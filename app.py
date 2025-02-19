@@ -191,11 +191,12 @@ def process_smiles_mode(smiles: str, mode: str):
 # Gradio Interface
 # -----------------------------
 with gr.Blocks() as demo:
-    gr.Markdown("# Molecule Feature Highlighter")
+    gr.Markdown("# Moliety: Molecular Feature Highlighter")
     gr.Markdown(
         "Enter a SMILES string below and select a highlighting mode. "
         "You can choose to highlight functional groups, interligand moieties, rotatable bonds, or chiral centers."
     )
+    gr.Markdown("www.giorginolab.it")
     
     with gr.Row():
         smiles_input = gr.Textbox(
