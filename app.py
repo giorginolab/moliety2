@@ -2,8 +2,10 @@ import gradio as gr
 from rdkit import Chem
 from rdkit.Chem import Draw
 from PIL import Image
+from rdkit.Chem.Draw import MolDraw2DCairo
+from io import BytesIO
 
-IMAGE_SIZE=(600,600)
+IMAGE_SIZE=(800,800)
 
 # -----------------------------
 # Functional Group Definitions
@@ -150,12 +152,13 @@ def highlight_chiral_centers(smiles: str):
         return None
     highlight_atoms = [idx for idx, _ in chiral_centers]
     legend = "Chiral Centers: " + ", ".join(f"{idx} ({ch})" for idx, ch in chiral_centers)
-    img = Draw.MolToImage(
-        mol,
-        size=IMAGE_SIZE,
-        highlightAtoms=highlight_atoms,
-        legend=legend
-    )
+    drawer = MolDraw2DCairo(IMAGE_SIZE[0], IMAGE_SIZE[1])
+    options = drawer.drawOptions()
+    options.addAtomIndices = True  # Show atom number labels
+    drawer.DrawMolecule(mol, highlightAtoms=highlight_atoms, legend=legend)
+    drawer.FinishDrawing()
+    img_data = drawer.GetDrawingText()
+    img = Image.open(BytesIO(img_data))
     return img
 
 def process_chiral_centers(smiles: str):
