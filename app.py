@@ -19,33 +19,54 @@ functional_groups = {
 # Pre-compile the SMARTS queries for functional groups.
 compiled_patterns = {name: Chem.MolFromSmarts(smart) for name, smart in functional_groups.items()}
 
+# -----------------------------
+# Interligand Moieties Definitions
+# -----------------------------
+def load_interligand_moieties():
+    moieties = {}
+    try:
+        with open("SMARTS_InteLigand.txt", "r") as f:
+            for line in f:
+                line = line.strip()
+                # Skip blank lines or comments
+                if not line or line.startswith("#"):
+                    continue
+                # Expect lines of the form "MoietyName: SMARTS"
+                if ":" in line:
+                    parts = line.split(":", 1)
+                    name = parts[0].strip()
+                    pattern = parts[1].strip()
+                    # Optionally, only keep lines that look like a SMARTS (e.g. start with '[')
+                    if pattern and pattern.startswith("["):
+                        moieties[name] = pattern
+    except Exception as e:
+        print("Error loading SMARTS_InteLigand.txt:", e)
+    return moieties
+
+interligand_moieties = load_interligand_moieties()
+compiled_interligand_patterns = {name: Chem.MolFromSmarts(smart) 
+                                 for name, smart in interligand_moieties.items()}
+
+# -----------------------------
+# Highlighting Functions
+# -----------------------------
 def highlight_functional_groups(smiles: str):
-    """
-    Given a SMILES string, find all matching functional groups and return
-    a list of images (as PIL Images) of the molecule with each group highlighted.
-    """
     mol = Chem.MolFromSmiles(smiles)
     if mol is None:
-        return None  # invalid SMILES
-
+        return None
     images = []
-    # Loop over each functional group
     for group_name, pattern in compiled_patterns.items():
         matches = mol.GetSubstructMatches(pattern)
         if matches:
-            # Collect all atoms and bonds that match this group.
             highlight_atoms = set()
             highlight_bonds = set()
             for match in matches:
                 highlight_atoms.update(match)
-                # For bonds, check each bond in the molecule
                 for bond in mol.GetBonds():
                     a1 = bond.GetBeginAtomIdx()
                     a2 = bond.GetEndAtomIdx()
                     if a1 in match and a2 in match:
                         highlight_bonds.add(bond.GetIdx())
-            # Draw the molecule with the highlighted atoms and bonds,
-            # including the group name as a legend.
             img = Draw.MolToImage(
                 mol,
                 size=(300, 300),
@@ -57,25 +78,45 @@ def highlight_functional_groups(smiles: str):
     return images
 
 def process_functional_groups(smiles: str):
-    """
-    Process SMILES and return images highlighting functional groups.
-    """
     images = highlight_functional_groups(smiles)
     if images is None or len(images) == 0:
         return [], "No functional groups recognized or invalid SMILES."
     return images, f"Found {len(images)} functional group(s)."
 
-# -----------------------------
-# Rotatable Bond Functions
-# -----------------------------
+def highlight_interligand_moieties(smiles: str):
+    mol = Chem.MolFromSmiles(smiles)
+    if mol is None:
+        return None
+    images = []
+    for moiety_name, pattern in compiled_interligand_patterns.items():
+        matches = mol.GetSubstructMatches(pattern)
+        if matches:
+            highlight_atoms = set()
+            highlight_bonds = set()
+            for match in matches:
+                highlight_atoms.update(match)
+                for bond in mol.GetBonds():
+                    a1 = bond.GetBeginAtomIdx()
+                    a2 = bond.GetEndAtomIdx()
+                    if a1 in match and a2 in match:
+                        highlight_bonds.add(bond.GetIdx())
+            img = Draw.MolToImage(
+                mol,
+                size=(300, 300),
+                highlightAtoms=list(highlight_atoms),
+                highlightBonds=list(highlight_bonds),
+                legend=moiety_name
+            )
+            images.append(img)
+    return images
+
+def process_interligand_moieties(smiles: str):
+    images = highlight_interligand_moieties(smiles)
+    if images is None or len(images) == 0:
+        return [], "No interligand moieties recognized or invalid SMILES."
+    return images, f"Found {len(images)} interligand moiety(ies)."
+
 def get_rotatable_bond_indices(mol):
-    """
-    Identify rotatable bonds in the molecule and return their bond indices.
-    A simple definition is used:
-      - Bond is single and not in a ring.
-      - Both atoms are heavy atoms (atomic number > 1).
-      - Both atoms have degree > 1 (i.e. non-terminal).
-    """
     rot_bond_indices = []
     for bond in mol.GetBonds():
         if bond.GetBondType() != Chem.BondType.SINGLE:
@@ -92,10 +133,6 @@ def get_rotatable_bond_indices(mol):
     return rot_bond_indices
 
 def highlight_rotatable_bonds(smiles: str):
-    """
-    Given a SMILES string, highlight all rotatable bonds in the molecule.
-    Returns a PIL Image with rotatable bonds highlighted.
-    """
     mol = Chem.MolFromSmiles(smiles)
     if mol is None:
         return None
@@ -111,23 +148,12 @@ def highlight_rotatable_bonds(smiles: str):
     return img
 
 def process_rotatable(smiles: str):
-    """
-    Process SMILES and return an image highlighting the rotatable bonds.
-    """
     img = highlight_rotatable_bonds(smiles)
     if img is None:
         return None, "No rotatable bonds recognized or invalid SMILES."
     return img, "Rotatable bonds highlighted."
 
-# -----------------------------
-# Combined Processing Function
-# -----------------------------
 def process_smiles_mode(smiles: str, mode: str):
-    """
-    Depending on the selected mode, process the SMILES string either to highlight:
-      - Functional Groups (returns a list of images), or
-      - Rotatable Bonds (returns a single image wrapped in a list).
-    """
     if mode == "Functional Groups":
         images, status_msg = process_functional_groups(smiles)
         return images, status_msg
@@ -136,6 +162,9 @@ def process_smiles_mode(smiles: str, mode: str):
         if img is None:
             return [], status_msg
         return [img], status_msg
+    elif mode == "Interligand moieties":
+        images, status_msg = process_interligand_moieties(smiles)
+        return images, status_msg
     else:
         return [], "Invalid mode selected."
 
@@ -146,7 +175,7 @@ with gr.Blocks() as demo:
     gr.Markdown("# Molecule Feature Highlighter")
     gr.Markdown(
         "Enter a SMILES string below and select a highlighting mode. "
-        "You can choose to highlight known functional groups or to display the rotatable bonds in the molecule."
+        "You can choose to highlight known functional groups, interligand moieties, or display the rotatable bonds in the molecule."
     )
     
     with gr.Row():
@@ -157,16 +186,14 @@ with gr.Blocks() as demo:
         )
         mode_dropdown = gr.Dropdown(
             label="Highlight Mode",
-            choices=["Functional Groups", "Rotatable Bonds"],
+            choices=["Functional Groups", "Rotatable Bonds", "Interligand moieties"],
             value="Functional Groups"
         )
     
     gallery = gr.Gallery(label="Highlighted Features", columns=3, height="auto")
     status = gr.Textbox(label="Status", interactive=False)
 
-    # Submit using both SMILES and selected mode.
     smiles_input.submit(process_smiles_mode, inputs=[smiles_input, mode_dropdown], outputs=[gallery, status])
     mode_dropdown.change(process_smiles_mode, inputs=[smiles_input, mode_dropdown], outputs=[gallery, status])
 
 demo.launch()
-
