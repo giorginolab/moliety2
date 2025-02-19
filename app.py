@@ -3,7 +3,9 @@ from rdkit import Chem
 from rdkit.Chem import Draw
 from PIL import Image
 
-# Define a dictionary of functional groups with corresponding SMARTS patterns.
+# -----------------------------
+# Functional Group Definitions
+# -----------------------------
 functional_groups = {
     "Hydroxyl": "[OX2H]",
     "Carbonyl": "[CX3]=[OX1]",
@@ -14,7 +16,7 @@ functional_groups = {
     "Halide": "[F,Cl,Br,I]"
 }
 
-# Pre-compile the SMARTS queries.
+# Pre-compile the SMARTS queries for functional groups.
 compiled_patterns = {name: Chem.MolFromSmarts(smart) for name, smart in functional_groups.items()}
 
 def highlight_functional_groups(smiles: str):
@@ -43,7 +45,7 @@ def highlight_functional_groups(smiles: str):
                     if a1 in match and a2 in match:
                         highlight_bonds.add(bond.GetIdx())
             # Draw the molecule with the highlighted atoms and bonds,
-            # and include the group name as a legend.
+            # including the group name as a legend.
             img = Draw.MolToImage(
                 mol,
                 size=(300, 300),
@@ -54,33 +56,117 @@ def highlight_functional_groups(smiles: str):
             images.append(img)
     return images
 
-def process_smiles(smiles):
+def process_functional_groups(smiles: str):
     """
-    Process the input SMILES string and return a tuple:
-      - list of PIL Images for each recognized functional group
-      - a status message.
+    Process SMILES and return images highlighting functional groups.
     """
     images = highlight_functional_groups(smiles)
     if images is None or len(images) == 0:
         return [], "No functional groups recognized or invalid SMILES."
     return images, f"Found {len(images)} functional group(s)."
 
-# Build the Gradio interface.
+# -----------------------------
+# Rotatable Bond Functions
+# -----------------------------
+def get_rotatable_bond_indices(mol):
+    """
+    Identify rotatable bonds in the molecule and return their bond indices.
+    A simple definition is used:
+      - Bond is single and not in a ring.
+      - Both atoms are heavy atoms (atomic number > 1).
+      - Both atoms have degree > 1 (i.e. non-terminal).
+    """
+    rot_bond_indices = []
+    for bond in mol.GetBonds():
+        if bond.GetBondType() != Chem.BondType.SINGLE:
+            continue
+        if bond.IsInRing():
+            continue
+        a1 = bond.GetBeginAtom()
+        a2 = bond.GetEndAtom()
+        if a1.GetAtomicNum() == 1 or a2.GetAtomicNum() == 1:
+            continue
+        if a1.GetDegree() < 2 or a2.GetDegree() < 2:
+            continue
+        rot_bond_indices.append(bond.GetIdx())
+    return rot_bond_indices
+
+def highlight_rotatable_bonds(smiles: str):
+    """
+    Given a SMILES string, highlight all rotatable bonds in the molecule.
+    Returns a PIL Image with rotatable bonds highlighted.
+    """
+    mol = Chem.MolFromSmiles(smiles)
+    if mol is None:
+        return None
+    rot_bonds = get_rotatable_bond_indices(mol)
+    if not rot_bonds:
+        return None
+    img = Draw.MolToImage(
+        mol,
+        size=(300, 300),
+        highlightBonds=rot_bonds,
+        legend="Rotatable Bonds"
+    )
+    return img
+
+def process_rotatable(smiles: str):
+    """
+    Process SMILES and return an image highlighting the rotatable bonds.
+    """
+    img = highlight_rotatable_bonds(smiles)
+    if img is None:
+        return None, "No rotatable bonds recognized or invalid SMILES."
+    return img, "Rotatable bonds highlighted."
+
+# -----------------------------
+# Combined Processing Function
+# -----------------------------
+def process_smiles_mode(smiles: str, mode: str):
+    """
+    Depending on the selected mode, process the SMILES string either to highlight:
+      - Functional Groups (returns a list of images), or
+      - Rotatable Bonds (returns a single image wrapped in a list).
+    """
+    if mode == "Functional Groups":
+        images, status_msg = process_functional_groups(smiles)
+        return images, status_msg
+    elif mode == "Rotatable Bonds":
+        img, status_msg = process_rotatable(smiles)
+        if img is None:
+            return [], status_msg
+        return [img], status_msg
+    else:
+        return [], "Invalid mode selected."
+
+# -----------------------------
+# Gradio Interface
+# -----------------------------
 with gr.Blocks() as demo:
-    gr.Markdown("# Functional Group and Moiety Recognizer")
+    gr.Markdown("# Molecule Feature Highlighter")
     gr.Markdown(
-        "Enter a SMILES string below. The app uses RDKit to identify common "
-        "functional groups and then displays images of the molecule with each group highlighted."
+        "Enter a SMILES string below and select a highlighting mode. "
+        "You can choose to highlight known functional groups or to display the rotatable bonds in the molecule."
     )
-    smiles_input = gr.Textbox(
-        label="Enter SMILES string", 
-        placeholder="e.g. CC(=O)OC1=CC=CC=C1C(=O)O"
-    )
-    gallery = gr.Gallery(label="Recognized Functional Groups", columns=3, height="auto")
+    
+    with gr.Row():
+        smiles_input = gr.Textbox(
+            label="Enter SMILES string", 
+            placeholder="e.g. CC(=O)OC1=CC=CC=C1C(=O)O",
+            lines=1
+        )
+        mode_dropdown = gr.Dropdown(
+            label="Highlight Mode",
+            choices=["Functional Groups", "Rotatable Bonds"],
+            value="Functional Groups"
+        )
+    
+    gallery = gr.Gallery(label="Highlighted Features", columns=3, height="auto")
     status = gr.Textbox(label="Status", interactive=False)
 
-    # When the user submits the SMILES, call process_smiles.
-    smiles_input.submit(process_smiles, inputs=smiles_input, outputs=[gallery, status])
+    # Submit using both SMILES and selected mode.
+    smiles_input.submit(process_smiles_mode, inputs=[smiles_input, mode_dropdown], outputs=[gallery, status])
+    mode_dropdown.change(process_smiles_mode, inputs=[smiles_input, mode_dropdown], outputs=[gallery, status])
 
 demo.launch()
 
