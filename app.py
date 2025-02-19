@@ -3,6 +3,8 @@ from rdkit import Chem
 from rdkit.Chem import Draw
 from PIL import Image
 
+IMAGE_SIZE=(600,600)
+
 # -----------------------------
 # Functional Group Definitions
 # -----------------------------
@@ -69,7 +71,7 @@ def highlight_by_patterns(smiles: str, pattern_dict: dict):
                         highlight_bonds.add(bond.GetIdx())
             img = Draw.MolToImage(
                 mol,
-                size=(300, 300),
+                size=IMAGE_SIZE,
                 highlightAtoms=list(highlight_atoms),
                 highlightBonds=list(highlight_bonds),
                 legend=name
@@ -124,7 +126,7 @@ def highlight_rotatable_bonds(smiles: str):
         return None
     img = Draw.MolToImage(
         mol,
-        size=(300, 300),
+        size=IMAGE_SIZE,
         highlightBonds=rot_bonds,
         legend="Rotatable Bonds"
     )
@@ -150,7 +152,7 @@ def highlight_chiral_centers(smiles: str):
     legend = "Chiral Centers: " + ", ".join(f"{idx} ({ch})" for idx, ch in chiral_centers)
     img = Draw.MolToImage(
         mol,
-        size=(300, 300),
+        size=IMAGE_SIZE,
         highlightAtoms=highlight_atoms,
         legend=legend
     )
