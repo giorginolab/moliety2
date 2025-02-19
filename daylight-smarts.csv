@@ -1,0 +1,254 @@
+Section ID,Section,Group,Rule Name,Smarts,Comment
+2. Functional Groups by Element,C,alkane,[CX4],Alkyl Carbon
+2. Functional Groups by Element,C,alkene (-ene),[$([CX2](=C)=C)],Allenic Carbon
+2. Functional Groups by Element,C,alkene (-ene),[$([CX3]=[CX3])],Vinylic Carbon; Ethenyl carbon
+2. Functional Groups by Element,C,alkyne (-yne),[$([CX2]#C)],Acetylenic Carbon
+2. Functional Groups by Element,C,arene (Ar , aryl-, aromatic hydrocarbons),c,Arene
+2. Functional Groups by Element,C & O,carbonyl,[CX3]=[OX1],Carbonyl group. Low specificity; Hits carboxylic acid, ester, ketone, aldehyde, carbonic acid/ester,anhydride, carbamic acid/ester, acyl halide, amide.
+2. Functional Groups by Element,C & O,Carbonyl group,[$([CX3]=[OX1]),$([CX3+]-[OX1-])],Hits either resonance structure
+2. Functional Groups by Element,C & O,Carbonyl with Carbon,[CX3](=[OX1])C,Hits aldehyde, ketone, carboxylic acid (except formic), anhydride (except formic), acyl halides (acid halides). Won't hit carbamic acid/ester, carbonic acid/ester.
+2. Functional Groups by Element,C & O,Carbonyl with Nitrogen.,[OX1]=CN,Hits amide, carbamic acid/ester, poly peptide
+2. Functional Groups by Element,C & O,Carbonyl with Oxygen.,[CX3](=[OX1])O,Hits ester, carboxylic acid, carbonic acid or ester, carbamic acid or ester, anhydride Won't hit aldehyde or ketone.
+2. Functional Groups by Element,C & O,Acyl Halide,[CX3](=[OX1])[F,Cl,Br,I],acid halide, -oyl halide
+2. Functional Groups by Element,C & O,Aldehyde,[CX3H1](=O)[#6],-al
+2. Functional Groups by Element,C & O,Anhydride,[CX3](=[OX1])[OX2][CX3](=[OX1]),
+2. Functional Groups by Element,C & O,Amide,[NX3][CX3](=[OX1])[#6],-amide
+2. Functional Groups by Element,C & O,Amidinium,[NX3][CX3]=[NX3+],
+2. Functional Groups by Element,C & O,Carbamate.,[NX3,NX4+][CX3](=[OX1])[OX2,OX1-],Hits carbamic esters, acids, and zwitterions
+2. Functional Groups by Element,C & O,Carbamic ester,[NX3][CX3](=[OX1])[OX2H0],
+2. Functional Groups by Element,C & O,Carbamic acid.,[NX3,NX4+][CX3](=[OX1])[OX2H,OX1-],Hits carbamic acids and zwitterions.
+2. Functional Groups by Element,C & O,Carboxylate Ion.,[CX3](=O)[O-],Hits conjugate bases of carboxylic, carbamic, and carbonic acids.
+2. Functional Groups by Element,C & O,Carbonic Acid or Carbonic Ester,[CX3](=[OX1])(O)O,Carbonic Acid, Carbonic Ester, or combination
+2. Functional Groups by Element,C & O,Carbonic Acid or Carbonic Acid-Ester,[CX3](=[OX1])([OX2])[OX2H,OX1H0-1],Hits acid and conjugate base. Won't hit carbonic acid diester
+2. Functional Groups by Element,C & O,Carbonic Ester (carbonic acid diester),C[OX2][CX3](=[OX1])[OX2]C,Won't hit carbonic acid or combination carbonic acid/ester
+2. Functional Groups by Element,C & O,Carboxylic acid,[CX3](=O)[OX2H1],-oic acid, COOH
+2. Functional Groups by Element,C & O,Carboxylic acid or conjugate base.,[CX3](=O)[OX1H0-,OX2H1],
+2. Functional Groups by Element,C & O,Cyanamide,[NX3][CX2]#[NX1],
+2. Functional Groups by Element,C & O,Ester Also hits anhydrides,[#6][CX3](=O)[OX2H0][#6],won't hit formic anhydride.
+2. Functional Groups by Element,C & O,Ketone,[#6][CX3](=O)[#6],-one
+2. Functional Groups by Element,C & O,Ether,[OD2]([#6])[#6],Ether
+2. Functional Groups by Element,H,Hydrogen Atom,[H],Hits SMILES that are hydrogen atoms: [H+] [2H] [H][H]
+2. Functional Groups by Element,H,Not a Hydrogen Atom,[!#1],Hits SMILES that are not hydrogen atoms.
+2. Functional Groups by Element,H,Proton,[H+],Hits positively charged hydrogen atoms: [H+]
+2. Functional Groups by Element,H,Mono-Hydrogenated Cation,[+H],Hits atoms that have a positive charge and exactly one attached hydrogen: F[C+](F)[H]
+2. Functional Groups by Element,H,Not Mono-Hydrogenated,[!H] or [!H1],Hits atoms that don't have exactly one attached hydrogen.
+2. Functional Groups by Element,N,amide see carbonyl,,
+2. Functional Groups by Element,N,mine (-amino),[NX3;H2,H1;!$(NC=O)],Primary or secondary amine, not amide; Not ammonium ion (N must be 3-connected), not ammonia (H count can't be 3). Primary or secondary is specified by N's H-count (H2 & H1 respectively). Also note that "&" (and) is the dafault opperator and is higher precedence that "," (or), which is higher precedence than ";" (and). Will hit cyanamides and thioamides
+2. Functional Groups by Element,N,Enamine,[NX3][CX3]=[CX3],
+2. Functional Groups by Element,N,Primary amine, not amide.,[NX3;H2;!$(NC=[!#6]);!$(NC#[!#6])][#6],Not amide (C not double bonded to a hetero-atom), not ammonium ion (N must be 3-connected), not ammonia (N's H-count can't be 3), not cyanamide (C not triple bonded to a hetero-atom)
+2. Functional Groups by Element,N,Two primary or secondary amines,[NX3;H2,H1;!$(NC=O)].[NX3;H2,H1;!$(NC=O)],Here we use the disconnection symbol (".") to match two separate unbonded identical patterns.
+2. Functional Groups by Element,N,Enamine or Aniline Nitrogen,[NX3][$(C=C),$(cc)],
+2. Functional Groups by Element,N,Generic amino acid: low specificity.,[NX3,NX4+][CX4H]([*])[CX3](=[OX1])[O,N],For use w/ non-standard a.a. search. hits pro but not gly. Hits acids and conjugate bases. Hits single a.a.s and specific residues w/in polypeptides (internal, or terminal).
+2. Functional Groups by Element,N,Dipeptide group. generic amino acid: low specificity.,[NX3H2,NH3X4+][CX4H]([*])[CX3](=[OX1])[NX3,NX4+][CX4H]([*])[CX3](=[OX1])[OX2H,OX1-],Won't hit pro or gly. Hits acids and conjugate bases.
+2. Functional Groups by Element,N,Amino Acid,[$([NX3H2,NX4H3+]),$([NX3H](C)(C))][CX4H]([*])[CX3](=[OX1])[OX2H,OX1-,N],Replace * w/ a specific a.a. side chain from the 18_standard_side_chains list to hit a specific standard a.a. Won't work with Proline or Glycine, they have their own SMARTS (see side chain list). Hits acids and conjugate bases. Hits single a.a.s and specific residues w/i n polypeptides (internal, or terminal). {e.g. usage: Alanine side chain is [CH3X4] . Search is [$([NX3H2,NX4H3+]),$([NX3H](C)(C))][CX4H]([ CH3X4])[CX3](=[OX1])[OX2H,OX1-,N]}
+2. Functional Groups by Element,N,Alanine side chain,[CH3X4],
+2. Functional Groups by Element,N,Arginine side chain.,[CH2X4][CH2X4][CH2X4][NHX3][CH0X3](=[NH2X3+,NHX2+0])[NH2X3],Hits acid and conjugate base.
+2. Functional Groups by Element,N,Aspargine side chain.,[CH2X4][CX3](=[OX1])[NX3H2],Also hits Gln side chain when used alone.
+2. Functional Groups by Element,N,Aspartate (or Aspartic acid) side chain.,[CH2X4][CX3](=[OX1])[OH0-,OH],Hits acid and conjugate base. Also hits Glu side chain when used alone.
+2. Functional Groups by Element,N,Cysteine side chain.,[CH2X4][SX2H,SX1H0-],Hits acid and conjugate base
+2. Functional Groups by Element,N,Glutamate (or Glutamic acid) side chain.,[CH2X4][CH2X4][CX3](=[OX1])[OH0-,OH],Hits acid and conjugate base.
+2. Functional Groups by Element,N,Glycine,[$([$([NX3H2,NX4H3+]),$([NX3H](C)(C))][CX4H2][CX3](=[OX1])[OX2H,OX1-,N])],
+2. Functional Groups by Element,N,Histidine side chain.,[CH2X4][#6X3]1:[$([#7X3H+,#7X2H0+0]:[#6X3H]:[#7X3H]),$([#7X3H])]:[#6X3H]:[$([#7X3H+,#7X2H0+0]:[#6X3H]:[#7X3H]),$([#7X3H])]:[#6X3H]1,Hits acid & conjugate base for either Nitrogen. Note that the Ns can be either ([(Cationic 3-connected with one H) or (Neutral 2-connected without any Hs)] where there is a second-neighbor who is [3-connected with one H]) or (3-connected with one H).
+2. Functional Groups by Element,N,Isoleucine side chain,[CHX4]([CH3X4])[CH2X4][CH3X4],
+2. Functional Groups by Element,N,Leucine side chain,[CH2X4][CHX4]([CH3X4])[CH3X4],
+2. Functional Groups by Element,N,Lysine side chain.,[CH2X4][CH2X4][CH2X4][CH2X4][NX4+,NX3+0],Acid and conjugate base
+2. Functional Groups by Element,N,Methionine side chain,[CH2X4][CH2X4][SX2][CH3X4],
+2. Functional Groups by Element,N,Phenylalanine side chain,[CH2X4][cX3]1[cX3H][cX3H][cX3H][cX3H][cX3H]1,
+2. Functional Groups by Element,N,Proline,[$([NX3H,NX4H2+]),$([NX3](C)(C)(C))]1[CX4H]([CH2][CH2][CH2]1)[CX3](=[OX1])[OX2H,OX1-,N],
+2. Functional Groups by Element,N,Serine side chain,[CH2X4][OX2H],
+2. Functional Groups by Element,N,Thioamide,[NX3][CX3]=[SX1],
+2. Functional Groups by Element,N,Threonine side chain,[CHX4]([CH3X4])[OX2H],
+2. Functional Groups by Element,N,Tryptophan side chain,[CH2X4][cX3]1[cX3H][nX3H][cX3]2[cX3H][cX3H][cX3H][cX3H][cX3]12,
+2. Functional Groups by Element,N,Tyrosine side chain.,[CH2X4][cX3]1[cX3H][cX3H][cX3]([OHX2,OH0X1-])[cX3H][cX3H]1,Acid and conjugate base
+2. Functional Groups by Element,N,Valine side chain,[CHX4]([CH3X4])[CH3X4],
+2. Functional Groups by Element,N,Alanine side chain,[CH3X4],
+2. Functional Groups by Element,N,Arginine side chain.,[CH2X4][CH2X4][CH2X4][NHX3][CH0X3](=[NH2X3+,NHX2+0])[NH2X3],Hits acid and conjugate base.
+2. Functional Groups by Element,N,Aspargine side chain.,[CH2X4][CX3](=[OX1])[NX3H2],Also hits Gln side chain when used alone.
+2. Functional Groups by Element,N,Aspartate (or Aspartic acid) side chain.,[CH2X4][CX3](=[OX1])[OH0-,OH],Hits acid and conjugate base. Also hits Glu side chain when used alone.
+2. Functional Groups by Element,N,Cysteine side chain.,[CH2X4][SX2H,SX1H0-],Hits acid and conjugate base
+2. Functional Groups by Element,N,Glutamate (or Glutamic acid) side chain.,[CH2X4][CH2X4][CX3](=[OX1])[OH0-,OH],Hits acid and conjugate base.
+2. Functional Groups by Element,N,Glycine,N[CX4H2][CX3](=[OX1])[O,N],
+2. Functional Groups by Element,N,Histidine side chain.,[CH2X4][#6X3]1:[$([#7X3H+,#7X2H0+0]:[#6X3H]:[#7X3H]),$([#7X3H])]:[#6X3H]:[$([#7X3H+,#7X2H0+0]:[#6X3H]:[#7X3H]),$([#7X3H])]:[#6X3H]1,Hits acid & conjugate base for either Nitrogen. Note that the Ns can be either ([(Cationic 3-connected with one H) or (Neutral 2-connected without any Hs)] where there is a second-neighbor who is [3-connected
+2. Functional Groups by Element,N,Isoleucine side chain,[CHX4]([CH3X4])[CH2X4][CH3X4],
+2. Functional Groups by Element,N,Leucine side chain,[CH2X4][CHX4]([CH3X4])[CH3X4],
+2. Functional Groups by Element,N,Lysine side chain.,[CH2X4][CH2X4][CH2X4][CH2X4][NX4+,NX3+0],Acid and conjugate base
+2. Functional Groups by Element,N,Methionine side chain,[CH2X4][CH2X4][SX2][CH3X4],
+2. Functional Groups by Element,N,Phenylalanine side chain,[CH2X4][cX3]1[cX3H][cX3H][cX3H][cX3H][cX3H]1,
+2. Functional Groups by Element,N,Proline,N1[CX4H]([CH2][CH2][CH2]1)[CX3](=[OX1])[O,N],
+2. Functional Groups by Element,N,Serine side chain,[CH2X4][OX2H],
+2. Functional Groups by Element,N,Threonine side chain,[CHX4]([CH3X4])[OX2H],
+2. Functional Groups by Element,N,Tryptophan side chain,[CH2X4][cX3]1[cX3H][nX3H][cX3]2[cX3H][cX3H][cX3H][cX3H][cX3]12,
+2. Functional Groups by Element,N,Tyrosine side chain.,[CH2X4][cX3]1[cX3H][cX3H][cX3]([OHX2,OH0X1-])[cX3H][cX3H]1,Acid and conjugate base
+2. Functional Groups by Element,N,Valine side chain,[CHX4]([CH3X4])[CH3X4],
+2. Functional Groups by Element,N,azide (-azido),Azide group.,[$(*-[NX2-]-[NX2+]#[NX1]),$(*-[NX2]=[NX2+]=[NX1-])],Hits any atom with an attached azide.
+2. Functional Groups by Element,N,azide (-azido),Azide ion.,[$([NX1-]=[NX2+]=[NX1-]),$([NX1]#[NX2+]-[NX1-2])],Hits N in azide ion
+2. Functional Groups by Element,N,azo,Nitrogen.,[#7],Nitrogen in N-containing compound. aromatic or aliphatic. Most general interpretation of "azo"
+2. Functional Groups by Element,N,azo,Azo Nitrogen. Low specificity.,[NX2]=N,Hits diazene, azoxy and some diazo structures
+2. Functional Groups by Element,N,azo,Azo Nitrogen.diazene,[NX2]=[NX2],(diaza alkene)
+2. Functional Groups by Element,N,azo,Azoxy Nitrogen.,[$([NX2]=[NX3+]([O-])[#6]),$([NX2]=[NX3+0](=[O])[#6])],
+2. Functional Groups by Element,N,azo,Diazo Nitrogen,[$([#6]=[N+]=[N-]),$([#6-]-[N+]#[N])],
+2. Functional Groups by Element,N,azo,Azole.,[$([nr5]:[nr5,or5,sr5]),$([nr5]:[cr5]:[nr5,or5,sr5])],5 member aromatic heterocycle w/ 2double bonds. contains N & another non C (N,O,S) subclasses are furo-, thio-, pyrro- (replace CH o' furfuran, thiophene, pyrrol w/ N)
+2. Functional Groups by Element,N,hydrazine,Hydrazine H2NNH2,[NX3][NX3],
+2. Functional Groups by Element,N,hydrazone,Hydrazone C=NNH2,[NX3][NX2]=[*],
+2. Functional Groups by Element,N,imine,Substituted imine,[CX3;$([C]([#6])[#6]),$([CH][#6])]=[NX2][#6],Schiff base
+2. Functional Groups by Element,N,imine,Substituted or un-substituted imine,[$([CX3]([#6])[#6]),$([CX3H][#6])]=[$([NX2][#6]),$([NX2H])],
+2. Functional Groups by Element,N,imine,Iminium,[NX3+]=[CX3],
+2. Functional Groups by Element,N,imide,Unsubstituted dicarboximide,[CX3](=[OX1])[NX3H][CX3](=[OX1]),
+2. Functional Groups by Element,N,imide,Substituted dicarboximide,[CX3](=[OX1])[NX3H0]([#6])[CX3](=[OX1]),
+2. Functional Groups by Element,N,imide,Dicarboxdiimide,[CX3](=[OX1])[NX3H0]([NX3H0]([CX3](=[OX1]))[CX3](=[OX1]))[CX3](=[OX1]),
+2. Functional Groups by Element,N,nitrate,Nitrate group,[$([NX3](=[OX1])(=[OX1])O),$([NX3+]([OX1-])(=[OX1])O)],Also hits nitrate anion
+2. Functional Groups by Element,N,nitrate,Nitrate Anion,[$([OX1]=[NX3](=[OX1])[OX1-]),$([OX1]=[NX3+]([OX1-])[OX1-])],
+2. Functional Groups by Element,N,nitrile,Nitrile,[NX1]#[CX2],
+2. Functional Groups by Element,N,nitrile,Isonitrile,[CX1-]#[NX2+],
+2. Functional Groups by Element,N,nitro,Nitro group.,[$([NX3](=O)=O),$([NX3+](=O)[O-])][!#8] Hits both forms.
+2. Functional Groups by Element,N,nitro,Two Nitro groups,[$([NX3](=O)=O),$([NX3+](=O)[O-])][!#8].[$([NX3](=O)=O),$([NX3+](=O)[O-])][!#8],
+2. Functional Groups by Element,N,nitroso,Nitroso-group,[NX2]=[OX1],
+2. Functional Groups by Element,N,n-oxide,N-Oxide,[$([#7+][OX1-]),$([#7v5]=[OX1]);!$([#7](~[O])~[O]);!$([#7]=[#7])],Hits both forms. Won't hit azoxy, nitro, nitroso,or nitrate.
+2. Functional Groups by Element,O,hydroxyl (includes alcohol, phenol),Hydroxyl,[OX2H],
+2. Functional Groups by Element,O,hydroxyl (includes alcohol, phenol),Hydroxyl in Alcohol,[#6][OX2H],
+2. Functional Groups by Element,O,hydroxyl (includes alcohol, phenol),Hydroxyl in Carboxylic Acid,[OX2H][CX3]=[OX1],
+2. Functional Groups by Element,O,hydroxyl (includes alcohol, phenol),Hydroxyl in H-O-P-,[OX2H]P,
+2. Functional Groups by Element,O,hydroxyl (includes alcohol, phenol),Enol,[OX2H][#6X3]=[#6],
+2. Functional Groups by Element,O,hydroxyl (includes alcohol, phenol),Phenol,[OX2H][cX3]:[c],
+2. Functional Groups by Element,O,hydroxyl (includes alcohol, phenol),Enol or Phenol,[OX2H][$(C=C),$(cc)],
+2. Functional Groups by Element,O,hydroxyl (includes alcohol, phenol),Hydroxyl_acidic,[$([OH]-*=[!#6])],An acidic hydroxyl is a hydroxyl bonded to an atom which is multiply bonded to a hetero atom, this includes carboxylic, sulphur, phosphorous, halogen and nitrogen oxyacids.
+2. Functional Groups by Element,O,peroxide,Peroxide groups.,[OX2,OX1-][OX2,OX1-],Also hits anions.
+2. Functional Groups by Element,P,phosphoric compounds,Phosphoric_acid groups.,[$(P(=[OX1])([$([OX2H]),$([OX1-]),$([OX2]P)])([$([OX2H]),$([OX1-]),$([OX2]P)])[$([OX2H]),$([OX1-]),$([OX2]P)]),$([P+]([OX1-])([$([OX2H]),$([OX1-]),$([OX2]P)])([$([OX2H]),$([OX1-]),$([OX2]P)])[$([OX2H]),$([OX1-]),$([OX2]P)])],Hits both depiction forms. Hits orthophosphoric acid and polyphosphoric acid anhydrides. Doesn't hit monophosphoric acid anhydride esters (including acidic mono- & di- esters) but will hit some polyphosphoric acid anhydride esters (mono- esters on pyrophosphoric acid and longer, di- esters on linear triphosphoric acid and longer).
+2. Functional Groups by Element,P,phosphoric compounds,Phosphoric_ester groups.,[$(P(=[OX1])([OX2][#6])([$([OX2H]),$([OX1-]),$([OX2][#6])])[$([OX2H]),$([OX1-]),$([OX2][#6]),$([OX2]P)]),$([P+]([OX1-])([OX2][#6])([$([OX2H]),$([OX1-]),$([OX2][#6])])[$([OX2H]),$([OX1-]),$([OX2][#6]),$([OX2]P)])],Hits both depiction forms. Doesn't hit non-ester phosphoric_acid groups.
+2. Functional Groups by Element,S,thio groups ( thio-, thi-, sulpho-, mercapto- ),Carbo-Thiocarboxylate,[S-][CX3](=S)[#6],
+2. Functional Groups by Element,S,thio groups ( thio-, thi-, sulpho-, mercapto- ),Carbo-Thioester,S([#6])[CX3](=O)[#6],
+2. Functional Groups by Element,S,thio groups ( thio-, thi-, sulpho-, mercapto- ),Thio analog of carbonyl,[#6X3](=[SX1])([!N])[!N],Where S replaces O. Not a thioamide.
+2. Functional Groups by Element,S,thio groups ( thio-, thi-, sulpho-, mercapto- ),Thiol, Sulfide or Disulfide Sulfur,[SX2],
+2. Functional Groups by Element,S,thio groups ( thio-, thi-, sulpho-, mercapto- ),Thiol,[#16X2H],
+2. Functional Groups by Element,S,thio groups ( thio-, thi-, sulpho-, mercapto- ),Sulfur with at-least one hydrogen.,[#16!H0],
+2. Functional Groups by Element,S,sulfide,Sulfide,[#16X2H0],-alkylthio Won't hit thiols. Hits disulfides.
+2. Functional Groups by Element,S,sulfide,Mono-sulfide,[#16X2H0][!#16],alkylthio- or alkoxy- Won't hit thiols. Won't hit disulfides.
+2. Functional Groups by Element,S,sulfide,Di-sulfide,[#16X2H0][#16X2H0],Won't hit thiols. Won't hit mono-sulfides.
+2. Functional Groups by Element,S,sulfide,Two Sulfides,[#16X2H0][!#16].[#16X2H0][!#16],Won't hit thiols. Won't hit mono-sulfides. Won't hit disulfides.
+2. Functional Groups by Element,S,sulfinate,Sulfinate,[$([#16X3](=[OX1])[OX2H0]),$([#16X3+]([OX1-])[OX2H0])],Won't hit Sulfinic Acid. Hits Both Depiction Forms.
+2. Functional Groups by Element,S,sulfinate,Sulfinic Acid,[$([#16X3](=[OX1])[OX2H,OX1H0-]),$([#16X3+]([OX1-])[OX2H,OX1H0-])],Won't hit substituted Sulfinates. Hits Both Depiction Forms. Hits acid and conjugate base (sulfinate).
+2. Functional Groups by Element,S,sulfone,Sulfone. Low specificity.,[$([#16X4](=[OX1])=[OX1]),$([#16X4+2]([OX1-])[OX1-])],Hits all sulfones, including heteroatom-substituted sulfones: sulfonic acid, sulfonate, sulfuric acid mono- & di- esters, sulfamic acid, sulfamate, sulfonamide... Hits Both Depiction Forms.
+2. Functional Groups by Element,S,sulfone,Sulfone. High specificity.,[$([#16X4](=[OX1])(=[OX1])([#6])[#6]),$([#16X4+2]([OX1-])([OX1-])([#6])[#6])],Only hits carbo- sulfones (Won't hit herteroatom-substituted molecules). Hits Both Depiction Forms.
+2. Functional Groups by Element,S,sulfone,Sulfonic acid. High specificity.,[$([#16X4](=[OX1])(=[OX1])([#6])[OX2H,OX1H0-]),$([#16X4+2]([OX1-])([OX1-])([#6])[OX2H,OX1H0-])],Only hits carbo- sulfonic acids (Won't hit herteroatom-substituted molecules). Hits acid and conjugate base. Hits Both Depiction Forms. Hits Arene sulfonic acids.
+2. Functional Groups by Element,S,sulfone,Sulfonate,[$([#16X4](=[OX1])(=[OX1])([#6])[OX2H0]),$([#16X4+2]([OX1-])([OX1-])([#6])[OX2H0])],(sulfonic ester) Only hits carbon-substituted sulfur (Oxygen may be herteroatom-substituted). Hits Both Depiction Forms.
+2. Functional Groups by Element,S,sulfone,Sulfonamide.,[$([#16X4]([NX3])(=[OX1])(=[OX1])[#6]),$([#16X4+2]([NX3])([OX1-])([OX1-])[#6])],Only hits carbo- sulfonamide. Hits Both Depiction Forms.
+2. Functional Groups by Element,S,sulfone,Carbo-azosulfone,[SX4](C)(C)(=O)=N,Partial N-Analog of Sulfone
+2. Functional Groups by Element,S,sulfone,Sulfonamide,[$([SX4](=[OX1])(=[OX1])([!O])[NX3]),$([SX4+2]([OX1-])([OX1-])([!O])[NX3])],(sulf drugs) Won't hit sulfamic acid or sulfamate. Hits Both Depiction Forms.
+2. Functional Groups by Element,S,sulfoxide,Sulfoxide Low specificity.,[$([#16X3]=[OX1]),$([#16X3+][OX1-])],( sulfinyl, thionyl ) Analog of carbonyl where S replaces C. Hits all sulfoxides, including heteroatom-substituted sulfoxides, dialkylsulfoxides carbo-sulfoxides, sulfinate, sulfinic acids... Hits Both Depiction Forms. Won't hit sulfones.
+2. Functional Groups by Element,S,sulfoxide,Sulfoxide High specificity,[$([#16X3](=[OX1])([#6])[#6]),$([#16X3+]([OX1-])([#6])[#6])],(sulfinyl , thionyl) Analog of carbonyl where S replaces C. Only hits carbo-sulfoxides (Won't hit herteroatom-substituted molecules). Hits Both Depiction Forms. Won't hit sulfones.
+2. Functional Groups by Element,S,sulfate,Sulfate,[$([#16X4](=[OX1])(=[OX1])([OX2H,OX1H0-])[OX2][#6]),$([#16X4+2]([OX1-])([OX1-])([OX2H,OX1H0-])[OX2][#6])],(sulfuric acid monoester) Only hits when oxygen is carbon-substituted. Hits acid and conjugate base. Hits Both Depiction Forms.
+2. Functional Groups by Element,S,sulfate,Sulfuric acid ester (sulfate ester) Low specificity.,[$([SX4](=O)(=O)(O)O),$([SX4+2]([O-])([O-])(O)O)],Hits sulfuric acid, sulfuric acid monoesters (sulfuric acids) and diesters (sulfates). Hits acid and conjugate base. Hits Both Depiction Forms.
+2. Functional Groups by Element,S,sulfate,Sulfuric Acid Diester.,[$([#16X4](=[OX1])(=[OX1])([OX2][#6])[OX2][#6]),$([#16X4](=[OX1])(=[OX1])([OX2][#6])[OX2][#6])],Only hits when oxygen is carbon-substituted. Hits Both Depiction Forms.
+2. Functional Groups by Element,S,sulfamate,Sulfamate.,[$([#16X4]([NX3])(=[OX1])(=[OX1])[OX2][#6]),$([#16X4+2]([NX3])([OX1-])([OX1-])[OX2][#6])],Only hits when oxygen is carbon-substituted. Hits Both Depiction Forms.
+2. Functional Groups by Element,S,sulfamate,Sulfamic Acid.,[$([#16X4]([NX3])(=[OX1])(=[OX1])[OX2H,OX1H0-]),$([#16X4+2]([NX3])([OX1-])([OX1-])[OX2H,OX1H0-])],Hits acid and conjugate base. Hits Both Depiction Forms.
+2. Functional Groups by Element,S,sulfene,Sulfenic acid.,[#16X2][OX2H,OX1H0-],Hits acid and conjugate base.
+2. Functional Groups by Element,S,sulfene,Sulfenate.,[#16X2][OX2H0],
+2. Functional Groups by Element,X,halide (-halo -fluoro -chloro -bromo -iodo),Any carbon attached to any halogen,[#6][F,Cl,Br,I],
+2. Functional Groups by Element,X,halide (-halo -fluoro -chloro -bromo -iodo),Halogen,[F,Cl,Br,I],
+2. Functional Groups by Element,X,halide (-halo -fluoro -chloro -bromo -iodo),Three_halides groups,[F,Cl,Br,I].[F,Cl,Br,I].[F,Cl,Br,I],Hits SMILES that have three halides.
+2. Functional Groups by Element,X,acyl halide,Acyl Halide,[CX3](=[OX1])[F,Cl,Br,I],(acid halide, -oyl halide)
+3. Gross Structual Features,Chirality,Specified chiral carbon.,[$([#6X4@](*)(*)(*)*),$([#6X4@H](*)(*)*)],Matches carbons whose chirality is specified (clockwise or anticlockwise) Will not match molecules whose chirality is unspecified b ut that could otherwise be considered chiral. Also,therefore won't match molecules that would be chiral due to an implicit connection (i.e.i mplicit H).
+3. Gross Structual Features,Chirality,"No-conflict" chiral match,C[C@?](F)(Cl)Br,Will match molecules with chiralities as specified or unspecified.
+3. Gross Structual Features,Chirality,"No-conflict" chiral match where an H is present,C[C@?H](Cl)Br,Will match molecules with chiralities as specified or unspecified.
+3. Gross Structual Features,Orbital Configuration,sp2 cationic carbon,[$([cX2+](:*):*)],Aromatic cationic sp2 carbon with a free electron in a non-bonding sp2 hybrid orbital
+3. Gross Structual Features,Orbital Configuration,Aromatic sp2 carbon.,[$([cX3](:*):*),$([cX2+](:*):*)],The first recursive SMARTS matches carbons that are three-connected, the second case matches two-connected carbons (i.e cations with a free electron in a non-bonding sp2 hybrid orbital)
+3. Gross Structual Features,Orbital Configuration,Any sp2 carbon.,[$([cX3](:*):*),$([cX2+](:*):*),$([CX3]=*),$([CX2+]=*)],The first recursive SMARTS matches carbons that are three-connected and aromatic. The second case matches two-connected aromatic ca rbons (i.e cations with a free electron in a non-bonding sp2 hybrid orbital). The third case matches three-connected non-aromatic carbons ( alkenes). The fourth case matches non-aromatic cationic alkene carbons.
+3. Gross Structual Features,Orbital Configuration,Any sp2 nitrogen.,[$([nX3](:*):*),$([nX2](:*):*),$([#7X2]=*),$([NX3](=*)=*),$([#7X3+](-*)=*),$([#7X3+H]=*)],Can be aromatic 3-connected with 2 aromatic bonds (eg pyrrole,Pyridine-N-oxide), aromatic 2-connected with 2 aromatic bonds (and a free pair of electrons in a nonbonding orbital, e.g.Pyridine), either aromatic or non-aromatic 2-connected with a double bond (and a free pair of electrons in a nonbonding orbital, e.g. C=N ), non aromatic 3-connected with 2 double bonds (e.g. a nitro group; this form does not exist in reality, SMILES can represent the charge-separated resonance structures as a single uncharged structure), either aromatic or non-aromatic 3-connected cation w/ 1 single bond and 1 double bond (e.g. a nitro group, here the individual charge-separated resonance structures are specified), either aromatic or non-aromatic 3-connected hydrogenated cation with a double bond (as the previous case but R is hydrogen), rspectively.
+3. Gross Structual Features,Orbital Configuration,Explicit Hydrogen on sp2-Nitrogen,[$([#1X1][$([nX3](:*):*),$([nX2](:*):*),$([#7X2]=*),$([NX3](=*)=*),$([#7X3+](-*)=*),$([#7X3+H]=*)])],(H must be an isotope or ion)
+3. Gross Structual Features,Orbital Configuration,sp3 nitrogen,[$([NX4+]),$([NX3]);!$(*=*)&!$(*:*)],One atom that is (a 4-connected N cation or a 3-connected N) and is not double bonded and is not aromatically bonded.
+3. Gross Structual Features,Orbital Configuration,Explicit Hydrogen on an sp3 N.,[$([#1X1][$([NX4+]),$([NX3]);!$(*=*)&!$(*:*)])],One atom that is a 1-connected H that is bonded to an sp3 N. (H must be an isotope or ion)
+3. Gross Structual Features,Orbital Configuration,sp2 N in N-Oxide,[$([$([NX3]=O),$([NX3+][O-])])],
+3. Gross Structual Features,Orbital Configuration,sp3 N in N-Oxide Exclusive:,[$([$([NX4]=O),$([NX4+][O-])])],Only hits if O is explicitly present. Won't hit if * is in SMILES in place of O.
+3. Gross Structual Features,Orbital Configuration,sp3 N in N-Oxide Inclusive:,[$([$([NX4]=O),$([NX4+][O-,#0])])],Hits if O could be present. Hits if * if used in place of O in smiles.
+3. Gross Structual Features,Connectivity,Quaternary Nitrogen,[$([NX4+]),$([NX4]=*)],Hits non-aromatic Ns.
+3. Gross Structual Features,Connectivity,Tricoordinate S double bonded to N.,[$([SX3]=N)],
+3. Gross Structual Features,Connectivity,S double-bonded to Carbon,[$([SX1]=[#6])],Hits terminal (1-connected S)
+3. Gross Structual Features,Connectivity,Triply bonded N,[$([NX1]#*)],
+3. Gross Structual Features,Connectivity,Divalent Oxygen,[$([OX2])],
+3. Gross Structual Features,Chains & Branching,Unbranched_alkane groups.,[R0;D2][R0;D2][R0;D2][R0;D2],Only hits alkanes (single-bond chains). Only hits chains of at-least 4 members. All non-(implicit-hydrogen) atoms count as branches (e.g. halide substituted chains count as branched).
+3. Gross Structual Features,Chains & Branching,Unbranched_chain groups.,[R0;D2]~[R0;D2]~[R0;D2]~[R0;D2],Hits any bond (single, double, triple). Only hits chains of at-least 4 members. All non-(implicit-hydrogen) atoms count as branches (e.g. halide substituted chains count as branched).
+3. Gross Structual Features,Chains & Branching,Long_chain groups.,[AR0]~[AR0]~[AR0]~[AR0]~[AR0]~[AR0]~[AR0]~[AR0],Aliphatic chains at-least 8 members long.
+3. Gross Structual Features,Chains & Branching,Atom_fragment,[!$([#6+0]);!$(C(F)(F)F);!$(c(:[!c]):[!c])!$([#6]=,#[!#6])],(CLOGP definition) A fragment atom is a not an isolating carbon
+3. Gross Structual Features,Chains & Branching,Carbon_isolating,[$([#6+0]);!$(C(F)(F)F);!$(c(:[!c]):[!c])!$([#6]=,#[!#6])],This definition is based on that in CLOGP, so it is a charge-neutral carbon, which is not a CF3 or an aromatic C between two aromati c hetero atoms eg in tetrazole, it is not multiply bonded to a hetero atom.
+3. Gross Structual Features,Chains & Branching,Terminal S bonded to P,[$([SX1]~P)],
+3. Gross Structual Features,Chains & Branching,Nitrogen on -N-C=N-,[$([NX3]C=N)],
+3. Gross Structual Features,Chains & Branching,Nitrogen on -N-N=C-,[$([NX3]N=C)],
+3. Gross Structual Features,Chains & Branching,Nitrogen on -N-N=N-,[$([NX3]N=N)],
+3. Gross Structual Features,Chains & Branching,Oxygen in -O-C=N-,[$([OX2]C=N)],
+3. Gross Structual Features,Rotation,Rotatable bond,[!$(*#*)&!D1]-!@[!$(*#*)&!D1],An atom which is not triply bonded and not one-connected i.e.terminal connected by a single non-ring bond to and equivalent atom. Note that logical operators can be applied to bonds ("-&!@"). Here, the overall SMARTS consists of two atoms and one bond. The bond is "site and not ring". *#* any atom triple bonded to any atom. By enclosing this SMARTS in parentheses and preceding with $, this enables us to use $(*#*) to write a recursive SMARTS using that string as an atom primitive. The purpose is to avoid bonds such as c1ccccc1-C#C which wo be considered rotatable without this specification.
+3. Gross Structual Features,Cyclic Features,Bicyclic,[$([*R2]([*R])([*R])([*R]))].[$([*R2]([*R])([*R])([*R]))],Bicyclic compounds have 2 bridgehead atoms with 3 arms connecting the bridgehead atoms.
+3. Gross Structual Features,Cyclic Features,Ortho,*-!:aa-!:*,Ortho-substituted ring
+3. Gross Structual Features,Cyclic Features,Meta,*-!:aaa-!:*,Meta-substituted ring
+3. Gross Structual Features,Cyclic Features,Para,*-!:aaaa-!:*,Para-substituted ring
+3. Gross Structual Features,Cyclic Features,Acylic-bonds,*!@*,
+3. Gross Structual Features,Cyclic Features,Single bond and not in a ring,*-!@*,
+3. Gross Structual Features,Cyclic Features,Non-ring atom,[R0] or [!R],
+3. Gross Structual Features,Cyclic Features,Macrocycle groups.,[r;!r3;!r4;!r5;!r6;!r7],
+3. Gross Structual Features,Cyclic Features,S in aromatic 5-ring with lone pair,[sX2r5],
+3. Gross Structual Features,Cyclic Features,Aromatic 5-Ring O with Lone Pair,[oX2r5],
+3. Gross Structual Features,Cyclic Features,N in 5-sided aromatic ring,[nX2r5],
+3. Gross Structual Features,Cyclic Features,Spiro-ring center,[X4;R2;r4,r5,r6](@[r4,r5,r6])(@[r4,r5,r6])(@[r4,r5,r6])@[r4,r5,r6]rings size 4-6
+3. Gross Structual Features,Cyclic Features,N in 5-ring arom,[$([nX2r5]:[a-]),$([nX2r5]:[a]:[a-])],anion
+3. Gross Structual Features,Cyclic Features,CIS or TRANS double bond in a ring,*/,\[R]=;@[R]/,\*,An isomeric SMARTS consisting of four atoms and three bonds.
+3. Gross Structual Features,Cyclic Features,CIS or TRANS double or aromatic bond in a ring,*/,\[R]=,:;@[R]/,\*
+3. Gross Structual Features,Cyclic Features,Unfused benzene ring,[cR1]1[cR1][cR1][cR1][cR1][cR1]1,To find a benzene ring which is not fused, we write a SMARTS of 6 aromatic carbons in a ring where each atom is only in one ring:
+3. Gross Structual Features,Cyclic Features,Multiple non-fused benzene rings,[cR1]1[cR1][cR1][cR1][cR1][cR1]1.[cR1]1[cR1][cR1][cR1][cR1][cR1]1,
+3. Gross Structual Features,Cyclic Features,Fused benzene rings,c12ccccc1cccc2,
+4. Meta-SMARTS,Amino Acids,Generic amino acid: low specificity.,[NX3,NX4+][CX4H]([*])[CX3](=[OX1])[O,N],For use w/ non-standard a.a. search. hits pro but not gly. Hits acids and conjugate bases. Hits single a.a.s and specific residues w/in polypeptides (internal, or terminal).
+4. Meta-SMARTS,Amino Acids,A.A. Template for 20 standard a.a.s,[$([$([NX3H,NX4H2+]),$([NX3](C)(C)(C))]1[CX4H]([CH2][CH2][CH2]1)[CX3](=[OX1])[OX2H,OX1-,N]),$([$([NX3H2,NX4H3+]),$([NX3H](C)(C))][CX4H2][CX3](=[OX1])[OX2H,OX1-,N]),$([$([NX3H2,NX4H3+]),$([NX3H](C)(C))][CX4H]([*])[CX3](=[OX1])[OX2H,OX1-,N])],Pro, Gly, Other. Replace * w/ the entire 18_standard_side_chains list to get "any standard a.a." Hits acids and conjugate bases. Hits single a.a.s and specific residues w/in polypeptides (internal, or terminal).
+4. Meta-SMARTS,Amino Acids,Proline,[$([NX3H,NX4H2+]),$([NX3](C)(C)(C))]1[CX4H]([CH2][CH2][CH2]1)[CX3](=[OX1])[OX2H,OX1-,N],
+4. Meta-SMARTS,Amino Acids,Glycine,[$([$([NX3H2,NX4H3+]),$([NX3H](C)(C))][CX4H2][CX3](=[OX1])[OX2H,OX1-,N])],
+4. Meta-SMARTS,Amino Acids,Other a.a.,[$([NX3H2,NX4H3+]),$([NX3H](C)(C))][CX4H]([*])[CX3](=[OX1])[OX2H,OX1-,N],Replace * w/ a specific a.a. side chain from the 18_standard_side_chains list to hit a specific standard a.a. Won't work with Proline or Glycine, they have their own SMARTS (see side chain list). Hits acids and conjugate bases. Hits single a.a.s and specific residues w/i polypeptides (internal, or terminal). Example usage: Alanine side chain is [CH3X4] Alanine Search is [$([NX3H2,NX4H3+]),$([NX3H](C)(C))][CX4H]([CH3X4])[CX3](=[OX1])[OX2H,OX1-,N]
+4. Meta-SMARTS,Amino Acids,18_standard_aa_side_chains.,([$([CH3X4]),$([CH2X4][CH2X4][CH2X4][NHX3][CH0X3](=[NH2X3+,NHX2+0])[NH2X3]),$([CH2X4][CX3](=[OX1])[NX3H2]),$([CH2X4][CX3](=[OX1])[OH0-,OH]),$([CH2X4][SX2H,SX1H0-]),$([CH2X4][CH2X4][CX3](=[OX1])[OH0-,OH]),$([CH2X4][#6X3]1:[$([#7X3H+,#7X2H0+0]:[#6X3H]:[#7X3H]),$([#7X3H])]:[#6X3H]:[$([#7X3H+,#7X2H0+0]:[#6X3H]:[#7X3H]),$([#7X3H])]:[#6X3H]1),$([CHX4]([CH3X4])[CH2X4][CH3X4]),$([CH2X4][CHX4]([CH3X4])[CH3X4]),$([CH2X4][CH2X4][CH2X4][CH2X4][NX4+,NX3+0]),$([CH2X4][CH2X4][SX2][CH3X4]),$([CH2X4][cX3]1[cX3H][cX3H][cX3H][cX3H][cX3H]1),$([CH2X4][OX2H]),$([CHX4]([CH3X4])[OX2H]),$([CH2X4][cX3]1[cX3H][nX3H][cX3]2[cX3H][cX3H][cX3H][cX3H][cX3]12),$([CH2X4][cX3]1[cX3H][cX3H][cX3]([OHX2,OH0X1-])[cX3H][cX3H]1),$([CHX4]([CH3X4])[CH3X4])]),Can be any of the standard 18 (Pro & Gly are treated separately) Hits acids and conjugate bases.
+4. Meta-SMARTS,Amino Acids,N in Any_standard_amino_acid.,[$([$([NX3H,NX4H2+]),$([NX3](C)(C)(C))]1[CX4H]([CH2][CH2][CH2]1)[CX3](=[OX1])[OX2H,OX1-,N]),$([$([NX3H2,NX4H3+]),$([NX3H](C)(C))][CX4H2][CX3](=[OX1])[OX2H,OX1-,N]),$([$([NX3H2,NX4H3+]),$([NX3H](C)(C))][CX4H]([$([CH3X4]),$([CH2X4][CH2X4][CH2X4][NHX3][CH0X3](=[NH2X3+,NHX2+0])[NH2X3]),$([CH2X4][CX3](=[OX1])[NX3H2]),$([CH2X4][CX3](=[OX1])[OH0-,OH]),$([CH2X4][SX2H,SX1H0-]),$([CH2X4][CH2X4][CX3](=[OX1])[OH0-,OH]),$([CH2X4][#6X3]1:[$([#7X3H+,#7X2H0+0]:[#6X3H]:[#7X3H]),$([#7X3H])]:[#6X3H]:[$([#7X3H+,#7X2H0+0]:[#6X3H]:[#7X3H]),$([#7X3H])]:[#6X3H]1),$([CHX4]([CH3X4])[CH2X4][CH3X4]),$([CH2X4][CHX4]([CH3X4])[CH3X4]),$([CH2X4][CH2X4][CH2X4][CH2X4][NX4+,NX3+0]),$([CH2X4][CH2X4][SX2][CH3X4]),$([CH2X4][cX3]1[cX3H][cX3H][cX3H][cX3H][cX3H]1),$([CH2X4][OX2H]),$([CHX4]([CH3X4])[OX2H]),$([CH2X4][cX3]1[cX3H][nX3H][cX3]2[cX3H][cX3H][cX3H][cX3H][cX3]12),$([CH2X4][cX3]1[cX3H][cX3H][cX3]([OHX2,OH0X1-])[cX3H][cX3H]1),$([CHX4]([CH3X4])[CH3X4])])[CX3](=[OX1])[OX2H,OX1-,N])],Format is A.A.Template for 20 standard a.a.s. where * is replaced by the entire 18_standard_side_chains list (or'd together). A gen eric amino acid with any of the 18 side chains or, proline or glycine. Hits "standard" amino acids that have terminally appended groups (i.e . "standard" refers to the side chains). (Pro, Gly, or 18 normal a.a.s.) Hits single a.a.s and specific residues w/in polypeptides (intern al, or terminal).
+4. Meta-SMARTS,Amino Acids,Non-standard amino acid.,[$([NX3,NX4+][CX4H]([*])[CX3](=[OX1])[O,N]);!$([$([$([NX3H,NX4H2+]),$([NX3](C)(C)(C))]1[CX4H]([CH2][CH2][CH2]1)[CX3](=[OX1])[OX2H,OX1-,N]),$([$([NX3H2,NX4H3+]),$([NX3H](C)(C))][CX4H2][CX3](=[OX1])[OX2H,OX1-,N]),$([$([NX3H2,NX4H3+]),$([NX3H](C)(C))][CX4H]([$([CH3X4]),$([CH2X4][CH2X4][CH2X4][NHX3][CH0X3](=[NH2X3+,NHX2+0])[NH2X3]),$([CH2X4][CX3](=[OX1])[NX3H2]),$([CH2X4][CX3](=[OX1])[OH0-,OH]),$([CH2X4][SX2H,SX1H0-]),$([CH2X4][CH2X4][CX3](=[OX1])[OH0-,OH]),$([CH2X4][#6X3]1:[$([#7X3H+,#7X2H0+0]:[#6X3H]:[#7X3H]),$([#7X3H])]:[#6X3H]:[$([#7X3H+,#7X2H0+0]:[#6X3H]:[#7X3H]),$([#7X3H])]:[#6X3H]1),$([CHX4]([CH3X4])[CH2X4][CH3X4]),$([CH2X4][CHX4]([CH3X4])[CH3X4]),$([CH2X4][CH2X4][CH2X4][CH2X4][NX4+,NX3+0]),$([CH2X4][CH2X4][SX2][CH3X4]),$([CH2X4][cX3]1[cX3H][cX3H][cX3H][cX3H][cX3H]1),$([CH2X4][OX2H]),$([CHX4]([CH3X4])[OX2H]),$([CH2X4][cX3]1[cX3H][nX3H][cX3]2[cX3H][cX3H][cX3H][cX3H][cX3]12),$([CH2X4][cX3]1[cX3H][cX3H][cX3]([OHX2,OH0X1-])[cX3H][cX3H]1),$([CHX4]([CH3X4])[CH3X4])])[CX3](=[OX1])[OX2H,OX1-,N])])],Generic amino acid but not a "standard" amino acid ("standard" refers to the 20 normal side chains). Won't hit amino acids that are non-standard due solely to the fact that groups are terminally-appended to the polypeptide chain (N or C term). format is [$(generic a.a.); !$(not a standard one)] Hits single a.a.s and specific residues w/in polypeptides (internal, or terminal).
+4. Meta-SMARTS,Recursive or Multiple,Recursive SMARTS: Atoms connected to particular SMARTS,Ortho,[SMARTS_expression]-!:aa-!:[SMARTS_expression]
+4. Meta-SMARTS,Recursive or Multiple,Recursive SMARTS: Atoms connected to particular SMARTS,Meta,[SMARTS_expression]-!:aaa-!:[SMARTS_expression]
+4. Meta-SMARTS,Recursive or Multiple,Recursive SMARTS: Atoms connected to particular SMARTS,Para,[SMARTS_expression]-!:aaaa-!:[SMARTS_expression]
+4. Meta-SMARTS,Recursive or Multiple,Recursive SMARTS: Atoms connected to particular SMARTS,Hydrogen,[$([#1][SMARTS_expression])],Hydrogen must be explicit i.e. an isotope or charged
+4. Meta-SMARTS,Recursive or Multiple,Recursive SMARTS: Atoms connected to particular SMARTS,Nitrogen,[$([#7][SMARTS_expression])]
+4. Meta-SMARTS,Recursive or Multiple,Recursive SMARTS: Atoms connected to particular SMARTS,Oxygen,[$([#8][SMARTS_expression])]
+4. Meta-SMARTS,Recursive or Multiple,Recursive SMARTS: Atoms connected to particular SMARTS,Fluorine,[$([#9][SMARTS_expression])]
+4. Meta-SMARTS,Recursive or Multiple,Two possible groups,[$(SMARTS_expression_A),$(SMARTS_expression_B)],Hits atoms in either environment or group of interest, A or B. Example usages: Azide group is : [$(*-[NX2-]-[NX2+]#[NX1]),$(*-[NX2]=[NX2+]=[NX1-])] Azide ion is: [$([NX1-]=[NX2+]=[NX1-]),$( [NX1]#[NX2+]-[NX1-2])] Azide or azide ion is: [$([$(*-[NX2-]-[NX2+]#[NX1]),$(*-[NX2]=[NX2+]=[NX1-])]),$([$([NX1-]=[NX2+]=[NX1-]),$( [NX1]#[NX2+]-[NX1-2])])]
+4. Meta-SMARTS,Recursive or Multiple,Recursive SMARTS,[$([atom_that_gets_hit][other_atom][other_atom])],Hits first atom within parenthesis Example usages: [$([CX3]=[OX1])] hits Carbonyl Carbon [$([OX1]=[CX3])] hits Carbonyl Oxygen
+4. Meta-SMARTS,Recursive or Multiple,Single only, Double only, Single or Double,Sulfide,[#16X2H0],(-alkylthio) Won't hit thiols. Hits disulfides too.
+4. Meta-SMARTS,Recursive or Multiple,Single only, Double only, Single or Double,Mono-sulfide,[#16X2H0][!#16],(alkylthio- or alkoxy-) R-S-R Won't hit thiols. Won't hit disulfides.
+4. Meta-SMARTS,Recursive or Multiple,Single only, Double only, Single or Double,Di-sulfide,[#16X2H0][#16X2H0],Won't hit thiols. Won't hit mono-sulfides.
+4. Meta-SMARTS,Recursive or Multiple,Single only, Double only, Single or Double,Two sulfides,[#16X2H0][!#16].[#16X2H0][!#16],Won't hit thiols. Won't hit mono-sulfides. Won't hit disulfides.
+4. Meta-SMARTS,Recursive or Multiple,Single only, Double only, Single or Double,Acid/conj-base,[OX2H,OX1H0-],Hits acid and conjugate base. acid/base
+4. Meta-SMARTS,Recursive or Multiple,Single only, Double only, Single or Double,Non-acid Oxygen,[OX2H0],
+4. Meta-SMARTS,Recursive or Multiple,Single only, Double only, Single or Double,Acid/base,[H1,H0-],Works for any atom if base form has no Hs & acid has only one.
+4. Meta-SMARTS,Muntiple Disconnected Groups,Two disconnected SMARTS fragments,([Cl!$(Cl~c)].[c!$(c~Cl)]),A molecule that contains a chlorine and an aromatic carbon but which are not connected to each other. Uses component-level SMARTS. B oth SMARTS fragments must be in the same SMILES target fragment.
+4. Meta-SMARTS,Muntiple Disconnected Groups,Two disconnected SMARTS fragments,([Cl]).([c]),Hits SMILES that contain a chlorine and an aromatic carbon but which are in different SMILES fragments.
+4. Meta-SMARTS,Muntiple Disconnected Groups,Two not-necessarily connected SMARTS fragments,([Cl].[c]),Uses component-level SMARTS. Both SMARTS fragments must be in the same SMILES target fragment.
+4. Meta-SMARTS,Muntiple Disconnected Groups,Two not-necessarily connected fragments,([SMARTS_expression]).([SMARTS_expression]),Uses component-level SMARTS. SMARTS fragments are each in different SMILES target fragments.
+4. Meta-SMARTS,Muntiple Disconnected Groups,Two primary or secondary amines,[NX3;H2,H1;!$(NC=O)].[NX3;H2,H1;!$(NC=O)],Here we use the "disconnection" symbol (".") to match two separate not-necessarily bonded identical patterns.
+4. Meta-SMARTS,Tools & Tricks,Alternative/Equivalent Representations,Any carbon aromatic or non-aromatic,[#6] or [c,C],
+4. Meta-SMARTS,Tools & Tricks,SMILES wildcard,[#0],This SMARTS hits the SMILES *
+4. Meta-SMARTS,Tools & Tricks,Factoring,[OX2,OX1-][OX2,OX1-] or [O;X2,X1-][O;X2,X1-],Factor out common atomic expressions in the recursive SMARTS. May improve human readability.
+4. Meta-SMARTS,Tools & Tricks,High-precidence "and",[N&X4&+,N&X3&+0] or [NX4+,NX3+0],High-precidence "and" (&) is the default logical operator. "Or" (,) is higher precidence than & and low-precidence "and" (;) is lower precidence than &.
+4. Meta-SMARTS,Tools & Tricks,Hs on Carbons,[#6!H0,#1],
+4. Meta-SMARTS,Tools & Tricks,Atoms w/ 1 H,[H,#1],
+5. Electron & Proton Features,Acids & Bases,Acid,[!H0;F,Cl,Br,I,N+,$([OH]-*=[!#6]),+],Proton donor
+5. Electron & Proton Features,Acids & Bases,Carboxylic acid,[CX3](=O)[OX2H1],(-oic acid, COOH)
+5. Electron & Proton Features,Acids & Bases,Carboxylic acid or conjugate base.,[CX3](=O)[OX1H0-,OX2H1],
+5. Electron & Proton Features,Acids & Bases,Hydroxyl_acidic,[$([OH]-*=[!#6])],An acidic hydroxyl is a hydroxyl bonded to an atom which is multiply bonded to a hetero atom, this includes carboxylic, sulphur, pho sphorous, halogen and nitrogen oxyacids
+5. Electron & Proton Features,Acids & Bases,Phosphoric_Acid,[$(P(=[OX1])([$([OX2H]),$([OX1-]),$([OX2]P)])([$([OX2H]),$([OX1-]),$([OX2]P)])[$([OX2H]),$([OX1-]),$([OX2]P)]),$([P+]([OX1-])([$([OX2H]),$([OX1-]),$([OX2]P)])([$([OX2H]),$([OX1-]),$([OX2]P)])[$([OX2H]),$([OX1-]),$([OX2]P)])],Hits both forms. Hits orthophosphoric acid and polyphosphoric acid anhydrides. Doesn't hit monophosphoric acid anhydride esters (in cluding acidic mono- & di- esters) but will hit some polyphosphoric acid anhydride esters (mono- esters on pyrophosphoric acid and longe r, di- esters on linear triphosphoric acid and longer). Hits acid and conjugate base.
+5. Electron & Proton Features,Acids & Bases,Sulfonic Acid. High specificity.,[$([#16X4](=[OX1])(=[OX1])([#6])[OX2H,OX1H0-]),$([#16X4+2]([OX1-])([OX1-])([#6])[OX2H,OX1H0-])],Only hits carbo- sulfonic acids (Won't hit herteroatom-substituted molecules). Hits acid and conjugate base. Hits Both Depiction Fo rms. Hits Arene sulfonic acids.
+5. Electron & Proton Features,Acids & Bases,Acyl Halide,[CX3](=[OX1])[F,Cl,Br,I],(acid halide, -oyl halide)
+5. Electron & Proton Features,Charge,Anionic divalent Nitrogen,[NX2-],
+5. Electron & Proton Features,Charge,Oxenium Oxygen,[OX2H+]=*,
+5. Electron & Proton Features,Charge,Oxonium Oxygen,[OX3H2+],
+5. Electron & Proton Features,Charge,Carbocation,[#6+],
+5. Electron & Proton Features,Charge,sp2 cationic carbon.,[$([cX2+](:*):*)],Aromatic cationic sp2 carbon with a free electron in a non-bonding sp2 hybrid orbital
+5. Electron & Proton Features,Charge,Azide ion.,[$([NX1-]=[NX2+]=[NX1-]),$([NX1]#[NX2+]-[NX1-2])],Hits N in azide ion
+5. Electron & Proton Features,Charge,Zwitterion High Specificity,[+1]~*~*~[-1],+1 charged atom separated by any 3 bonds from a -1 charged atom.
+5. Electron & Proton Features,Charge,Zwitterion Low Specificity, Crude,[$([!-0!-1!-2!-3!-4]~*~[!+0!+1!+2!+3!+4]),$([!-0!-1!-2!-3!-4]~*~*~[!+0!+1!+2!+3!+4]),$([!-0!-1!-2!-3!-4]~*~*~*~[!+0!+1!+2!+3!+4]),$([!-0!-1!-2!-3!-4]~*~*~*~*~[!+0!+1!+2!+3!+4]),$([!-0!-1!-2!-3!-4]~*~*~*~*~*~[!+0!+1!+2!+3!+4]),$([!-0!-1!-2!-3!-4]~*~*~*~*~*~*~[!+0!+1!+2!+3!+4]),$([!-0!-1!-2!-3!-4]~*~*~*~*~*~*~*~[!+0!+1!+2!+3!+4]),$([!-0!-1!-2!-3!-4]~*~*~*~*~*~*~*~*~[!+0!+1!+2!+3!+4]),$([!-0!-1!-2!-3!-4]~*~*~*~*~*~*~*~*~*~[!+0!+1!+2!+3!+4])],Variously charged moieties separated by up to ten bonds.
+5. Electron & Proton Features,Charge,Zwitterion Low Specificity,([!-0!-1!-2!-3!-4].[!+0!+1!+2!+3!+4]),Variously charged moieties that are within the same molecule but not-necessarily connected. Uses component-level grouping.
+5. Electron & Proton Features,H-bond Donors & Acceptors,Hydrogen-bond acceptor,[#6,#7;R0]=[#8],Only hits carbonyl and nitroso. Matches a 2-atom pattern consisting of a carbon or nitrogen not in a ring, double bonded to an oxyge n.
+5. Electron & Proton Features,H-bond Donors & Acceptors,Hydrogen-bond acceptor,[!$([#6,F,Cl,Br,I,o,s,nX3,#7v5,#15v5,#16v4,#16v6,*+1,*+2,*+3)],A H-bond acceptor is a heteroatom with no positive charge, note that negatively charged oxygen or sulphur are included. Excluded are halogens, including F, heteroaromatic oxygen, sulphur and pyrrole N. Higher oxidation levels of N,P,S are excluded. Note P(III) is currentl y included. Zeneca's work would imply that (O=S=O) shoud also be excluded.
+5. Electron & Proton Features,H-bond Donors & Acceptors,Hydrogen-bond donor.,[!$([#6,H0,-,-2,-3])],A H-bond donor is a non-negatively charged heteroatom with at least one H
+5. Electron & Proton Features,H-bond Donors & Acceptors,Hydrogen-bond donor.,[!H0;#7,#8,#9],Must have an N-H bond, an O-H bond, or a F-H bond
+5. Electron & Proton Features,H-bond Donors & Acceptors,Possible intramolecular H-bond,[O,N;!H0]-*~*-*=[$([C,N;R0]=O)],Note that the overall SMARTS consists of five atoms. The fifth atom is defined by a "recursive SMARTS", where "$()" encloses a valid nested SMARTS and acts syntactically like an atom-primitive in the overall SMARTS. Multiple nesting is allowed.
+5. Electron & Proton Features,Radicals,Carbon Free-Radical,[#6;X3v3+0],Hits a neutral carbon with three single bonds.
+5. Electron & Proton Features,Radicals,Nitrogen Free-Radical,[#7;X2v4+0],Hits a neutral nitrogen with two single bonds or with a single and a triple bond.
