@@ -203,7 +203,7 @@ def load_yaml_smarts():
                     subsub_name = subsub.get("name", "Unnamed Subsubgroup")
                     for rule in subsub.get("rules", []):
                         if "smarts" in rule:
-                            key = f"{group_name}: {subgroup_name} > {subsub_name} - {rule.get('name', 'Unnamed Rule')}"
+                            key = f"{group_name} > {subgroup_name} > {subsub_name} > {rule.get('name', 'Unnamed Rule')}"
                             compiled_yaml[key] = Chem.MolFromSmarts(rule.get("smarts"))
             elif "rules" in subgroup:
                 for rule in subgroup.get("rules", []):
@@ -219,8 +219,8 @@ def process_daylight_smarts_examples(smiles: str):
     patterns = load_yaml_smarts()
     images = highlight_by_patterns(smiles, patterns)
     if images is None or len(images) == 0:
-        return [], "No YAML SMARTS recognized or invalid SMILES." 
-    return images, f"Found {len(images)} YAML SMARTS matches." 
+        return [], "No SMARTS examples recognized or invalid SMILES." 
+    return images, f"Found {len(images)} SMARTS matches." 
 
 # -----------------------------
 # Combined Processing Function
