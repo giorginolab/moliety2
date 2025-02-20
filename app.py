@@ -78,7 +78,7 @@ def highlight_by_patterns(smiles: str, pattern_dict: dict):
                 highlightBonds=list(highlight_bonds),
                 legend=name
             )
-            images.append(img)
+            images.append((img,name))
     return images
 
 # These two functions simply call the generic one with different pattern dictionaries.
@@ -196,8 +196,8 @@ def process_smiles_mode(smiles: str, mode: str):
 with gr.Blocks() as demo:
     gr.Markdown("# Moliety: Molecular Feature Highlighter")
     gr.Markdown(
-        "Confirm your impostor syndrome by uploading a molecule in SMILES form and count all the moieties you were supposed to know by heart."
-        "Enter a SMILES string below and select a highlighting mode. "
+        "Enter a SMILES string below and select a highlighting mode. <br/>"
+        "Confirm your impostor syndrome by uploading a molecule in SMILES form and count all the moieties you were supposed to know by heart. <br/>"
         "You can choose to highlight functional groups, interligand moieties, rotatable bonds, or chiral centers."
     )
     gr.Markdown("www.giorginolab.it")
@@ -222,7 +222,7 @@ with gr.Blocks() as demo:
             ["CCOC(=O)C1=CC=CC=C1", "Rotatable Bonds"],
             ["CC(C(=O)O)N", "Chiral Centers"],
             ["CC(C)Cc1ccc(cc1)C(C)C(=O)O", "Functional Groups"],
-            ["CC1=C(C=C(C=C1)C(=O)NC2=C3C(=CC(=CC3=C(C=C2)S(=O)(=O)O)S(=O)(=O)O)NC(=O)C4=CC(=CC=C4)NC(=O)NC5=CC=CC(=C5)C(=O)NC6=C(C=CC(=C6)C(=O)NC7=C8C(=CC(=CC8=C(C=C7)S(=O)(=O)O)S(=O)(=O)O)S(=O)(=O)O)C", "Functional Groups"]
+            ["CC1=C(C=C(C=C1)C(=O)NC2=C3C(=CC(=CC3=C(C=C2)S(=O)(=O)O)S(=O)(=O)O)S(=O)(=O)O)NC(=O)C4=CC(=CC=C4)NC(=O)NC5=CC=CC(=C5)C(=O)NC6=C(C=CC(=C6)C(=O)NC7=C8C(=CC(=CC8=C(C=C7)S(=O)(=O)O)S(=O)(=O)O)S(=O)(=O)O)C", "Functional Groups"]
         ],
         example_labels=["Aspirin", "Aspirin (kekulized)", "Ethylbenzoate", "DL-Alanine", "Ibuprofen", "Suramin"],
         inputs=[smiles_input, mode_dropdown],
