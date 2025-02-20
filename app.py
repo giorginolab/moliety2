@@ -205,7 +205,7 @@ with gr.Blocks() as demo:
         smiles_input = gr.Textbox(
             label="Enter SMILES string", 
             placeholder="e.g. CC(=O)OC1=CC=CC=C1C(=O)O",
-            lines=1
+            lines=3
         )
         mode_dropdown = gr.Dropdown(
             label="Highlight Mode",
@@ -213,6 +213,18 @@ with gr.Blocks() as demo:
             value="Functional Groups"
         )
     
+    gr.Examples(
+        examples=[
+            ["CC(=O)OC1=CC=CC=C1C(=O)O", "Functional Groups"],
+            ["CCOC(=O)C1=CC=CC=C1", "Rotatable Bonds"],
+            ["CC(C(=O)O)N", "Chiral Centers"]
+        ],
+        example_labels=["Aspirin","Ethylbenzoate","DL-Alanine"],
+        inputs=[smiles_input, mode_dropdown],
+        label="Examples"
+    )
+
+   
     gallery = gr.Gallery(label="Highlighted Features", columns=3, height="auto")
     status = gr.Textbox(label="Status", interactive=False)
 
