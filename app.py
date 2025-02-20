@@ -246,7 +246,7 @@ def process_daylight_smarts_examples(smiles: str):
     return images, f"Found {len(images)} SMARTS matches." 
 
 # -----------------------------
-# Scaffold Highlight Function
+# Updated Scaffold Highlight Function
 # -----------------------------
 def process_scaffold(smiles: str):
     mol = Chem.MolFromSmiles(smiles)
@@ -258,13 +258,19 @@ def process_scaffold(smiles: str):
     match = mol.GetSubstructMatch(scaffold)
     if not match:
         return [], "Scaffold not found as substructure."
+    # Compute bonds where both atoms are in the match
+    highlight_bonds = []
+    for bond in mol.GetBonds():
+        if bond.GetBeginAtomIdx() in match and bond.GetEndAtomIdx() in match:
+            highlight_bonds.append(bond.GetIdx())
     img = Draw.MolToImage(
         mol,
         size=IMAGE_SIZE,
         highlightAtoms=list(match),
+        highlightBonds=highlight_bonds,
         legend="Murcko Scaffold"
     )
-    return [(img, "Scaffold")], "Scaffold highlighted."
+    return [(img, "Murcko Scaffold")], "Scaffold highlighted."
 
 # -----------------------------
 # Combined Processing Function
@@ -290,7 +296,7 @@ def process_smiles_mode(smiles: str, mode: str):
     elif mode == "DAYLIGHT SMARTS Examples":  
         images, status_msg = process_daylight_smarts_examples(smiles)
         return images, status_msg
-    elif mode == "Murcko Scaffold Highlight":  # New mode branch
+    elif mode == "Murcko Scaffold":
         images, status_msg = process_scaffold(smiles)
         return images, status_msg
     else:
@@ -319,7 +325,7 @@ with gr.Blocks() as demo:
         mode_dropdown = gr.Dropdown(
             label="Highlight Mode",
             choices=["Functional Groups", "Rotatable Bonds", "Interligand Moieties", "Chiral Centers", 
-                     "Potential Stereo", "DAYLIGHT SMARTS Examples", "Murcko Scaffold Highlight"],  # Added new mode
+                     "Potential Stereo", "DAYLIGHT SMARTS Examples", "Murcko Scaffold"],  # Added new mode
             value="Functional Groups"
         )
     
