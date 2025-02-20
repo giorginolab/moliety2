@@ -1,6 +1,5 @@
 ---
 title: Moliety2
-emoji: ⌬
 colorFrom: indigo
 colorTo: yellow
 sdk: gradio
