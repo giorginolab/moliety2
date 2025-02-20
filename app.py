@@ -28,7 +28,7 @@ compiled_patterns = {name: Chem.MolFromSmarts(smart)
 def load_interligand_moieties():
     moieties = {}
     try:
-        with open("SMARTS_InteLigand.txt", "r") as f:
+        with open("data/SMARTS_InteLigand.txt", "r") as f:
             for line in f:
                 line = line.strip()
                 if not line or line.startswith("#"):

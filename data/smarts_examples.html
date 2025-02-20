@@ -1,0 +1,1353 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Daylight&gt;SMARTS Examples</title>
+    <link rel="stylesheet" href="/b.css" type="text/css">
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+<body>
+<table width=750 cellpadding=0 cellspacing=0 border=0>
+    <tr>
+    <td align=center> <iframe src="/iframes/header2.html" name="iframe4" width="745" height="170"
+         scrolling="no" frameborder="0"></iframe></td>
+    </tr>
+</table>
+<table width=750 cellpadding=15>
+    <tr><td class="border-bot">
+<center><h1>SMARTS Examples
+</h1></center>
+<a name="TOP"></a><h2>Table of Contents</h2>
+
+  <a href="#INTRO">1. Introduction</a><br>
+  <a href="#GROUP">2. Functional Groups by Element</a><br>
+  <a href="#STRUCTUAL">2. Gross Structual Features</a><br>
+  <a href="#META">4. Meta-SMARTS</a><br>
+    <a href="#E-">5. Electron &amp; Proton Features</a><br>
+<a href="#BREAK">6. Breakdown of Complex SMARTS</a><br>
+  <a href="#EXMPL">7. Interesting Example SMARTS</a><br>
+<br>
+<a NAME="INTRO"></a>
+<H2>
+1. Introduction
+</H2>
+When using SMARTS to do searches, it is often helpful to have
+   example queries from which to start.  This document contains
+   many potentially useful example SMARTS which may be used to
+   perform searches. templates, examples and ideas.
+<br><br>
+These SMARTS have been tested, but they may still contain errors.
+   Please send corrections, improvements, additions, and questions to
+   <A HREF="mailto:support@daylight.com">support@daylight.com.</A>
+
+<br><br>
+<a NAME="GROUP"></a>
+<H2>
+2. Functional Groups by Element
+</H2>
+
+<table border=1 COLS=8 WIDTH="750"><tr>
+   <td align=center><a href="#C">C</a></td>
+   <td align=center><a href="#CO">C&amp;O</a></td>
+   <td align=center><a href="#H">H</a></td>
+   <td align=center><a href="#N">N</a></td>
+   <td align=center><a href="#O">O</a></td>
+   <td align=center><a href="#P">P</a></td>
+   <td align=center><a href="#S">S</a></td>
+   <td align=center><a href="#X">X</a></td></tr>
+</table><br>
+<a NAME="C"></a><h2></a>C</h2>
+<h3> alkane </h3><dl>
+<p><dt> Alkyl Carbon
+   <dd> [CX4]</p></dl><br>
+<h3> alkene (-ene) </h3><dl>
+<p><dt> Allenic Carbon
+   <dd> [$([CX2](=C)=C)]
+<p><dt> Vinylic Carbon
+   <dd> [$([CX3]=[CX3])]
+   <dd> Ethenyl carbon </p></dl><br>
+<h3> alkyne (-yne) </h3><dl>
+<p><dt> Acetylenic Carbon
+   <dd> [$([CX2]#C)]</p></dl><br>
+<h3> arene (Ar , aryl-, aromatic hydrocarbons) </h3><dl>
+<p><dt> Arene
+   <dd> c </p></dl><br>
+<a NAME="CO"></a><h2>C &amp; O</h2>
+<h3>carbonyl</h3><dl>
+<p><dt> Carbonyl group. Low specificity
+   <dd> [CX3]=[OX1]
+   <dd> Hits carboxylic acid, ester, ketone, aldehyde, carbonic
+        acid/ester,anhydride, carbamic acid/ester, acyl halide, amide.
+<p><dt> Carbonyl group
+   <dd> [$([CX3]=[OX1]),$([CX3+]-[OX1-])]
+   <dd> Hits either resonance structure
+<p><dt> Carbonyl with Carbon
+   <dd> [CX3](=[OX1])C
+   <dd> Hits aldehyde, ketone, carboxylic acid (except formic), anhydride
+        (except formic), acyl halides (acid halides). Won't hit carbamic
+        acid/ester, carbonic acid/ester.
+<p><dt> Carbonyl with Nitrogen.
+   <dd> [OX1]=CN
+   <dd> Hits amide, carbamic acid/ester, poly peptide
+<p><dt> Carbonyl with Oxygen.
+   <dd> [CX3](=[OX1])O
+   <dd> Hits ester, carboxylic acid, carbonic acid or ester, carbamic acid
+        or ester, anhydride  Won't hit aldehyde or ketone.
+<p><dt> Acyl Halide
+   <dd> [CX3](=[OX1])[F,Cl,Br,I]
+   <dd> acid halide, -oyl halide
+<p><dt> Aldehyde
+   <dd> [CX3H1](=O)[#6]
+   <dd> -al
+<p><dt> Anhydride
+   <dd> [CX3](=[OX1])[OX2][CX3](=[OX1])
+<p><dt> Amide
+   <dd> [NX3][CX3](=[OX1])[#6]
+   <dd> -amide
+<p><dt> Amidinium
+   <dd> [NX3][CX3]=[NX3+]
+<p><dt> Carbamate.
+   <dd> [NX3,NX4+][CX3](=[OX1])[OX2,OX1-]
+   <dd> Hits carbamic esters, acids, and zwitterions
+<p><dt> Carbamic ester
+   <dd> [NX3][CX3](=[OX1])[OX2H0]
+<p><dt> Carbamic acid.
+   <dd> [NX3,NX4+][CX3](=[OX1])[OX2H,OX1-]
+   <dd> Hits carbamic acids and zwitterions.
+<p><dt> Carboxylate Ion.
+   <dd> [CX3](=O)[O-]
+   <dd> Hits conjugate bases of carboxylic, carbamic, and carbonic acids.
+<p><dt> Carbonic Acid or Carbonic Ester
+   <dd> [CX3](=[OX1])(O)O
+   <dd> Carbonic Acid, Carbonic Ester, or combination
+<p><dt> Carbonic Acid or Carbonic Acid-Ester
+   <dd> [CX3](=[OX1])([OX2])[OX2H,OX1H0-1]
+   <dd> Hits acid and conjugate base. Won't hit carbonic acid diester
+<p><dt> Carbonic Ester (carbonic acid diester)
+   <dd> C[OX2][CX3](=[OX1])[OX2]C
+   <dd> Won't hit carbonic acid or combination carbonic acid/ester
+<p><dt> Carboxylic acid
+   <dd> [CX3](=O)[OX2H1]
+   <dd> -oic acid, COOH
+<p><dt> Carboxylic acid or conjugate base.
+   <dd> [CX3](=O)[OX1H0-,OX2H1]
+<p><dt> Cyanamide
+   <dd> [NX3][CX2]#[NX1]
+<p><dt> Ester Also hits anhydrides
+   <dd> [#6][CX3](=O)[OX2H0][#6]
+   <dd> won't hit formic anhydride.
+<p><dt> Ketone
+   <dd> [#6][CX3](=O)[#6]
+   <dd> -one </p></dl><br>
+<h3> ether</h3><dl>
+<p><dt> Ether
+   <dd> [OD2]([#6])[#6]</p></dl><br>
+<a NAME="H"></a><h2></a>H</h2>
+<h3> hydrogen atoms</h3><dl>
+<p><dt> Hydrogen Atom
+   <dd> [H]
+   <dd> Hits SMILES that are hydrogen atoms: [H+] [2H] [H][H]
+<p><dt> Not a Hydrogen Atom
+   <dd> [!#1]
+   <dd> Hits SMILES that are not hydrogen atoms.
+<p><dt> Proton
+   <dd> [H+]
+   <dd> Hits positively charged hydrogen atoms: [H+]</p></dl><br>
+<h3> hydrogen count</h3><dl>
+<p><dt> Mono-Hydrogenated Cation
+   <dd> [+H]
+   <dd> Hits atoms that have a positive charge and exactly one attached hydrogen: F[C+](F)[H]
+<p><dt> Not Mono-Hydrogenated
+   <dd> [!H] or [!H1]
+   <dd> Hits atoms that don't have exactly one attached hydrogen.</p></dl><br>
+<a NAME="N"></a><h2>N</h2>
+<h3> amide </b> see carbonyl</p><br>
+mine (-amino) </h3><dl>
+<p><dt> Primary or secondary amine, not amide.
+   <dd> [NX3;H2,H1;!$(NC=O)]
+   <dd> Not ammonium ion (N must be 3-connected), not ammonia (H count can't be 3). Primary or secondary is specified by N's H-count (H2 &amp; H1 respectively).  Also note that "&amp;" (and) is the dafault opperator and is higher precedence that "," (or), which is higher precedence than ";" (and). Will hit cyanamides and thioamides
+<p><dt> Enamine
+   <dd> [NX3][CX3]=[CX3]
+<p><dt> Primary amine, not amide.
+   <dd> [NX3;H2;!$(NC=[!#6]);!$(NC#[!#6])][#6] Not amide (C not double bonded to a hetero-atom), not ammonium ion (N must be 3-connected), not ammonia (N's H-count can't be 3), not cyanamide (C not triple bonded to a hetero-atom)
+<p><dt> Two primary or secondary amines
+   <dd> [NX3;H2,H1;!$(NC=O)].[NX3;H2,H1;!$(NC=O)]
+   <dd> Here we use the disconnection symbol (".") to match two separate unbonded identical patterns.
+<p><dt> Enamine or Aniline Nitrogen
+   <dd> [NX3][$(C=C),$(cc)]</p></dl><br>
+<h3> amino acids</h3><dl>
+<p><dt> Generic amino acid: low specificity.
+   <dd> [NX3,NX4+][CX4H]([*])[CX3](=[OX1])[O,N]
+   <dd> For use w/ non-standard a.a. search. hits pro but not gly. Hits acids and conjugate bases.  Hits single a.a.s and specific residues w/in polypeptides (internal, or terminal).
+<p><dt> Dipeptide group. generic amino acid: low specificity.
+   <dd> [NX3H2,NH3X4+][CX4H]([*])[CX3](=[OX1])[NX3,NX4+][CX4H]([*])[CX3](=[OX1])[OX2H,OX1-]
+   <dd> Won't hit pro or gly. Hits acids and conjugate bases.
+<p><dt> Amino Acid
+   <dd> [$([NX3H2,NX4H3+]),$([NX3H](C)(C))][CX4H]([*])[CX3](=[OX1])[OX2H,OX1-,N]
+   <dd> Replace * w/ a specific a.a. side chain from the 18_standard_side_chains list to hit a specific standard a.a. Won't work with Proline
+ or Glycine, they have their own SMARTS (see side chain list). Hits acids and conjugate bases.  Hits single a.a.s and specific residues w/i
+n polypeptides (internal, or terminal). {e.g. usage:  Alanine side chain is  [CH3X4] . Search is [$([NX3H2,NX4H3+]),$([NX3H](C)(C))][CX4H]([
+CH3X4])[CX3](=[OX1])[OX2H,OX1-,N]}</p></dl><br>
+<h3> amino acid side chains</h3><dl>
+<p><dt> Alanine side chain
+   <dd> [CH3X4]
+
+<p><dt> Arginine side chain.
+   <dd> [CH2X4][CH2X4][CH2X4][NHX3][CH0X3](=[NH2X3+,NHX2+0])[NH2X3]
+   <dd> Hits acid and conjugate base.
+
+<p><dt> Aspargine side chain.
+   <dd> [CH2X4][CX3](=[OX1])[NX3H2]
+   <dd> Also hits Gln side chain when used alone.
+
+<p><dt> Aspartate (or Aspartic acid) side chain.
+   <dd> [CH2X4][CX3](=[OX1])[OH0-,OH]
+   <dd> Hits acid and conjugate base. Also hits Glu side chain when used alone.
+
+<p><dt> Cysteine side chain.
+   <dd> [CH2X4][SX2H,SX1H0-]
+   <dd> Hits acid and conjugate base
+
+<p><dt> Glutamate (or Glutamic acid) side chain.
+   <dd> [CH2X4][CH2X4][CX3](=[OX1])[OH0-,OH]
+   <dd> Hits acid and conjugate base.
+
+<p><dt> Glycine
+   <dd> [$([$([NX3H2,NX4H3+]),$([NX3H](C)(C))][CX4H2][CX3](=[OX1])[OX2H,OX1-,N])]
+<p><dt> Histidine side chain.
+   <dd> [CH2X4][#6X3]1:[$([#7X3H+,#7X2H0+0]:[#6X3H]:[#7X3H]),$([#7X3H])]:[#6X3H]:<br>[$([#7X3H+,#7X2H0+0]:[#6X3H]:[#7X3H]),$([#7X3H])]:[#6X3H]1
+   <dd> Hits acid &amp; conjugate base for either Nitrogen.  Note that the Ns can be either ([(Cationic 3-connected with one H) or (Neutral
+2-connected without any Hs)] where there is a second-neighbor who is [3-connected with one H]) or (3-connected with one H).
+
+<p><dt> Isoleucine side chain
+   <dd> [CHX4]([CH3X4])[CH2X4][CH3X4]
+
+<p><dt> Leucine side chain
+   <dd> [CH2X4][CHX4]([CH3X4])[CH3X4]
+
+<p><dt> Lysine side chain.
+   <dd> [CH2X4][CH2X4][CH2X4][CH2X4][NX4+,NX3+0]
+   <dd> Acid and conjugate base
+
+<p><dt> Methionine side chain
+   <dd> [CH2X4][CH2X4][SX2][CH3X4]
+
+<p><dt> Phenylalanine side chain
+   <dd> [CH2X4][cX3]1[cX3H][cX3H][cX3H][cX3H][cX3H]1
+
+<p><dt> Proline
+   <dd> [$([NX3H,NX4H2+]),$([NX3](C)(C)(C))]1[CX4H]([CH2][CH2][CH2]1)[CX3](=[OX1])[OX2H,OX1-,N]
+
+<p><dt> Serine side chain
+   <dd> [CH2X4][OX2H]
+
+<p><dt> Thioamide
+   <dd> [NX3][CX3]=[SX1]
+
+<p><dt> Threonine side chain
+   <dd> [CHX4]([CH3X4])[OX2H]
+
+<p><dt> Tryptophan side chain
+   <dd> [CH2X4][cX3]1[cX3H][nX3H][cX3]2[cX3H][cX3H][cX3H][cX3H][cX3]12
+
+<p><dt> Tyrosine side chain.
+   <dd> [CH2X4][cX3]1[cX3H][cX3H][cX3]([OHX2,OH0X1-])[cX3H][cX3H]1
+   <dd> Acid and conjugate base
+
+<p><dt> Valine side chain
+   <dd> [CHX4]([CH3X4])[CH3X4]
+
+<p><dt> Alanine side chain
+   <dd> [CH3X4]
+
+<p><dt> Arginine side chain.
+   <dd> [CH2X4][CH2X4][CH2X4][NHX3][CH0X3](=[NH2X3+,NHX2+0])[NH2X3]
+   <dd> Hits acid and conjugate base.
+
+<p><dt> Aspargine side chain.
+   <dd> [CH2X4][CX3](=[OX1])[NX3H2]
+   <dd> Also hits Gln side chain when used alone.
+
+<p><dt> Aspartate (or Aspartic acid) side chain.
+   <dd> [CH2X4][CX3](=[OX1])[OH0-,OH]
+   <dd> Hits acid and conjugate base. Also hits Glu side chain when used alone.
+
+<p><dt> Cysteine side chain.
+   <dd> [CH2X4][SX2H,SX1H0-]
+   <dd> Hits acid and conjugate base
+
+<p><dt> Glutamate (or Glutamic acid) side chain.
+   <dd> [CH2X4][CH2X4][CX3](=[OX1])[OH0-,OH]
+   <dd> Hits acid and conjugate base.
+
+<p><dt> Glycine
+   <dd> N[CX4H2][CX3](=[OX1])[O,N]
+
+<p><dt> Histidine side chain.
+   <dd> [CH2X4][#6X3]1:[$([#7X3H+,#7X2H0+0]:[#6X3H]:[#7X3H]),$([#7X3H])]:[#6X3H]:<br>[$([#7X3H+,#7X2H0+0]:[#6X3H]:[#7X3H]),$([#7X3H])]:[#6X3H]1
+   <dd> Hits acid &amp; conjugate base for either Nitrogen.  Note that the Ns can be either ([(Cationic 3-connected with one H) or (Neutral
+2-connected without any Hs)] where there is a second-neighbor who is [3-connected 
+
+<p><dt> Isoleucine side chain
+   <dd> [CHX4]([CH3X4])[CH2X4][CH3X4]
+
+<p><dt> Leucine side chain
+   <dd> [CH2X4][CHX4]([CH3X4])[CH3X4]
+
+<p><dt> Lysine side chain.
+   <dd> [CH2X4][CH2X4][CH2X4][CH2X4][NX4+,NX3+0]
+   <dd> Acid and conjugate base
+
+<p><dt> Methionine side chain
+   <dd> [CH2X4][CH2X4][SX2][CH3X4]
+
+<p><dt> Phenylalanine side chain
+   <dd> [CH2X4][cX3]1[cX3H][cX3H][cX3H][cX3H][cX3H]1
+
+<p><dt> Proline
+   <dd> N1[CX4H]([CH2][CH2][CH2]1)[CX3](=[OX1])[O,N]
+
+<p><dt> Serine side chain
+   <dd> [CH2X4][OX2H]
+
+<p><dt> Threonine side chain
+   <dd> [CHX4]([CH3X4])[OX2H]
+
+<p><dt> Tryptophan side chain
+   <dd> [CH2X4][cX3]1[cX3H][nX3H][cX3]2[cX3H][cX3H][cX3H][cX3H][cX3]12
+
+<p><dt> Tyrosine side chain.
+   <dd> [CH2X4][cX3]1[cX3H][cX3H][cX3]([OHX2,OH0X1-])[cX3H][cX3H]1
+   <dd> Acid and conjugate base
+
+<p><dt> Valine side chain
+   <dd> [CHX4]([CH3X4])[CH3X4]</p></dl><br>
+
+<h3> azide (-azido) </h3><dl>
+
+<p><dt> Azide group.
+   <dd> [$(*-[NX2-]-[NX2+]#[NX1]),$(*-[NX2]=[NX2+]=[NX1-])]
+   <dd> Hits any atom with an attached azide.
+
+<p><dt> Azide ion.
+   <dd> [$([NX1-]=[NX2+]=[NX1-]),$([NX1]#[NX2+]-[NX1-2])]
+   <dd> Hits N in azide ion</p></dl><br>
+
+<h3> azo </h3><dl>
+
+<p><dt> Nitrogen.
+   <dd> [#7]
+   <dd> Nitrogen in N-containing compound. aromatic or aliphatic. Most general interpretation of "azo"
+
+<p><dt> Azo Nitrogen. Low specificity.
+   <dd> [NX2]=N
+   <dd> Hits diazene, azoxy and some diazo structures
+
+<p><dt> Azo Nitrogen.diazene
+   <dd> [NX2]=[NX2]
+   <dd> (diaza alkene)
+
+<p><dt> Azoxy Nitrogen.
+   <dd> [$([NX2]=[NX3+]([O-])[#6]),$([NX2]=[NX3+0](=[O])[#6])]
+
+<p><dt> Diazo Nitrogen
+   <dd> [$([#6]=[N+]=[N-]),$([#6-]-[N+]#[N])]
+
+<p><dt> Azole.
+   <dd> [$([nr5]:[nr5,or5,sr5]),$([nr5]:[cr5]:[nr5,or5,sr5])]
+   <dd> 5 member aromatic heterocycle w/ 2double bonds. contains N &amp; another non C (N,O,S)  subclasses are furo-, thio-, pyrro-  (replace
+CH o' furfuran, thiophene, pyrrol w/ N)</p></dl><br>
+
+<h3> hydrazine</h3><dl>
+
+<p><dt> Hydrazine H2NNH2
+   <dd> [NX3][NX3]</p></dl><br>
+
+<h3> hydrazone </h3><dl>
+
+<p><dt> Hydrazone C=NNH2
+   <dd> [NX3][NX2]=[*]</p></dl><br>
+
+<h3> imine </h3><dl>
+
+<p><dt> Substituted imine
+   <dd> [CX3;$([C]([#6])[#6]),$([CH][#6])]=[NX2][#6]
+   <dd> Schiff base
+
+<p><dt> Substituted or un-substituted imine
+   <dd> [$([CX3]([#6])[#6]),$([CX3H][#6])]=[$([NX2][#6]),$([NX2H])]
+
+<p><dt> Iminium
+   <dd> [NX3+]=[CX3]</p></dl><br>
+
+<h3> imide </h3><dl>
+
+<p><dt> Unsubstituted dicarboximide
+   <dd> [CX3](=[OX1])[NX3H][CX3](=[OX1])
+
+<p><dt> Substituted dicarboximide
+   <dd> [CX3](=[OX1])[NX3H0]([#6])[CX3](=[OX1])
+
+<p><dt> Dicarboxdiimide
+   <dd> [CX3](=[OX1])[NX3H0]([NX3H0]([CX3](=[OX1]))[CX3](=[OX1]))[CX3](=[OX1])</p></dl><br>
+
+<h3> nitrate </h3><dl>
+
+<p><dt> Nitrate group
+   <dd> [$([NX3](=[OX1])(=[OX1])O),$([NX3+]([OX1-])(=[OX1])O)]
+   <dd> Also hits nitrate anion
+
+<p><dt> Nitrate Anion
+   <dd> [$([OX1]=[NX3](=[OX1])[OX1-]),$([OX1]=[NX3+]([OX1-])[OX1-])]</p></dl><br>
+
+<h3> nitrile </h3><dl>
+
+<p><dt> Nitrile
+   <dd> [NX1]#[CX2]
+
+<p><dt> Isonitrile
+   <dd> [CX1-]#[NX2+]</p></dl><br>
+
+<h3> nitro </h3><dl>
+
+<p><dt> Nitro group.
+   <dd> [$([NX3](=O)=O),$([NX3+](=O)[O-])][!#8] Hits both forms.
+
+<p><dt> Two Nitro groups
+   <dd> [$([NX3](=O)=O),$([NX3+](=O)[O-])][!#8].[$([NX3](=O)=O),$([NX3+](=O)[O-])][!#8]</p></dl><br>
+
+<h3> nitroso </h3><dl>
+
+<p><dt> Nitroso-group
+   <dd> [NX2]=[OX1]</p></dl><br>
+
+<h3> n-oxide </h3><dl>
+
+<p><dt> N-Oxide
+   <dd> [$([#7+][OX1-]),$([#7v5]=[OX1]);!$([#7](~[O])~[O]);!$([#7]=[#7])]
+   <dd> Hits both forms. Won't hit azoxy, nitro, nitroso,or nitrate.</p></dl><br>
+
+
+<a NAME="O"></a><h2>O</h2>
+
+
+<h3> hydroxyl (includes alcohol, phenol) </h3><dl>
+
+<p><dt> Hydroxyl
+   <dd> [OX2H]
+
+<p><dt> Hydroxyl in Alcohol
+   <dd> [#6][OX2H]
+
+<p><dt> Hydroxyl in Carboxylic Acid
+   <dd> [OX2H][CX3]=[OX1]
+
+<p><dt> Hydroxyl in H-O-P-
+   <dd> [OX2H]P
+
+<p><dt> Enol
+   <dd> [OX2H][#6X3]=[#6]
+
+<p><dt> Phenol
+   <dd> [OX2H][cX3]:[c]
+
+<p><dt> Enol or Phenol
+   <dd> [OX2H][$(C=C),$(cc)]
+
+<p><dt>  Hydroxyl_acidic
+   <dd> [$([OH]-*=[!#6])]
+   <dd> An acidic hydroxyl is a hydroxyl bonded to an atom which is multiply bonded to a hetero atom, this includes carboxylic, sulphur, phosphorous,
+halogen and nitrogen oxyacids.</p></dl><br>
+
+<h3> peroxide </h3><dl>
+
+<p><dt> Peroxide groups.
+   <dd> [OX2,OX1-][OX2,OX1-]
+   <dd> Also hits anions.</p></dl><br>
+
+
+<a NAME="P"></a><h2>P</h2>
+
+
+<h3> phosphoric compounds </h3><dl>
+
+<p><dt> Phosphoric_acid groups.
+   <dd> [$(P(=[OX1])([$([OX2H]),$([OX1-]),$([OX2]P)])([$([OX2H]),$([OX1-]),$([OX2]P)])[$([OX2H]),$([OX1-]),$([OX2]P)]),$([P+]([OX1-])([$([OX2H]),$([OX1-]),$([OX2]P)])([$([OX2H]),$([OX1-]),$([OX2]P)])[$([OX2H]),$([OX1-]),$([OX2]P)])]
+   <dd> Hits both depiction forms. Hits orthophosphoric acid and polyphosphoric acid anhydrides.  Doesn't hit monophosphoric acid anhydride
+esters (including acidic mono- &amp; di- esters) but will hit some polyphosphoric acid anhydride esters (mono- esters on pyrophosphoric acid
+ and longer, di-  esters on linear triphosphoric acid and longer).
+
+<p><dt> Phosphoric_ester groups.
+   <dd> [$(P(=[OX1])([OX2][#6])([$([OX2H]),$([OX1-]),$([OX2][#6])])[$([OX2H]),$([OX1-]),$([OX2][#6]),$([OX2]P)]),$([P+]([OX1-])([OX2][#6])([$([OX2H]),$([OX1-]),$([OX2][#6])])[$([OX2H]),$([OX1-]),$([OX2][#6]),$([OX2]P)])]
+   <dd> Hits both depiction forms.  Doesn't hit non-ester phosphoric_acid groups.</p></dl><br>
+
+<a NAME="S"></a><h2>S</h2>
+
+
+<h3>thio groups ( thio-, thi-, sulpho-, mercapto- )</h3><dl>
+
+
+<p><dt> Carbo-Thiocarboxylate
+   <dd> [S-][CX3](=S)[#6]
+
+<p><dt> Carbo-Thioester
+   <dd> S([#6])[CX3](=O)[#6]
+
+<p><dt> Thio analog of carbonyl
+   <dd> [#6X3](=[SX1])([!N])[!N]
+   <dd> Where S replaces O.  Not a thioamide.
+
+<p><dt> Thiol, Sulfide or Disulfide Sulfur
+   <dd> [SX2]
+
+<p><dt> Thiol
+   <dd> [#16X2H]
+
+<p><dt> Sulfur with at-least one hydrogen.
+   <dd> [#16!H0]
+
+<p><dt> Thioamide
+   <dd> [NX3][CX3]=[SX1]</p></dl><br>
+
+<h3>sulfide</h3><dl>
+
+<p><dt> Sulfide
+   <dd> [#16X2H0]
+   <dd> -alkylthio  Won't hit thiols. Hits disulfides.
+
+<p><dt> Mono-sulfide
+   <dd> [#16X2H0][!#16]
+   <dd> alkylthio- or alkoxy- Won't hit thiols. Won't hit disulfides.
+
+<p><dt> Di-sulfide
+   <dd> [#16X2H0][#16X2H0]
+   <dd> Won't hit thiols. Won't hit mono-sulfides.
+
+<p><dt> Two Sulfides
+   <dd> [#16X2H0][!#16].[#16X2H0][!#16]
+   <dd> Won't hit thiols. Won't hit mono-sulfides. Won't hit disulfides.</p></dl><br>
+
+<h3>sulfinate</h3><dl>
+
+<p><dt> Sulfinate
+   <dd> [$([#16X3](=[OX1])[OX2H0]),$([#16X3+]([OX1-])[OX2H0])]
+   <dd> Won't hit Sulfinic Acid.  Hits Both Depiction Forms.
+
+<p><dt> Sulfinic Acid
+   <dd> [$([#16X3](=[OX1])[OX2H,OX1H0-]),$([#16X3+]([OX1-])[OX2H,OX1H0-])]
+   <dd> Won't hit substituted Sulfinates.  Hits Both Depiction Forms.
+        Hits acid and conjugate base (sulfinate).</p></dl><br>
+
+<h3>sulfone</h3><dl>
+
+<p><dt> Sulfone.  Low specificity.
+   <dd> [$([#16X4](=[OX1])=[OX1]),$([#16X4+2]([OX1-])[OX1-])]
+   <dd> Hits all sulfones, including heteroatom-substituted sulfones: sulfonic acid, sulfonate, sulfuric acid mono- &amp; di- esters, sulfamic
+acid, sulfamate, sulfonamide... Hits Both Depiction Forms.
+
+<p><dt> Sulfone. High specificity.
+   <dd> [$([#16X4](=[OX1])(=[OX1])([#6])[#6]),$([#16X4+2]([OX1-])([OX1-])([#6])[#6])]
+   <dd> Only hits carbo- sulfones (Won't hit herteroatom-substituted molecules).  Hits Both Depiction Forms.
+
+<p><dt> Sulfonic acid.  High specificity.
+   <dd> [$([#16X4](=[OX1])(=[OX1])([#6])[OX2H,OX1H0-]),$([#16X4+2]([OX1-])([OX1-])([#6])[OX2H,OX1H0-])]
+   <dd> Only hits carbo- sulfonic acids (Won't hit herteroatom-substituted molecules).
+        Hits acid and conjugate base.  Hits Both Depiction Forms. Hits Arene sulfonic acids.
+
+<p><dt> Sulfonate
+   <dd> [$([#16X4](=[OX1])(=[OX1])([#6])[OX2H0]),$([#16X4+2]([OX1-])([OX1-])([#6])[OX2H0])]
+   <dd> (sulfonic ester) Only hits carbon-substituted sulfur
+        (Oxygen may be herteroatom-substituted).  Hits Both Depiction Forms.
+
+<p><dt> Sulfonamide.
+   <dd> [$([#16X4]([NX3])(=[OX1])(=[OX1])[#6]),$([#16X4+2]([NX3])([OX1-])([OX1-])[#6])]
+   <dd> Only hits carbo- sulfonamide. Hits Both Depiction Forms.
+
+<p><dt> Carbo-azosulfone
+   <dd> [SX4](C)(C)(=O)=N
+   <dd> Partial N-Analog of Sulfone
+
+<p><dt> Sulfonamide
+   <dd> [$([SX4](=[OX1])(=[OX1])([!O])[NX3]),$([SX4+2]([OX1-])([OX1-])([!O])[NX3])]
+   <dd> (sulf drugs)  Won't hit sulfamic acid or sulfamate. Hits Both Depiction Forms.</p></dl><br>
+
+<h3>sulfoxide</h3><dl>
+
+<p><dt> Sulfoxide Low specificity.
+   <dd> [$([#16X3]=[OX1]),$([#16X3+][OX1-])]
+   <dd> ( sulfinyl, thionyl )   Analog of carbonyl where S replaces C.
+        Hits all sulfoxides, including heteroatom-substituted sulfoxides,
+        dialkylsulfoxides carbo-sulfoxides, sulfinate, sulfinic acids...
+        Hits Both Depiction Forms. Won't hit sulfones.
+
+<p><dt> Sulfoxide High specificity
+   <dd> [$([#16X3](=[OX1])([#6])[#6]),$([#16X3+]([OX1-])([#6])[#6])]
+   <dd> (sulfinyl , thionyl)  Analog of carbonyl where S replaces C. Only hits carbo-sulfoxides
+        (Won't hit herteroatom-substituted molecules).  Hits Both Depiction Forms. Won't hit sulfones.</p></dl><br>
+
+<h3>sulfate</h3><dl>
+
+<p><dt> Sulfate
+   <dd> [$([#16X4](=[OX1])(=[OX1])([OX2H,OX1H0-])[OX2][#6]),$([#16X4+2]([OX1-])([OX1-])([OX2H,OX1H0-])[OX2][#6])]
+   <dd> (sulfuric acid monoester)  Only hits when oxygen is carbon-substituted.
+        Hits acid and conjugate base. Hits Both Depiction Forms.
+
+<p><dt> Sulfuric acid ester (sulfate ester)  Low specificity.
+   <dd> [$([SX4](=O)(=O)(O)O),$([SX4+2]([O-])([O-])(O)O)]
+   <dd> Hits sulfuric acid, sulfuric acid monoesters (sulfuric acids) and diesters (sulfates).
+        Hits acid and conjugate base. Hits Both Depiction Forms.
+<p><dt> Sulfuric Acid Diester.
+   <dd> [$([#16X4](=[OX1])(=[OX1])([OX2][#6])[OX2][#6]),$([#16X4](=[OX1])(=[OX1])([OX2][#6])[OX2][#6])]
+   <dd> Only hits when oxygen is carbon-substituted. Hits Both Depiction Forms.</p></dl><br>
+
+<h3>sulfamate</h3><dl>
+
+<p><dt> Sulfamate.
+   <dd> [$([#16X4]([NX3])(=[OX1])(=[OX1])[OX2][#6]),$([#16X4+2]([NX3])([OX1-])([OX1-])[OX2][#6])]
+   <dd> Only hits when oxygen is carbon-substituted. Hits Both Depiction Forms.
+
+<p><dt> Sulfamic Acid.
+   <dd> [$([#16X4]([NX3])(=[OX1])(=[OX1])[OX2H,OX1H0-]),$([#16X4+2]([NX3])([OX1-])([OX1-])[OX2H,OX1H0-])]
+   <dd> Hits acid and conjugate base. Hits Both Depiction Forms.</p></dl><br>
+
+<h3>sulfene</h3><dl>
+
+<p><dt> Sulfenic acid.
+   <dd> [#16X2][OX2H,OX1H0-]
+   <dd> Hits acid and conjugate base.
+
+<p><dt> Sulfenate.
+   <dd> [#16X2][OX2H0]</p></dl><br>
+
+
+<a NAME="X"></a><h2>X</h2>
+
+
+<h3> halide (-halo -fluoro -chloro -bromo -iodo) </h3><dl>
+
+<p><dt> Any carbon attached to any halogen
+   <dd> [#6][F,Cl,Br,I]
+
+<p><dt> Halogen
+   <dd> [F,Cl,Br,I]
+
+<p><dt> Three_halides groups
+   <dd> [F,Cl,Br,I].[F,Cl,Br,I].[F,Cl,Br,I]
+   <dd> Hits SMILES that have three halides.</p></dl><br>
+
+<h3> acyl halide </h3><dl>
+
+<p><dt> Acyl Halide
+   <dd> [CX3](=[OX1])[F,Cl,Br,I]
+   <dd> (acid halide, -oyl halide)</p></dl><br>
+
+
+<a NAME="STRUCTUAL"></a>
+<H2>
+  3. Gross Structual Features
+</H2><br><br>
+
+
+<table BORDER COLS=6 WIDTH="750" NOSAVE ><tr>
+   <td align=center><a href="#CHIRALITY">Chirality</a></td>
+   <td align=center><a href="#ORBITAL">Orbital Configuration</a></td>
+   <td align=center><a href="#CONNECT">Connectivity</a></td>
+   <td align=center><a href="#CHAIN"> Chains &amp; Branching</a></td>
+   <td align=center><a href="#ROTATE">Rotation</a></td>
+   <td align=center><a href="#CYCLE">Cyclic Features</a></td>
+</table><br><br>
+
+
+<a NAME="CHIRALITY"></a><h2>Chirality</h2>
+<dl>
+<p><dt> Specified chiral carbon.
+   <dd> [$([#6X4@](*)(*)(*)*),$([#6X4@H](*)(*)*)]
+   <dd> Matches carbons whose chirality is specified (clockwise or anticlockwise)  Will not match molecules whose chirality is unspecified b
+ut that could otherwise be considered chiral. Also,therefore won't match molecules that would be chiral due to an implicit connection (i.e.i
+mplicit H).
+
+<p><dt> "No-conflict" chiral match
+   <dd> C[C@?](F)(Cl)Br
+   <dd> Will match molecules with chiralities as specified or unspecified.
+
+<p><dt> "No-conflict" chiral match where an H is present
+   <dd> C[C@?H](Cl)Br
+   <dd> Will match molecules with chiralities as specified or unspecified.</p></dl><br>
+
+<a NAME="ORBITAL"></a><h2>Orbital Configuration</h2>
+
+<dl>
+<p><dt> sp2 cationic carbon
+   <dd> [$([cX2+](:*):*)]
+   <dd> Aromatic cationic sp2 carbon with a free electron in a non-bonding sp2 hybrid orbital
+
+<p><dt> Aromatic sp2 carbon.
+   <dd> [$([cX3](:*):*),$([cX2+](:*):*)]
+   <dd> The first recursive SMARTS matches carbons that are three-connected, the second case matches two-connected carbons (i.e cations with
+ a free electron in a non-bonding sp2 hybrid orbital)
+
+<p><dt> Any sp2 carbon.
+   <dd> [$([cX3](:*):*),$([cX2+](:*):*),$([CX3]=*),$([CX2+]=*)]
+   <dd> The first recursive SMARTS matches carbons that are three-connected and aromatic.  The second case matches two-connected aromatic ca
+rbons (i.e cations with a free electron in a non-bonding sp2 hybrid orbital).  The third case matches three-connected non-aromatic carbons (
+alkenes). The fourth case matches non-aromatic cationic alkene carbons.
+
+<p><dt> Any sp2 nitrogen.
+   <dd> [$([nX3](:*):*),$([nX2](:*):*),$([#7X2]=*),$([NX3](=*)=*),$([#7X3+](-*)=*),$([#7X3+H]=*)]
+
+   <dd> Can be aromatic 3-connected with 2 aromatic bonds (eg pyrrole,Pyridine-N-oxide), aromatic 2-connected with 2 aromatic bonds (and a free
+pair of electrons in a nonbonding orbital, e.g.Pyridine), either aromatic or non-aromatic 2-connected with a double bond (and a free pair
+of electrons in a nonbonding orbital, e.g. C=N ), non aromatic 3-connected with 2 double bonds (e.g. a nitro group; this form does not exist
+in reality, SMILES can represent the charge-separated resonance structures as a single uncharged structure), either aromatic or non-aromatic
+3-connected cation w/ 1 single bond and 1 double bond (e.g. a nitro group, here the individual charge-separated resonance structures are
+specified),  either aromatic or non-aromatic 3-connected hydrogenated cation with a double bond (as the previous case but R is hydrogen), 
+rspectively.
+
+<p><dt> Explicit Hydrogen on sp2-Nitrogen
+   <dd> [$([#1X1][$([nX3](:*):*),$([nX2](:*):*),$([#7X2]=*),$([NX3](=*)=*),$([#7X3+](-*)=*),$([#7X3+H]=*)])]
+   <dd> (H must be an isotope or ion)
+
+<p><dt> sp3 nitrogen
+   <dd> [$([NX4+]),$([NX3]);!$(*=*)&amp;!$(*:*)]
+   <dd> One atom that is (a 4-connected N cation or a 3-connected N) and is not double bonded and is not aromatically bonded.
+
+<p><dt> Explicit Hydrogen on an sp3 N.
+   <dd> [$([#1X1][$([NX4+]),$([NX3]);!$(*=*)&amp;!$(*:*)])]
+   <dd> One atom that is a 1-connected H that is bonded to an sp3 N. (H must be an isotope or ion)
+
+<p><dt> sp2 N in N-Oxide
+   <dd> [$([$([NX3]=O),$([NX3+][O-])])]
+
+<p><dt> sp3 N in N-Oxide   Exclusive:
+   <dd> [$([$([NX4]=O),$([NX4+][O-])])]
+   <dd> Only hits if O is explicitly present. Won't hit if * is in SMILES in place of O.
+
+<p><dt> sp3 N in N-Oxide Inclusive:
+   <dd> [$([$([NX4]=O),$([NX4+][O-,#0])])]
+   <dd> Hits if O could be present. Hits if * if used in place of O in smiles.</p></dl><br>
+
+
+<a NAME="CONNECT"></a><h2>Connectivity</h2>
+
+<dl>
+<p><dt> Quaternary Nitrogen
+   <dd> [$([NX4+]),$([NX4]=*)]
+   <dd> Hits non-aromatic Ns.
+<p><dt> Tricoordinate S double bonded to N.
+   <dd> [$([SX3]=N)]
+
+<p><dt> S double-bonded to Carbon
+   <dd> [$([SX1]=[#6])]
+   <dd> Hits terminal (1-connected S)
+
+<p><dt> Triply bonded N
+   <dd> [$([NX1]#*)]
+
+<p><dt> Divalent Oxygen
+   <dd> [$([OX2])]</p></dl><br>
+
+
+<a NAME="CHAIN"></a><h2>Chains &amp; Branching </h2>
+
+<dl>
+<p><dt> Unbranched_alkane groups.
+   <dd> [R0;D2][R0;D2][R0;D2][R0;D2]
+   <dd> Only hits alkanes (single-bond chains).  Only hits chains of at-least 4 members. All non-(implicit-hydrogen) atoms count as branches
+ (e.g. halide substituted chains count as branched).
+
+<p><dt> Unbranched_chain groups.
+   <dd> [R0;D2]~[R0;D2]~[R0;D2]~[R0;D2]
+   <dd> Hits any bond (single, double, triple).  Only hits chains of at-least 4 members. All non-(implicit-hydrogen) atoms count as branches
+ (e.g. halide substituted chains count as branched).
+
+<p><dt> Long_chain groups.
+   <dd> [AR0]~[AR0]~[AR0]~[AR0]~[AR0]~[AR0]~[AR0]~[AR0]
+   <dd> Aliphatic chains at-least 8 members long.
+
+<p><dt> Atom_fragment
+   <dd> [!$([#6+0]);!$(C(F)(F)F);!$(c(:[!c]):[!c])!$([#6]=,#[!#6])]
+   <dd> (CLOGP definition) A fragment atom is a not an isolating carbon
+
+<p><dt> Carbon_isolating
+   <dd> [$([#6+0]);!$(C(F)(F)F);!$(c(:[!c]):[!c])!$([#6]=,#[!#6])]
+   <dd> This definition is based on that in CLOGP, so it is a charge-neutral carbon, which is not a CF3 or an aromatic C between two aromati
+c hetero atoms eg in tetrazole, it is not multiply bonded to a hetero atom.
+
+<p><dt> Terminal S bonded to P
+   <dd> [$([SX1]~P)]
+
+<p><dt> Nitrogen on -N-C=N-
+   <dd> [$([NX3]C=N)]
+
+<p><dt> Nitrogen on -N-N=C-
+   <dd> [$([NX3]N=C)]
+
+<p><dt> Nitrogen on -N-N=N-
+   <dd> [$([NX3]N=N)]
+
+<p><dt> Oxygen in -O-C=N-
+   <dd> [$([OX2]C=N)] </p></dl><br>
+
+
+<a NAME="ROTATE"></a><h2>Rotation</h2>
+
+<dl>
+<p><dt> Rotatable bond
+   <dd> [!$(*#*)&amp;!D1]-!@[!$(*#*)&amp;!D1]
+   <dd> An atom which is not triply bonded and not one-connected i.e.terminal connected by a single non-ring bond to and equivalent atom. Note
+that logical operators can be applied to bonds ("-&amp;!@"). Here, the overall SMARTS consists of two atoms and one bond. The bond is "site
+and not ring". *#* any atom triple bonded to any atom.  By enclosing this SMARTS in parentheses and preceding with $, this enables us to
+use $(*#*) to write a recursive SMARTS using that string as an atom primitive. The purpose is to avoid bonds such as c1ccccc1-C#C which wo
+be considered rotatable without this specification.</p></dl><br>
+
+
+<a NAME="CYCLE"></a><h2>Cyclic Features</h2>
+
+<dl>
+<p><dt> Bicyclic
+   <dd> [$([*R2]([*R])([*R])([*R]))].[$([*R2]([*R])([*R])([*R]))]
+   <dd> Bicyclic compounds have 2 bridgehead atoms with 3 arms connecting the bridgehead atoms.
+
+<p><dt> Ortho
+   <dd> *-!:aa-!:*
+   <dd> Ortho-substituted ring
+
+<p><dt> Meta
+   <dd> *-!:aaa-!:*
+   <dd> Meta-substituted ring
+
+<p><dt> Para
+   <dd> *-!:aaaa-!:*
+   <dd> Para-substituted ring
+
+<p><dt> Acylic-bonds
+   <dd> *!@*
+
+<p><dt> Single bond and not in a ring
+   <dd> *-!@*
+
+<p><dt> Non-ring atom
+   <dd> [R0] or [!R]
+
+<p><dt> Macrocycle groups.
+   <dd> [r;!r3;!r4;!r5;!r6;!r7]
+
+<p><dt> S in aromatic 5-ring with lone pair
+   <dd> [sX2r5]
+
+<p><dt> Aromatic 5-Ring O with Lone Pair
+   <dd> [oX2r5]
+
+<p><dt> N in 5-sided aromatic ring
+   <dd> [nX2r5]
+
+<p><dt> Spiro-ring center
+   <dd> [X4;R2;r4,r5,r6](@[r4,r5,r6])(@[r4,r5,r6])(@[r4,r5,r6])@[r4,r5,r6]rings size 4-6
+
+<p><dt> N in 5-ring arom
+   <dd> [$([nX2r5]:[a-]),$([nX2r5]:[a]:[a-])] anion
+
+<p><dt> CIS or TRANS double bond in a ring
+   <dd> */,\[R]=;@[R]/,\*
+   <dd> An isomeric SMARTS consisting of four atoms and three bonds.
+
+<p><dt> CIS or TRANS double or aromatic bond in a ring
+   <dd> */,\[R]=,:;@[R]/,\*
+
+<p><dt> Unfused benzene ring
+   <dd> [cR1]1[cR1][cR1][cR1][cR1][cR1]1
+   <dd> To find a benzene ring which is not fused, we write a SMARTS of 6 aromatic carbons in a ring where each atom is only in one ring:
+
+<p><dt> Multiple non-fused benzene rings
+   <dd> [cR1]1[cR1][cR1][cR1][cR1][cR1]1.[cR1]1[cR1][cR1][cR1][cR1][cR1]1
+
+<p><dt> Fused benzene rings
+   <dd> c12ccccc1cccc2</p></dl><br>
+
+
+<a NAME="META"></a>
+<H2>
+   4. Meta-SMARTS
+</H2><br><br>
+
+<table BORDER COLS=3 WIDTH="750" NOSAVE ><tr>
+   <td align=center><a href="#AA">Amino Acids </a></td>
+   <td align=center><a href="#RECUR"> Recursive or Multiple </a></td>
+   <td align=center><a href="#TOOL">Tools &amp;Tricks </a></td>
+</table><br><br>
+
+
+<a NAME="AA"></a><h2>Amino Acids</h2>
+
+<dl>
+<p><dt> Generic amino acid: low specificity.
+   <dd> [NX3,NX4+][CX4H]([*])[CX3](=[OX1])[O,N]
+   <dd> For use w/ non-standard a.a. search. hits pro but not gly. Hits acids and conjugate bases.  Hits single a.a.s and specific residues
+w/in polypeptides (internal, or terminal).
+
+<p><dt>  A.A. Template for 20 standard a.a.s
+   <dd> [$([$([NX3H,NX4H2+]),$([NX3](C)(C)(C))]1[CX4H]([CH2][CH2][CH2]1)[CX3](=[OX1])[OX2H,OX1-,N]),<br>$([$([NX3H2,NX4H3+]),$([NX3H](C)(C))][CX4H2][CX3](=[OX1])[OX2H,OX1-,N]),$([$([NX3H2,NX4H3+]),$([NX3H](C)(C))][CX4H]([*])[CX3](=[OX1])[OX2H,OX1-,N])]
+
+   <dd> Pro, Gly, Other.  Replace * w/  the entire 18_standard_side_chains list to get "any standard a.a." Hits acids and conjugate bases.
+Hits single a.a.s and specific residues w/in polypeptides (internal, or terminal).
+
+<p><dt> Proline
+   <dd> [$([NX3H,NX4H2+]),$([NX3](C)(C)(C))]1[CX4H]([CH2][CH2][CH2]1)[CX3](=[OX1])[OX2H,OX1-,N]
+
+<p><dt> Glycine
+   <dd> [$([$([NX3H2,NX4H3+]),$([NX3H](C)(C))][CX4H2][CX3](=[OX1])[OX2H,OX1-,N])]
+
+<p><dt> Other a.a.
+   <dd> [$([NX3H2,NX4H3+]),$([NX3H](C)(C))][CX4H]([*])[CX3](=[OX1])[OX2H,OX1-,N]
+   <dd> Replace * w/ a specific a.a. side chain from the 18_standard_side_chains list to hit a specific standard a.a. Won't work with Proline
+or Glycine, they have their own SMARTS (see side chain list). Hits acids and conjugate bases.  Hits single a.a.s and specific residues w/i
+polypeptides (internal, or terminal).<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;Example usage:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;Alanine side chain is  [CH3X4] <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;Alanine Search is [$([NX3H2,NX4H3+]),$([NX3H](C)(C))][CX4H]([CH3X4])[CX3](=[OX1])[OX2H,OX1-,N]
+
+<p><dt> 18_standard_aa_side_chains.
+      <dd> ([$([CH3X4]),$([CH2X4][CH2X4][CH2X4][NHX3][CH0X3](=[NH2X3+,NHX2+0])[NH2X3]),<br>
+$([CH2X4][CX3](=[OX1])[NX3H2]),$([CH2X4][CX3](=[OX1])[OH0-,OH]),<br>
+$([CH2X4][SX2H,SX1H0-]),$([CH2X4][CH2X4][CX3](=[OX1])[OH0-,OH]),<br>
+$([CH2X4][#6X3]1:[$([#7X3H+,#7X2H0+0]:[#6X3H]:[#7X3H]),$([#7X3H])]:<br>
+[#6X3H]:[$([#7X3H+,#7X2H0+0]:[#6X3H]:[#7X3H]),$([#7X3H])]:[#6X3H]1),<br>
+$([CHX4]([CH3X4])[CH2X4][CH3X4]),$([CH2X4][CHX4]([CH3X4])[CH3X4]),<br>
+$([CH2X4][CH2X4][CH2X4][CH2X4][NX4+,NX3+0]),$([CH2X4][CH2X4][SX2][CH3X4]),<br>
+$([CH2X4][cX3]1[cX3H][cX3H][cX3H][cX3H][cX3H]1),$([CH2X4][OX2H]),<br>
+$([CHX4]([CH3X4])[OX2H]),$([CH2X4][cX3]1[cX3H][nX3H][cX3]2[cX3H][cX3H][cX3H][cX3H][cX3]12),<br>
+$([CH2X4][cX3]1[cX3H][cX3H][cX3]([OHX2,OH0X1-])[cX3H][cX3H]1),$([CHX4]([CH3X4])[CH3X4])])
+<dd>Can be any of the standard 18 (Pro &amp; Gly are treated separately) Hits acids and conjugate bases.
+
+<p><dt> N in Any_standard_amino_acid.
+      <dd> [$([$([NX3H,NX4H2+]),$([NX3](C)(C)(C))]1[CX4H]([CH2][CH2][CH2]1)[CX3]<br>
+(=[OX1])[OX2H,OX1-,N]),$([$([NX3H2,NX4H3+]),$([NX3H](C)(C))][CX4H2][CX3]<br>
+(=[OX1])[OX2H,OX1-,N]),$([$([NX3H2,NX4H3+]),$([NX3H](C)(C))][CX4H]([$([CH3X4]),<br>
+$([CH2X4][CH2X4][CH2X4][NHX3][CH0X3](=[NH2X3+,NHX2+0])[NH2X3]),$<br>
+([CH2X4][CX3](=[OX1])[NX3H2]),$([CH2X4][CX3](=[OX1])[OH0-,OH]),<br>
+$([CH2X4][SX2H,SX1H0-]),$([CH2X4][CH2X4][CX3](=[OX1])[OH0-,OH]),<br>
+$([CH2X4][#6X3]1:[$([#7X3H+,#7X2H0+0]:[#6X3H]:[#7X3H]),$([#7X3H])]:<br>
+[#6X3H]:[$([#7X3H+,#7X2H0+0]:[#6X3H]:[#7X3H]),$([#7X3H])]:[#6X3H]1),<br>
+$([CHX4]([CH3X4])[CH2X4][CH3X4]),$([CH2X4][CHX4]([CH3X4])[CH3X4]),<br>
+$([CH2X4][CH2X4][CH2X4][CH2X4][NX4+,NX3+0]),$([CH2X4][CH2X4][SX2][CH3X4]),<br>
+$([CH2X4][cX3]1[cX3H][cX3H][cX3H][cX3H][cX3H]1),$([CH2X4][OX2H]),<br>
+$([CHX4]([CH3X4])[OX2H]),$([CH2X4][cX3]1[cX3H][nX3H][cX3]2[cX3H][cX3H][cX3H][cX3H][cX3]12),<br>
+$([CH2X4][cX3]1[cX3H][cX3H][cX3]([OHX2,OH0X1-])[cX3H][cX3H]1),<br>
+$([CHX4]([CH3X4])[CH3X4])])[CX3](=[OX1])[OX2H,OX1-,N])]
+<dd> Format is A.A.Template for 20 standard a.a.s. where * is replaced by the entire 18_standard_side_chains list (or'd together).  A gen
+eric amino acid with any of the 18 side chains or, proline or glycine. Hits "standard" amino acids that have terminally appended groups (i.e
+. "standard" refers to the side chains).  (Pro, Gly, or 18 normal a.a.s.)  Hits single a.a.s and specific residues w/in polypeptides (intern
+al, or terminal).
+
+<p><dt> Non-standard amino acid.
+   <dd> [$([NX3,NX4+][CX4H]([*])[CX3](=[OX1])[O,N]);!$([$([$([NX3H,NX4H2+]),<br>
+$([NX3](C)(C)(C))]1[CX4H]([CH2][CH2][CH2]1)[CX3](=[OX1])[OX2H,OX1-,N]),<br>
+$([$([NX3H2,NX4H3+]),$([NX3H](C)(C))][CX4H2][CX3](=[OX1])[OX2H,OX1-,N]),<br>
+$([$([NX3H2,NX4H3+]),$([NX3H](C)(C))][CX4H]([$([CH3X4]),$([CH2X4][CH2X4][CH2X4][NHX3][CH0X3]<br>
+(=[NH2X3+,NHX2+0])[NH2X3]),$([CH2X4][CX3](=[OX1])[NX3H2]),$([CH2X4][CX3](=[OX1])[OH0-,OH]),<br>
+$([CH2X4][SX2H,SX1H0-]),$([CH2X4][CH2X4][CX3](=[OX1])[OH0-,OH]),$([CH2X4][#6X3]1:<br>
+[$([#7X3H+,#7X2H0+0]:[#6X3H]:[#7X3H]),$([#7X3H])]:<br>
+[#6X3H]:[$([#7X3H+,#7X2H0+0]:[#6X3H]:[#7X3H]),<br>
+$([#7X3H])]:[#6X3H]1),$([CHX4]([CH3X4])[CH2X4][CH3X4]),$([CH2X4][CHX4]([CH3X4])[CH3X4]),<br>
+$([CH2X4][CH2X4][CH2X4][CH2X4][NX4+,NX3+0]),$([CH2X4][CH2X4][SX2][CH3X4]),<br>
+$([CH2X4][cX3]1[cX3H][cX3H][cX3H][cX3H][cX3H]1),$([CH2X4][OX2H]),$([CHX4]([CH3X4])[OX2H]),<br>
+$([CH2X4][cX3]1[cX3H][nX3H][cX3]2[cX3H][cX3H][cX3H][cX3H][cX3]12),<br>
+$([CH2X4][cX3]1[cX3H][cX3H][cX3]([OHX2,OH0X1-])[cX3H][cX3H]1),<br>
+$([CHX4]([CH3X4])[CH3X4])])[CX3](=[OX1])[OX2H,OX1-,N])])]
+   <dd> Generic amino acid but not a "standard" amino acid ("standard" refers to the 20 normal side chains).  Won't hit amino acids that are
+ non-standard due solely to the fact that groups are terminally-appended to the polypeptide chain (N or C term). format is [$(generic a.a.);
+!$(not a standard one)] Hits single a.a.s and specific residues w/in polypeptides (internal, or terminal).</p></dl><br>
+
+
+<a NAME="RECUR"></a><h2>Recursive or Multiple </h2>
+
+<h3> Recursive SMARTS: Atoms connected to particular SMARTS</h3><dl>
+
+<p><dt> Ortho
+   <dd>[SMARTS_expression]-!:aa-!:[SMARTS_expression]
+
+<p><dt> Meta
+   <dd> [SMARTS_expression]-!:aaa-!:[SMARTS_expression]
+
+<p><dt> Para
+   <dd> [SMARTS_expression]-!:aaaa-!:[SMARTS_expression]
+
+<p><dt> Hydrogen
+   <dd> [$([#1][SMARTS_expression])]
+   <dd> Hydrogen must be explicit i.e. an isotope or charged
+
+<p><dt> Nitrogen
+   <dd> [$([#7][SMARTS_expression])]
+
+<p><dt> Oxygen
+   <dd> [$([#8][SMARTS_expression])]
+
+<p><dt> Fluorine
+   <dd> [$([#9][SMARTS_expression])]</p></dl><br>
+
+<h3> Recursive SMARTS: Multiple groups</h3><dl>
+
+<p><dt> Two possible groups
+   <dd> [$(SMARTS_expression_A),$(SMARTS_expression_B)]
+   <dd> Hits atoms in either environment or group of interest, A or B.<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;Example usages:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;Azide group is : [$(*-[NX2-]-[NX2+]#[NX1]),$(*-[NX2]=[NX2+]=[NX1-])]<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;Azide ion is: [$([NX1-]=[NX2+]=[NX1-]),$([NX1]#[NX2+]-[NX1-2])]<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;Azide or azide ion is: [$([$(*-[NX2-]-[NX2+]#[NX1]),$(*-[NX2]=[NX2+]=[NX1-])]),$([$([NX1-]=[NX2+]=[NX1-]),$(
+[NX1]#[NX2+]-[NX1-2])])]
+
+<p><dt> Recursive SMARTS
+   <dd> [$([atom_that_gets_hit][other_atom][other_atom])]
+   <dd> Hits first atom within parenthesis
+        &nbsp;&nbsp;&nbsp;&nbsp;Example usages:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;[$([CX3]=[OX1])] hits Carbonyl Carbon
+        &nbsp;&nbsp;&nbsp;&nbsp;[$([OX1]=[CX3])] hits Carbonyl Oxygen </p></dl><br>
+
+<h3>   Single only, Double only, Single or Double</h3><dl>
+
+<p><dt> Sulfide
+   <dd> [#16X2H0]
+   <dd> (-alkylthio)  Won't hit thiols. Hits disulfides too.
+
+<p><dt> Mono-sulfide
+   <dd> [#16X2H0][!#16]
+   <dd> (alkylthio- or alkoxy-) R-S-R  Won't hit thiols. Won't hit disulfides.
+
+<p><dt> Di-sulfide
+   <dd> [#16X2H0][#16X2H0]
+   <dd> Won't hit thiols. Won't hit mono-sulfides.
+
+<p><dt> Two sulfides
+   <dd> [#16X2H0][!#16].[#16X2H0][!#16]
+
+   <dd> Won't hit thiols. Won't hit mono-sulfides. Won't hit disulfides.
+
+<p><dt> Acid/conj-base
+   <dd> [OX2H,OX1H0-]
+   <dd> Hits acid and conjugate base. acid/base
+
+<p><dt> Non-acid Oxygen
+   <dd> [OX2H0]
+
+<p><dt> Acid/base
+   <dd> [H1,H0-]
+   <dd> Works for any atom if base form has no Hs &amp; acid has only one.</p></dl><br>
+
+<h3> Muntiple Disconnected Groups</h3><dl>
+
+<p><dt> Two disconnected SMARTS fragments
+   <dd> ([Cl!$(Cl~c)].[c!$(c~Cl)])
+   <dd> A molecule that contains a chlorine and an aromatic carbon but which are not connected to each other. Uses component-level SMARTS. B
+oth SMARTS fragments must be in the same SMILES target fragment.
+
+<p><dt> Two disconnected SMARTS fragments
+   <dd> ([Cl]).([c])
+   <dd> Hits SMILES that contain a chlorine and an aromatic carbon but which are in different SMILES fragments.
+
+<p><dt> Two not-necessarily connected SMARTS fragments
+   <dd> ([Cl].[c])
+   <dd> Uses component-level SMARTS. Both SMARTS fragments must be in the same SMILES target fragment.
+
+<p><dt> Two not-necessarily connected fragments
+   <dd> ([SMARTS_expression]).([SMARTS_expression])
+   <dd> Uses component-level SMARTS. SMARTS fragments are each in different SMILES target fragments.
+
+<p><dt> Two primary or secondary amines
+   <dd> [NX3;H2,H1;!$(NC=O)].[NX3;H2,H1;!$(NC=O)]
+   <dd> Here we use the "disconnection" symbol (".") to match two separate not-necessarily bonded identical patterns.</p></dl><br>
+
+
+<a NAME="TOOL"></a><h2>Tools &amp;Tricks</h2>
+
+<h3> Alternative/Equivalent Representations </h3><dl>
+
+<p><dt> Any carbon aromatic or non-aromatic
+   <dd> [#6] or [c,C]
+
+<p><dt> SMILES wildcard
+   <dd> [#0]
+   <dd> This SMARTS hits the SMILES *
+
+<p><dt> Factoring
+   <dd> [OX2,OX1-][OX2,OX1-] or [O;X2,X1-][O;X2,X1-]
+   <dd> Factor out common atomic expressions in the recursive SMARTS.  May improve human readability.
+
+<p><dt> High-precidence "and"
+   <dd> [N&amp;X4&amp;+,N&amp;X3&amp;+0] or [NX4+,NX3+0]
+   <dd> High-precidence "and" (&amp;) is the default logical operator. "Or" (,) is higher precidence than &amp; and low-precidence "and" (;)
+ is lower precidence than &amp;. </p></dl><br>
+
+<h3> Hydrogens </h3><dl>
+
+<p><dt> Any atom w/ at-least 1 H
+   <dd> [*!H0,#1]
+   <dd> In SMILES and SMARTS, Hydrogen is not considered an atom (unless it is specified as an isotope). The hydrogen count is instead consi
+dered a property of an atom.  This SMARTS provides a way to effectively hit Hs themselves.
+
+<p><dt> Hs on Carbons
+   <dd> [#6!H0,#1]
+
+<p><dt> Atoms w/ 1 H
+   <dd> [H,#1] </p></dl><br>
+
+
+<a NAME="E-"></a>
+<H2>
+ 5. Electron &amp; Proton Features
+</H2><br><br>
+
+<table BORDER COLS=3 WIDTH="750" NOSAVE ><tr>
+   <td align=center><a href="#ACID">Acids &amp; Bases </a></td>
+   <td align=center><a href="#CHARGE">Charge</a></td>
+   <td align=center><a href="#H_BOND"> H-bond Donors &amp; Acceptors</a></td>
+   <td align=center><a href="#RAD"> Radicals </a></td>
+</table><br><br>
+
+
+<a NAME="ACID"></a><h2> Acids &amp; Bases </h2>
+
+<dl>
+<p><dt> Acid
+   <dd> [!H0;F,Cl,Br,I,N+,$([OH]-*=[!#6]),+]
+   <dd> Proton donor
+
+<p><dt> Carboxylic acid
+   <dd> [CX3](=O)[OX2H1]
+   <dd> (-oic acid, COOH)
+
+<p><dt> Carboxylic acid or conjugate base.
+   <dd> [CX3](=O)[OX1H0-,OX2H1]
+
+<p><dt> Hydroxyl_acidic
+   <dd> [$([OH]-*=[!#6])]
+   <dd> An acidic hydroxyl is a hydroxyl bonded to an atom which is multiply bonded to a hetero atom, this includes carboxylic, sulphur, pho
+sphorous, halogen and nitrogen oxyacids
+
+<p><dt> Phosphoric_Acid
+   <dd> [$(P(=[OX1])([$([OX2H]),$([OX1-]),$([OX2]P)])([$([OX2H]),$([OX1-]),$([OX2]P)])[$([OX2H]),$([OX1-]),$([OX2]P)]),$([P+]([OX1-])([$([OX2H]),$([OX1-]),$([OX2]P)])([$([OX2H]),$([OX1-]),$([OX2]P)])[$([OX2H]),$([OX1-]),$([OX2]P)])]
+   <dd> Hits both forms. Hits orthophosphoric acid and polyphosphoric acid anhydrides.  Doesn't hit monophosphoric acid anhydride esters (in
+cluding acidic mono- &amp; di- esters) but will hit some polyphosphoric acid anhydride esters (mono- esters on pyrophosphoric acid and longe
+r, di-  esters on linear triphosphoric acid and longer). Hits acid and conjugate base.
+
+<p><dt> Sulfonic Acid.  High specificity.
+   <dd> [$([#16X4](=[OX1])(=[OX1])([#6])[OX2H,OX1H0-]),$([#16X4+2]([OX1-])([OX1-])([#6])[OX2H,OX1H0-])]
+   <dd> Only hits carbo- sulfonic acids (Won't hit herteroatom-substituted molecules). Hits acid and conjugate base.  Hits Both Depiction Fo
+rms. Hits Arene sulfonic acids.
+
+<p><dt> Acyl Halide
+   <dd> [CX3](=[OX1])[F,Cl,Br,I]
+   <dd> (acid halide, -oyl halide)</p></dl><br>
+
+
+<a NAME="CHARGE"></a><h2>Charge </h2>
+
+<dl>
+<p><dt> Anionic divalent Nitrogen
+   <dd> [NX2-]
+
+<p><dt> Oxenium Oxygen
+   <dd> [OX2H+]=*
+
+<p><dt> Oxonium Oxygen
+   <dd> [OX3H2+]
+
+<p><dt> Carbocation
+   <dd> [#6+]
+
+<p><dt> sp2 cationic carbon.
+   <dd> [$([cX2+](:*):*)]
+   <dd> Aromatic cationic sp2 carbon with a free electron in a non-bonding sp2 hybrid orbital
+
+<p><dt> Azide ion.
+   <dd> [$([NX1-]=[NX2+]=[NX1-]),$([NX1]#[NX2+]-[NX1-2])]
+   <dd> Hits N in azide ion
+
+<p><dt> Zwitterion High Specificity
+   <dd> [+1]~*~*~[-1]
+   <dd> +1 charged atom separated by any 3 bonds from a -1 charged atom.
+
+<p><dt> Zwitterion Low Specificity, Crude
+   <dd>[$([!-0!-1!-2!-3!-4]~*~[!+0!+1!+2!+3!+4]),$([!-0!-1!-2!-3!-4]~*~*~[!+0!+1!+2!+3!+4]),$([!-0!-1!-2!-3!-4]~*~*~*~[!+0!+1!+2!+3!+4]),$([!-0!-1!-2!-3!-4]~*~*~*~*~[!+0!+1!+2!+3!+4]),$([!-0!-1!-2!-3!-4]~*~*~*~*~*~[!+0!+1!+2!+3!+4]),$([!-0!-1!-2!-3!-4]~*~*~*~*~*~*~[!+0!+1!+2!+3!+4]),$([!-0!-1!-2!-3!-4]~*~*~*~*~*~*~*~[!+0!+1!+2!+3!+4]),$([!-0!-1!-2!-3!-4]~*~*~*~*~*~*~*~*~[!+0!+1!+2!+3!+4]),$([!-0!-1!-2!-3!-4]~*~*~*~*~*~*~*~*~*~[!+0!+1!+2!+3!+4])]
+   <dd> Variously charged moieties separated by up to ten bonds.
+
+<p><dt> Zwitterion Low Specificity
+   <dd> ([!-0!-1!-2!-3!-4].[!+0!+1!+2!+3!+4])
+   <dd> Variously charged moieties that are within the same molecule but not-necessarily connected. Uses component-level grouping.</p></dl>
+<br>
+
+
+<a NAME="H_BOND"></a><h2> H-bond Donors &amp; Acceptors</h2>
+
+<dl>
+<p><dt> Hydrogen-bond acceptor
+   <dd> [#6,#7;R0]=[#8]
+   <dd> Only hits carbonyl and nitroso. Matches a 2-atom pattern consisting of a carbon or nitrogen not in a ring, double bonded to an oxyge
+n.
+
+<p><dt> Hydrogen-bond acceptor
+   <dd> [!$([#6,F,Cl,Br,I,o,s,nX3,#7v5,#15v5,#16v4,#16v6,*+1,*+2,*+3])]
+   <dd> A H-bond acceptor is a heteroatom with no positive charge, note that negatively charged oxygen or sulphur are included. Excluded are
+ halogens, including F, heteroaromatic oxygen, sulphur and pyrrole N. Higher oxidation levels of N,P,S are excluded. Note P(III) is currentl
+y included. Zeneca's work would imply that (O=S=O) shoud also be excluded.
+
+<p><dt> Hydrogen-bond donor.
+   <dd> [!$([#6,H0,-,-2,-3])]
+   <dd> A H-bond donor is a non-negatively charged heteroatom with at least one H
+
+<p><dt> Hydrogen-bond donor.
+   <dd> [!H0;#7,#8,#9]
+   <dd> Must have an N-H bond, an O-H bond, or a F-H bond
+
+<p><dt> Possible intramolecular H-bond
+   <dd> [O,N;!H0]-*~*-*=[$([C,N;R0]=O)]
+   <dd> Note that the overall SMARTS consists of five atoms. The fifth atom is defined by a "recursive SMARTS", where "$()" encloses a valid
+ nested SMARTS and acts syntactically like an atom-primitive in the overall SMARTS. Multiple nesting is allowed.</p></dl><br>
+
+<a NAME="RAD"></a><h2>Radicals </h2>
+
+<dl>
+<p><dt> Carbon Free-Radical
+   <dd> [#6;X3v3+0]
+   <dd> Hits a neutral carbon with three single bonds.
+
+<p><dt> Nitrogen Free-Radical
+   <dd> [#7;X2v4+0]
+   <dd> Hits a neutral nitrogen with two single bonds or with a single and a triple bond.  </p></dl><br>
+
+
+<a NAME="BREAK"></a>
+<H2>
+   6. Breakdown of Complex SMARTS
+</H2></center><br><br>
+
+
+<table BORDER COLS=2 WIDTH="750" NOSAVE ><tr>
+   <td align=center><a href="#AM_AC"> Amino Acid </a></td>
+   <td align=center><a href="#ES_AM"> Ester or Amide </a></td>
+   <!--th><!--a href="#">  <!--/a></td>
+</table><br><br>
+
+
+<a NAME="AM_AC"><h2>Amino Acid </h2></a>
+
+<b>[$([$([NX3H,NX4H2+]),$([NX3](C)(C)(C))]1[CX4H]([CH2][CH2][CH2]1)[CX3](=[OX1])[OX2H,OX1-,N]),$([$([NX3H2,NX4H3+]),$([NX3H](C)(C))][CX4H2][CX3](=[OX1])[OX2H,OX1-,N]),$([$([NX3H2,NX4H3+]),$([NX3H](C)(C))][CX4H]([*])[CX3](=[OX1])[OX2H,OX1-,N])]</b>
+
+i<pre>
+[$(                         Proline
+[                               N:
+$([                               terminal
+NX3H                                  neutral
+,                                     or
+NX4H2+])                              + charged
+,                                 or
+$([NX3](C)(C)(C))]1               internal
+[CX4H]                          C: alpha
+([CH2][CH2][CH2]1)                 pro side chain
+[CX3]                           C: of COOH
+(=[OX1])                        O: =O of COOH
+[OX2H,OX1-,N]                   O: term COOH (neutral or -) or intern
+),                          OR
+$(                          Glycine
+[                               N:
+$([                               terminal
+NX3H2                                neutral
+,                                    or
+NX4H3+])                             + charged
+,                                 or
+$([NX3H](C)(C))                   internal
+[CX4H2]                         C: alpha (w/ H side chain)
+[CX3]                           C: of COOH
+(=[OX1])                        O: =O of COOH
+[OX2H,OX1-,N]                   O: term COOH (neutral or -) or intern
+),                          OR
+$(                          Other amino acid
+[                               N:
+$([                               terminal
+NX3H2                                neutral
+,                                    or
+NX4H3+])                             + charged
+,                                 or
+$([NX3H](C)(C))]                  internal
+[CX4H]                          C: alpha
+([*])                              any side chain
+[CX3]                           C: of COOH
+(=[OX1])                        O: =O of COOH
+[OX2H,OX1-,N]                   O: term COOH (neutral or -) or intern
+)]
+</pre>
+
+<br><br>
+<a NAME="ES_AM"><h2> Ester or Amide </h2></a>
+
+
+<b>[#6][CX3](=O)[$([OX2H0]([#6])[#6]),$([#7])] </b>
+<pre>
+[#6]                    An atom that is a carbon
+[CX3]                   Connected to an atom that is a three-connected carbon
+(=O)                         Which is double bonded to an oxygen
+[                       Connected to an atom
+$(                           That is in an environment where
+[OX2H0]                         An atom that is a two-connected oxygen, without hydrogens
+([#6])[#6])                       Is connected to two carbons, one of them being the carbonyl C
+,                            Or
+$(                           That is in an environment where
+[#7]                            An atom is a nitrogen.
+)]
+</pre>
+<br><br>
+<a NAME="EXMPL"></a>
+<H2>
+ 7. Interesting Example SMARTS
+</H2>
+
+<dl>
+<p><dt> Oxygen double bonded to aliphatic carbon or nitrogen, single bonded to an aromatic ring, with a
+halogen in meta position
+   <dd> [#8]=[C,N]-aaa[F,Cl,Br,I]
+
+<p><dt> Aliphatic carbon attached to oxygen with any bond
+   <dd> C~O
+
+<p><dt> Oxygen or nitrogen, with at least one hydrogen attached and not in a ring
+   <dd> [O,N;!H0;R0]
+
+<p><dt> Oxygen double bonded to aliphatic carbon or nitrogen
+   <dd> [#8]=[C,N] or O=[C,N]
+
+<p><dt> Aliphatic atom single-bonded to any carbon which isn't a trifluromethyl carbon
+   <dd> A[#6;!$(C(F)(F)F)]
+
+<p><dt> PCB
+   <dd> [$(c:cCl),$(c:c:cCl),$(c:c:c:cCl)]-[$(c:cCl),$(c:c:cCl),$(c:c:c:cCl)]
+   <dd> Polychlorinated Biphenyls. Overall SMARTS is atom-bond-atom.  Note that ":" is explicit aromatic bond, and "-" is explicit single bo
+nd. On each side of the single bond, we use three nested SMARTS to represent
+the ortho, meta, and para position.
+
+<p><dt> Imidazolium Nitrogen
+   <dd> [nX3r5+]:c:n
+
+<p><dt> 1-methyl-2-hydroxy benzene with either a Cl or H at the 5 position.
+   <dd> [c;$([*Cl]),$([*H1])]1ccc(O)c(C)c1 or Cc1:c(O):c:c:[$(cCl),$([cH])]:c1
+   <dd> The "H" primitive in SMARTS means "total number
+of attached hydrogens", i.e., [C] will match C in [CH4] methane, [CH3]
+methyl, [CH2] methylene, etc., [CH3] will only match methyl. This is similar
+to the use of "H" in SMILES to specify hydrogen count. The default value
+for the SMARTS "H" primitive is 1 (same as SMILES, e.g., [CH2]=[CH]-[OH]
+same as CC=O). This H-specification value includes all attached hydrogens:
+implicit and explicit (e.g., isotopic [2H]).
+
+<p><dt> Nonstandard atom groups.
+   <dd> [!#1;!#2;!#3;!#5;!#6;!#7;!#8;!#9;!#11;!#12;!#15;!#16;!#17;!#19;!#20;!#35;!#53]</p></dl><br>
+<h2>More Information</h2>
+    <A HREF="/dayhtml/doc/theory/theory.smarts.html">Theory Manual</A><br>
+    <A HREF="/dayhtml_tutorials/languages/smarts/smarts_practice.html">SMARTS Practice</A><br>
+    </td>
+    </tr>
+    <tr>
+    <td><iframe src="/iframes/footer.html" name="iframe3" width="350" height="200"
+       scrolling="no" frameborder="0"></iframe></td>
+    </tr>
+</table>
+</body>
+</html>
+
