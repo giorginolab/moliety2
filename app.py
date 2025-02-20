@@ -4,10 +4,10 @@ from rdkit.Chem import Draw, AllChem
 from PIL import Image
 from rdkit.Chem.Draw import MolDraw2DCairo
 from io import BytesIO
-import yaml  
+import yaml
 from rdkit.Chem.Scaffolds import MurckoScaffold  # New import
 
-IMAGE_SIZE=(800,800)
+IMAGE_SIZE = (800, 800)
 
 # -----------------------------
 # Functional Group Definitions
@@ -19,10 +19,12 @@ functional_groups = {
     "Carboxylic Acid": "C(=O)[OX2H1]",
     "Ester": "C(=O)O[C]",
     "Ether": "[OD2]([#6])[#6]",
-    "Halide": "[F,Cl,Br,I]"
+    "Halide": "[F,Cl,Br,I]",
 }
-compiled_patterns = {name: Chem.MolFromSmarts(smart) 
-                     for name, smart in functional_groups.items()}
+compiled_patterns = {
+    name: Chem.MolFromSmarts(smart) for name, smart in functional_groups.items()
+}
+
 
 # -----------------------------
 # Interligand Moieties Definitions
@@ -45,18 +47,21 @@ def load_interligand_moieties():
         print("Error loading SMARTS_InteLigand.txt:", e)
     return moieties
 
-interligand_moieties = load_interligand_moieties()
-compiled_interligand_patterns = {name: Chem.MolFromSmarts(smart)
-                                 for name, smart in interligand_moieties.items()}
 
+interligand_moieties = load_interligand_moieties()
+compiled_interligand_patterns = {
+    name: Chem.MolFromSmarts(smart) for name, smart in interligand_moieties.items()
+}
 
 
 # -----------------------------
-# Rotatable bond Definition 
+# Rotatable bond Definition
 # https://www.daylight.com/dayhtml_tutorials/languages/smarts/smarts_examples.html
 # -----------------------------
 
-rotatable_patterns = {"DAYLIGHT defn.": Chem.MolFromSmarts("[!$(*#*)&!D1]-!@[!$(*#*)&!D1]")}
+rotatable_patterns = {
+    "DAYLIGHT defn.": Chem.MolFromSmarts("[!$(*#*)&!D1]-!@[!$(*#*)&!D1]")
+}
 
 
 # -----------------------------
@@ -90,9 +95,9 @@ def highlight_by_patterns(smiles: str, pattern_dict: dict):
                 size=IMAGE_SIZE,
                 highlightAtoms=list(highlight_atoms),
                 highlightBonds=list(highlight_bonds),
-                legend=name
+                legend=name,
             )
-            images.append((img,name))
+            images.append((img, name))
     return images
 
 
@@ -102,11 +107,13 @@ def process_functional_groups(smiles: str):
         return [], "No functional groups recognized or invalid SMILES."
     return images, f"Found {len(images)} functional group(s)."
 
+
 def process_interligand_moieties(smiles: str):
     images = highlight_by_patterns(smiles, compiled_interligand_patterns)
     if images is None or len(images) == 0:
         return [], "No interligand moieties recognized or invalid SMILES."
     return images, f"Found {len(images)} interligand moiety(ies)."
+
 
 # -----------------------------
 # Rotatable Bond Functions
@@ -127,6 +134,7 @@ def get_rotatable_bond_indices(mol):
         rot_bond_indices.append(bond.GetIdx())
     return rot_bond_indices
 
+
 def highlight_rotatable_bonds(smiles: str):
     mol = Chem.MolFromSmiles(smiles)
     if mol is None:
@@ -135,12 +143,10 @@ def highlight_rotatable_bonds(smiles: str):
     if not rot_bonds:
         return None
     img = Draw.MolToImage(
-        mol,
-        size=IMAGE_SIZE,
-        highlightBonds=rot_bonds,
-        legend="Rotatable Bonds"
+        mol, size=IMAGE_SIZE, highlightBonds=rot_bonds, legend="Rotatable Bonds"
     )
     return img
+
 
 def process_rotatable(smiles: str):
     images = []
@@ -154,6 +160,7 @@ def process_rotatable(smiles: str):
     else:
         return [], "No rotatable bonds found"
 
+
 # -----------------------------
 # Chiral Center Functions
 # -----------------------------
@@ -165,7 +172,9 @@ def highlight_chiral_centers(smiles: str):
     if not chiral_centers:
         return None
     highlight_atoms = [idx for idx, _ in chiral_centers]
-    legend = "Chiral Centers: " + ", ".join(f"{idx} ({ch})" for idx, ch in chiral_centers)
+    legend = "Chiral Centers: " + ", ".join(
+        f"{idx} ({ch})" for idx, ch in chiral_centers
+    )
     drawer = MolDraw2DCairo(IMAGE_SIZE[0], IMAGE_SIZE[1])
     options = drawer.drawOptions()
     options.addAtomIndices = True  # Show atom number labels
@@ -175,11 +184,13 @@ def highlight_chiral_centers(smiles: str):
     img = Image.open(BytesIO(img_data))
     return img
 
+
 def process_chiral_centers(smiles: str):
     img = highlight_chiral_centers(smiles)
     if img is None:
         return None, "No chiral centers recognized or invalid SMILES."
     return img, "Chiral centers highlighted."
+
 
 # -----------------------------
 # Potential Stereo Functions
@@ -194,14 +205,17 @@ def process_potential_stereo(smiles: str):
         return None, "No potential stereo centers found."
     images = []
     for sinfo in potential_stereocenters:
-        highlight_atoms = [sinfo.centeredOn] 
-        images.append(Draw.MolToImage(
-            mol,
-            size=IMAGE_SIZE,
-            highlightAtoms=highlight_atoms,
-            legend=sinfo.type.name
-        ))
+        highlight_atoms = [sinfo.centeredOn]
+        images.append(
+            Draw.MolToImage(
+                mol,
+                size=IMAGE_SIZE,
+                highlightAtoms=highlight_atoms,
+                legend=sinfo.type.name,
+            )
+        )
     return images, f"Found {len(highlight_atoms)} potential stereo center(s)."
+
 
 # -----------------------------
 # DAYLIGHT SMARTS Functions
@@ -214,7 +228,7 @@ def load_yaml_smarts():
         with open("data/daylight_smarts.yml", "r") as f:
             data = yaml.safe_load(f)
     except Exception as e:
-        print("Error loading daylight_smarts.yml:", e) 
+        print("Error loading daylight_smarts.yml:", e)
         return {}
     compiled_yaml = {}
     for group in data.get("groups", []):
@@ -235,6 +249,7 @@ def load_yaml_smarts():
                         compiled_yaml[key] = Chem.MolFromSmarts(rule.get("smarts"))
     return compiled_yaml
 
+
 def process_daylight_smarts_examples(smiles: str):
     """
     Highlight substructures using the SMARTS defined in the YAML file.
@@ -242,8 +257,9 @@ def process_daylight_smarts_examples(smiles: str):
     patterns = load_yaml_smarts()
     images = highlight_by_patterns(smiles, patterns)
     if images is None or len(images) == 0:
-        return [], "No SMARTS examples recognized or invalid SMILES." 
-    return images, f"Found {len(images)} SMARTS matches." 
+        return [], "No SMARTS examples recognized or invalid SMILES."
+    return images, f"Found {len(images)} SMARTS matches."
+
 
 # -----------------------------
 # Updated Scaffold Highlight Function
@@ -268,9 +284,10 @@ def process_scaffold(smiles: str):
         size=IMAGE_SIZE,
         highlightAtoms=list(match),
         highlightBonds=highlight_bonds,
-        legend="Murcko Scaffold"
+        legend="Murcko Scaffold",
     )
     return [(img, "Murcko Scaffold")], "Scaffold highlighted."
+
 
 # -----------------------------
 # Combined Processing Function
@@ -290,10 +307,10 @@ def process_smiles_mode(smiles: str, mode: str):
         if img is None:
             return [], status_msg
         return [img], status_msg
-    elif mode == "Potential Stereo":  
+    elif mode == "Potential Stereo":
         images, status_msg = process_potential_stereo(smiles)
         return images, status_msg
-    elif mode == "DAYLIGHT SMARTS Examples":  
+    elif mode == "DAYLIGHT SMARTS Examples":
         images, status_msg = process_daylight_smarts_examples(smiles)
         return images, status_msg
     elif mode == "Murcko Scaffold":
@@ -301,6 +318,7 @@ def process_smiles_mode(smiles: str, mode: str):
         return images, status_msg
     else:
         return [], "Invalid mode selected."
+
 
 # -----------------------------
 # Gradio Interface
@@ -314,21 +332,30 @@ with gr.Blocks() as demo:
         "You can choose to highlight functional groups, interligand moieties, rotatable bonds, chiral centers, or potential stereo centers."
     )
     gr.Markdown("**WARNING: Mostly AI-generated and untested! Use at own risk.**")
-    gr.Markdown("Based on SMARTS patterns provided with [OpenBabel](https://github.com/openbabel/openbabel/blob/master/data/SMARTS_InteLigand.txt) and [DAYLIGHT SMARTS examples](https://www.daylight.com/dayhtml_tutorials/languages/smarts/smarts_examples.html).")
-    
+    gr.Markdown(
+        "Based on SMARTS patterns provided with [OpenBabel](https://github.com/openbabel/openbabel/blob/master/data/SMARTS_InteLigand.txt) and [DAYLIGHT SMARTS examples](https://www.daylight.com/dayhtml_tutorials/languages/smarts/smarts_examples.html)."
+    )
+
     with gr.Row():
         smiles_input = gr.Textbox(
-            label="Enter SMILES string", 
+            label="Enter SMILES string",
             placeholder="e.g. CC(=O)OC1=CC=CC=C1C(=O)O",
-            lines=3
+            lines=3,
         )
         mode_dropdown = gr.Dropdown(
             label="Highlight Mode",
-            choices=["Functional Groups", "Rotatable Bonds", "Interligand Moieties", "Chiral Centers", 
-                     "Potential Stereo", "DAYLIGHT SMARTS Examples", "Murcko Scaffold"],  # Added new mode
-            value="Functional Groups"
+            choices=[
+                "Functional Groups",
+                "Rotatable Bonds",
+                "Interligand Moieties",
+                "Chiral Centers",
+                "Potential Stereo",
+                "DAYLIGHT SMARTS Examples",
+                "Murcko Scaffold",
+            ],  # Added new mode
+            value="Functional Groups",
         )
-    
+
     # Update gr.Examples component to maintain existing examples and add new ones from the README
     gr.Examples(
         examples=[
@@ -337,17 +364,35 @@ with gr.Blocks() as demo:
             ["CCOC(=O)C1=CC=CC=C1", "Rotatable Bonds"],
             ["CC(C(=O)O)N", "Chiral Centers"],
             ["CC(C)Cc1ccc(cc1)C(C)C(=O)O", "Functional Groups"],
-            ["CC1=C(C=C(C=C1)C(=O)NC2=C3C(=CC(=CC3=C(C=C2)S(=O)(=O)O)S(=O)(=O)O)S(=O)(=O)O)NC(=O)C4=CC(=CC=C4)NC(=O)NC5=CC=CC(=C5)C(=O)NC6=C(C=CC(=C6)C(=O)NC7=C8C(=CC(=CC8=C(C=C7)S(=O)(=O)O)S(=O)(=O)O)S(=O)(=O)O)C", "Functional Groups"]
+            [
+                "CC1=C(C=C(C=C1)C(=O)NC2=C3C(=CC(=CC3=C(C=C2)S(=O)(=O)O)S(=O)(=O)O)S(=O)(=O)O)NC(=O)C4=CC(=CC=C4)NC(=O)NC5=CC=CC(=C5)C(=O)NC6=C(C=CC(=C6)C(=O)NC7=C8C(=CC(=CC8=C(C=C7)S(=O)(=O)O)S(=O)(=O)O)S(=O)(=O)O)C",
+                "Functional Groups",
+            ],
         ],
-        example_labels=["Aspirin", "Aspirin (kekulized)", "Ethylbenzoate", "DL-Alanine", "Ibuprofen", "Suramin"],
+        example_labels=[
+            "Aspirin",
+            "Aspirin (kekulized)",
+            "Ethylbenzoate",
+            "DL-Alanine",
+            "Ibuprofen",
+            "Suramin",
+        ],
         inputs=[smiles_input, mode_dropdown],
-        label="Examples"
+        label="Examples",
     )
-    
+
     gallery = gr.Gallery(label="Highlighted Features", columns=3, height="auto")
     status = gr.Textbox(label="Status", interactive=False)
 
-    smiles_input.submit(process_smiles_mode, inputs=[smiles_input, mode_dropdown], outputs=[gallery, status])
-    mode_dropdown.change(process_smiles_mode, inputs=[smiles_input, mode_dropdown], outputs=[gallery, status])
+    smiles_input.submit(
+        process_smiles_mode,
+        inputs=[smiles_input, mode_dropdown],
+        outputs=[gallery, status],
+    )
+    mode_dropdown.change(
+        process_smiles_mode,
+        inputs=[smiles_input, mode_dropdown],
+        outputs=[gallery, status],
+    )
 
 demo.launch()
