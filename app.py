@@ -196,6 +196,7 @@ def process_smiles_mode(smiles: str, mode: str):
 with gr.Blocks() as demo:
     gr.Markdown("# Moliety: Molecular Feature Highlighter")
     gr.Markdown(
+        "Confirm your impostor syndrome by uploading a molecule in SMILES form and count all the moieties you were supposed to know by heart."
         "Enter a SMILES string below and select a highlighting mode. "
         "You can choose to highlight functional groups, interligand moieties, rotatable bonds, or chiral centers."
     )
@@ -213,18 +214,21 @@ with gr.Blocks() as demo:
             value="Functional Groups"
         )
     
+    # Aggiornamento del componente gr.Examples per mantenere i vecchi esempi e aggiungerne di nuovi dal README
     gr.Examples(
         examples=[
+            ["CC(=O)Oc1ccccc1C(=O)O", "Functional Groups"],
             ["CC(=O)OC1=CC=CC=C1C(=O)O", "Functional Groups"],
             ["CCOC(=O)C1=CC=CC=C1", "Rotatable Bonds"],
-            ["CC(C(=O)O)N", "Chiral Centers"]
+            ["CC(C(=O)O)N", "Chiral Centers"],
+            ["CC(C)Cc1ccc(cc1)C(C)C(=O)O", "Functional Groups"],
+            ["CC1=C(C=C(C=C1)C(=O)NC2=C3C(=CC(=CC3=C(C=C2)S(=O)(=O)O)S(=O)(=O)O)NC(=O)C4=CC(=CC=C4)NC(=O)NC5=CC=CC(=C5)C(=O)NC6=C(C=CC(=C6)C(=O)NC7=C8C(=CC(=CC8=C(C=C7)S(=O)(=O)O)S(=O)(=O)O)S(=O)(=O)O)C", "Functional Groups"]
         ],
-        example_labels=["Aspirin","Ethylbenzoate","DL-Alanine"],
+        example_labels=["Aspirin", "Aspirin (kekulized)", "Ethylbenzoate", "DL-Alanine", "Ibuprofen", "Suramin"],
         inputs=[smiles_input, mode_dropdown],
         label="Examples"
     )
-
-   
+    
     gallery = gr.Gallery(label="Highlighted Features", columns=3, height="auto")
     status = gr.Textbox(label="Status", interactive=False)
 
