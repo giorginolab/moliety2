@@ -1,6 +1,6 @@
 import gradio as gr
 from rdkit import Chem
-from rdkit.Chem import Draw
+from rdkit.Chem import Draw, AllChem
 from PIL import Image
 from rdkit.Chem.Draw import MolDraw2DCairo
 from io import BytesIO
@@ -181,6 +181,28 @@ def process_chiral_centers(smiles: str):
     return img, "Chiral centers highlighted."
 
 # -----------------------------
+# Potential Stereo Functions
+# -----------------------------
+def process_potential_stereo(smiles: str):
+    mol = Chem.MolFromSmiles(smiles)
+    if mol is None:
+        return None, "Invalid SMILES."
+    # Use RDKit's FindPotentialStereo (assuming available)
+    potential_stereocenters = Chem.FindPotentialStereo(mol)
+    if not potential_stereocenters:
+        return None, "No potential stereo centers found."
+    images = []
+    for sinfo in potential_stereocenters:
+        highlight_atoms = [sinfo.centeredOn] 
+        images.append(Draw.MolToImage(
+            mol,
+            size=IMAGE_SIZE,
+            highlightAtoms=highlight_atoms,
+            legend=sinfo.type.name
+        ))
+    return images, f"Found {len(highlight_atoms)} potential stereo center(s)."
+
+# -----------------------------
 # DAYLIGHT SMARTS Functions
 # -----------------------------
 def load_yaml_smarts():
@@ -240,6 +262,9 @@ def process_smiles_mode(smiles: str, mode: str):
         if img is None:
             return [], status_msg
         return [img], status_msg
+    elif mode == "Potential Stereo":  
+        images, status_msg = process_potential_stereo(smiles)
+        return images, status_msg
     elif mode == "DAYLIGHT SMARTS Examples":  
         images, status_msg = process_daylight_smarts_examples(smiles)
         return images, status_msg
@@ -255,7 +280,7 @@ with gr.Blocks() as demo:
     gr.Markdown(
         "Boost your impostor syndrome by uploading a molecule in SMILES form and count all the moieties you were supposed to know by heart. <br/>"
         "Enter a SMILES string below and select a highlighting mode. "
-        "You can choose to highlight functional groups, interligand moieties, rotatable bonds, or chiral centers."
+        "You can choose to highlight functional groups, interligand moieties, rotatable bonds, chiral centers, or potential stereo centers."
     )
     gr.Markdown("**WARNING: Mostly AI-generated and untested! Use at own risk.**")
     gr.Markdown("Based on SMARTS patterns provided with [OpenBabel](https://github.com/openbabel/openbabel/blob/master/data/SMARTS_InteLigand.txt) and [DAYLIGHT SMARTS examples](https://www.daylight.com/dayhtml_tutorials/languages/smarts/smarts_examples.html).")
@@ -268,7 +293,7 @@ with gr.Blocks() as demo:
         )
         mode_dropdown = gr.Dropdown(
             label="Highlight Mode",
-            choices=["Functional Groups", "Rotatable Bonds", "Interligand moieties", "Chiral Centers", "DAYLIGHT SMARTS Examples"], 
+            choices=["Functional Groups", "Rotatable Bonds", "Interligand moieties", "Chiral Centers", "Potential Stereo", "DAYLIGHT SMARTS Examples"], 
             value="Functional Groups"
         )
     
