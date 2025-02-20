@@ -5,6 +5,7 @@ from PIL import Image
 from rdkit.Chem.Draw import MolDraw2DCairo
 from io import BytesIO
 import yaml  
+from rdkit.Chem.Scaffolds import MurckoScaffold  # New import
 
 IMAGE_SIZE=(800,800)
 
@@ -245,6 +246,27 @@ def process_daylight_smarts_examples(smiles: str):
     return images, f"Found {len(images)} SMARTS matches." 
 
 # -----------------------------
+# Scaffold Highlight Function
+# -----------------------------
+def process_scaffold(smiles: str):
+    mol = Chem.MolFromSmiles(smiles)
+    if mol is None:
+        return [], "Invalid SMILES."
+    scaffold = MurckoScaffold.GetScaffoldForMol(mol)
+    if scaffold is None:
+        return [], "No scaffold found."
+    match = mol.GetSubstructMatch(scaffold)
+    if not match:
+        return [], "Scaffold not found as substructure."
+    img = Draw.MolToImage(
+        mol,
+        size=IMAGE_SIZE,
+        highlightAtoms=list(match),
+        legend="Murcko Scaffold"
+    )
+    return [(img, "Scaffold")], "Scaffold highlighted."
+
+# -----------------------------
 # Combined Processing Function
 # -----------------------------
 def process_smiles_mode(smiles: str, mode: str):
@@ -254,7 +276,7 @@ def process_smiles_mode(smiles: str, mode: str):
     elif mode == "Rotatable Bonds":
         images, status_msg = process_rotatable(smiles)
         return images, status_msg
-    elif mode == "Interligand moieties":
+    elif mode == "Interligand Moieties":
         images, status_msg = process_interligand_moieties(smiles)
         return images, status_msg
     elif mode == "Chiral Centers":
@@ -267,6 +289,9 @@ def process_smiles_mode(smiles: str, mode: str):
         return images, status_msg
     elif mode == "DAYLIGHT SMARTS Examples":  
         images, status_msg = process_daylight_smarts_examples(smiles)
+        return images, status_msg
+    elif mode == "Murcko Scaffold Highlight":  # New mode branch
+        images, status_msg = process_scaffold(smiles)
         return images, status_msg
     else:
         return [], "Invalid mode selected."
@@ -293,7 +318,8 @@ with gr.Blocks() as demo:
         )
         mode_dropdown = gr.Dropdown(
             label="Highlight Mode",
-            choices=["Functional Groups", "Rotatable Bonds", "Interligand moieties", "Chiral Centers", "Potential Stereo", "DAYLIGHT SMARTS Examples"], 
+            choices=["Functional Groups", "Rotatable Bonds", "Interligand Moieties", "Chiral Centers", 
+                     "Potential Stereo", "DAYLIGHT SMARTS Examples", "Murcko Scaffold Highlight"],  # Added new mode
             value="Functional Groups"
         )
     
