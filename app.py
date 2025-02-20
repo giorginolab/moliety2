@@ -47,6 +47,16 @@ interligand_moieties = load_interligand_moieties()
 compiled_interligand_patterns = {name: Chem.MolFromSmarts(smart)
                                  for name, smart in interligand_moieties.items()}
 
+
+
+# -----------------------------
+# Rotatable bond Definition 
+# https://www.daylight.com/dayhtml_tutorials/languages/smarts/smarts_examples.html
+# -----------------------------
+
+rotatable_patterns = {"DAYLIGHT defn.": Chem.MolFromSmarts("[!$(*#*)&!D1]-!@[!$(*#*)&!D1]")}
+
+
 # -----------------------------
 # Generic Highlighting Function
 # -----------------------------
@@ -81,21 +91,15 @@ def highlight_by_patterns(smiles: str, pattern_dict: dict):
             images.append((img,name))
     return images
 
-# These two functions simply call the generic one with different pattern dictionaries.
-def highlight_functional_groups(smiles: str):
-    return highlight_by_patterns(smiles, compiled_patterns)
-
-def highlight_interligand_moieties(smiles: str):
-    return highlight_by_patterns(smiles, compiled_interligand_patterns)
 
 def process_functional_groups(smiles: str):
-    images = highlight_functional_groups(smiles)
+    images = highlight_by_patterns(smiles, compiled_patterns)
     if images is None or len(images) == 0:
         return [], "No functional groups recognized or invalid SMILES."
     return images, f"Found {len(images)} functional group(s)."
 
 def process_interligand_moieties(smiles: str):
-    images = highlight_interligand_moieties(smiles)
+    images = highlight_by_patterns(smiles, compiled_interligand_patterns)
     if images is None or len(images) == 0:
         return [], "No interligand moieties recognized or invalid SMILES."
     return images, f"Found {len(images)} interligand moiety(ies)."
@@ -135,10 +139,16 @@ def highlight_rotatable_bonds(smiles: str):
     return img
 
 def process_rotatable(smiles: str):
+    images = []
     img = highlight_rotatable_bonds(smiles)
-    if img is None:
-        return None, "No rotatable bonds recognized or invalid SMILES."
-    return img, "Rotatable bonds highlighted."
+    if img:
+        images.append((img, "Local algorithm"))
+    img = highlight_by_patterns(smiles, rotatable_patterns)
+    images.extend(img)
+    if images:
+        return images, "Rotatable bonds highlighted."
+    else:
+        return [], "No rotatable bonds found"
 
 # -----------------------------
 # Chiral Center Functions
@@ -175,10 +185,8 @@ def process_smiles_mode(smiles: str, mode: str):
         images, status_msg = process_functional_groups(smiles)
         return images, status_msg
     elif mode == "Rotatable Bonds":
-        img, status_msg = process_rotatable(smiles)
-        if img is None:
-            return [], status_msg
-        return [img], status_msg
+        images, status_msg = process_rotatable(smiles)
+        return images, status_msg
     elif mode == "Interligand moieties":
         images, status_msg = process_interligand_moieties(smiles)
         return images, status_msg
