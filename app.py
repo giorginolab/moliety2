@@ -4,6 +4,7 @@ from rdkit.Chem import Draw
 from PIL import Image
 from rdkit.Chem.Draw import MolDraw2DCairo
 from io import BytesIO
+import yaml  
 
 IMAGE_SIZE=(800,800)
 
@@ -70,6 +71,8 @@ def highlight_by_patterns(smiles: str, pattern_dict: dict):
         return None
     images = []
     for name, pattern in pattern_dict.items():
+        if pattern is None:  # Skip uncompiled patterns
+            continue
         matches = mol.GetSubstructMatches(pattern)
         if matches:
             highlight_atoms = set()
@@ -178,6 +181,48 @@ def process_chiral_centers(smiles: str):
     return img, "Chiral centers highlighted."
 
 # -----------------------------
+# DAYLIGHT SMARTS Functions
+# -----------------------------
+def load_yaml_smarts():
+    """
+    Load and compile SMARTS from the YAML file.
+    """
+    try:
+        with open("data/daylight_smarts.yml", "r") as f:
+            data = yaml.safe_load(f)
+    except Exception as e:
+        print("Error loading daylight_smarts.yml:", e) 
+        return {}
+    compiled_yaml = {}
+    for group in data.get("groups", []):
+        group_name = group.get("name", "Unnamed Group")
+        for subgroup in group.get("subgroups", []):
+            subgroup_name = subgroup.get("name", "Unnamed Subgroup")
+            if "subsubgroups" in subgroup:
+                for subsub in subgroup.get("subsubgroups", []):
+                    subsub_name = subsub.get("name", "Unnamed Subsubgroup")
+                    for rule in subsub.get("rules", []):
+                        if "smarts" in rule:
+                            key = f"{group_name}: {subgroup_name} > {subsub_name} - {rule.get('name', 'Unnamed Rule')}"
+                            compiled_yaml[key] = Chem.MolFromSmarts(rule.get("smarts"))
+            elif "rules" in subgroup:
+                for rule in subgroup.get("rules", []):
+                    if "smarts" in rule:
+                        key = f"{group_name}: {subgroup_name} - {rule.get('name', 'Unnamed Rule')}"
+                        compiled_yaml[key] = Chem.MolFromSmarts(rule.get("smarts"))
+    return compiled_yaml
+
+def process_daylight_smarts_examples(smiles: str):
+    """
+    Highlight substructures using the SMARTS defined in the YAML file.
+    """
+    patterns = load_yaml_smarts()
+    images = highlight_by_patterns(smiles, patterns)
+    if images is None or len(images) == 0:
+        return [], "No YAML SMARTS recognized or invalid SMILES." 
+    return images, f"Found {len(images)} YAML SMARTS matches." 
+
+# -----------------------------
 # Combined Processing Function
 # -----------------------------
 def process_smiles_mode(smiles: str, mode: str):
@@ -195,6 +240,9 @@ def process_smiles_mode(smiles: str, mode: str):
         if img is None:
             return [], status_msg
         return [img], status_msg
+    elif mode == "DAYLIGHT SMARTS Examples":  
+        images, status_msg = process_daylight_smarts_examples(smiles)
+        return images, status_msg
     else:
         return [], "Invalid mode selected."
 
@@ -203,12 +251,14 @@ def process_smiles_mode(smiles: str, mode: str):
 # -----------------------------
 with gr.Blocks() as demo:
     gr.Markdown("# Moliety: Molecular Feature Highlighter")
+    gr.Markdown("www.giorginolab.it")
     gr.Markdown(
-        "Enter a SMILES string below and select a highlighting mode. <br/>"
-        "Confirm your impostor syndrome by uploading a molecule in SMILES form and count all the moieties you were supposed to know by heart. <br/>"
+        "Boost your impostor syndrome by uploading a molecule in SMILES form and count all the moieties you were supposed to know by heart. <br/>"
+        "Enter a SMILES string below and select a highlighting mode. "
         "You can choose to highlight functional groups, interligand moieties, rotatable bonds, or chiral centers."
     )
-    gr.Markdown("www.giorginolab.it")
+    gr.Markdown("**WARNING: Mostly AI-generated and untested! Use at own risk.**")
+    gr.Markdown("Based on SMARTS patterns provided with [OpenBabel](https://github.com/openbabel/openbabel/blob/master/data/SMARTS_InteLigand.txt) and [DAYLIGHT SMARTS examples](https://www.daylight.com/dayhtml_tutorials/languages/smarts/smarts_examples.html).")
     
     with gr.Row():
         smiles_input = gr.Textbox(
@@ -218,11 +268,11 @@ with gr.Blocks() as demo:
         )
         mode_dropdown = gr.Dropdown(
             label="Highlight Mode",
-            choices=["Functional Groups", "Rotatable Bonds", "Interligand moieties", "Chiral Centers"],
+            choices=["Functional Groups", "Rotatable Bonds", "Interligand moieties", "Chiral Centers", "DAYLIGHT SMARTS Examples"], 
             value="Functional Groups"
         )
     
-    # Aggiornamento del componente gr.Examples per mantenere i vecchi esempi e aggiungerne di nuovi dal README
+    # Update gr.Examples component to maintain existing examples and add new ones from the README
     gr.Examples(
         examples=[
             ["CC(=O)Oc1ccccc1C(=O)O", "Functional Groups"],
