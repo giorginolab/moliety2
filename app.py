@@ -185,6 +185,9 @@ def gasteiger_charges(smiles: str):
     if mol is None:
         return [], "Invalid SMILES."
     
+    # Add explicit hydrogens to the molecule
+    mol = Chem.AddHs(mol)
+    
     # Compute Gasteiger charges using AllChem
     AllChem.ComputeGasteigerCharges(mol)
     
@@ -199,13 +202,13 @@ def gasteiger_charges(smiles: str):
     if not highlight_atoms:
         return [], "Could not compute Gasteiger charges."
     
-    # Generate image with charge labels
+    # Generate image with charge labels, showing hydrogens
     img = mol_to_svg(mol, IMAGE_SIZE, 
                      highlightAtoms=highlight_atoms,
-                     legend="Gasteiger Charges",
+                     legend="Gasteiger Charges (including H)",
                      atomLabels=atom_labels)
     
-    return [(img, "Gasteiger Charges")], "Gasteiger charges computed and displayed."
+    return [(img, "Gasteiger Charges")], "Gasteiger charges computed and displayed (including hydrogens)."
 
 
 # -----------------------------
