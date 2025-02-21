@@ -1,6 +1,7 @@
 import gradio as gr
 from rdkit import Chem
 from rdkit.Chem.Scaffolds import MurckoScaffold 
+from rdkit.Chem import AllChem  # Add this import
 from rotatable_bonds import process_rotatable
 
 from file_helpers import load_interligand_moieties, load_yaml_smarts
@@ -177,6 +178,37 @@ def hybridization(smiles: str):
 
 
 # -----------------------------
+# Gasteiger Charges Function
+# -----------------------------
+def gasteiger_charges(smiles: str):
+    mol = Chem.MolFromSmiles(smiles)
+    if mol is None:
+        return [], "Invalid SMILES."
+    
+    # Compute Gasteiger charges using AllChem
+    AllChem.ComputeGasteigerCharges(mol)
+    
+    # Create atom labels dictionary with charges
+    atom_labels = {}
+    highlight_atoms = []
+    for atom in mol.GetAtoms():
+        charge = atom.GetDoubleProp('_GasteigerCharge')
+        atom_labels[atom.GetIdx()] = f"{charge:.3f}"
+        highlight_atoms.append(atom.GetIdx())
+    
+    if not highlight_atoms:
+        return [], "Could not compute Gasteiger charges."
+    
+    # Generate image with charge labels
+    img = mol_to_svg(mol, IMAGE_SIZE, 
+                     highlightAtoms=highlight_atoms,
+                     legend="Gasteiger Charges",
+                     atomLabels=atom_labels)
+    
+    return [(img, "Gasteiger Charges")], "Gasteiger charges computed and displayed."
+
+
+# -----------------------------
 # Combined Processing Function
 # -----------------------------
 # Modified process_smiles_mode: add SMILES validity check for Functional Groups
@@ -200,6 +232,8 @@ def process_smiles_main(smiles: str, mode: str):
         images, status_msg = scaffold(smiles)
     elif mode == "Hybridization":
         images, status_msg = hybridization(smiles)
+    elif mode == "Gasteiger Charges":
+        images, status_msg = gasteiger_charges(smiles)
     else:
         return [], "Invalid mode selected."
 
@@ -238,7 +272,8 @@ with gr.Blocks() as demo:
                 "Potential Stereogenic Centers",
                 "DAYLIGHT SMARTS Examples",
                 "Murcko Scaffold",
-                "Hybridization"  # Add new mode
+                "Hybridization",  # Add new mode
+                "Gasteiger Charges"  # Add new mode
             ],
             value="Functional Groups",
         )
