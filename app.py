@@ -212,17 +212,24 @@ def process_potential_stereo(smiles: str):
     mol = Chem.MolFromSmiles(smiles)
     if mol is None:
         return None, "Invalid SMILES."
-    # Use RDKit's FindPotentialStereo (assuming available)
+    # Use RDKit's FindPotentialStereo
     potential_stereocenters = Chem.FindPotentialStereo(mol)
     if not potential_stereocenters:
         return None, "No potential stereo centers found."
-    images = []
+    
+    highlight_atoms = []
+    atom_labels = {}
     for sinfo in potential_stereocenters:
-        highlight_atoms = [sinfo.centeredOn]
-        # Modified to output SVG
-        svg = mol_to_svg(mol, IMAGE_SIZE, highlightAtoms=highlight_atoms, legend=sinfo.type.name)
-        images.append((svg, sinfo.type.name))
-    return images, f"Found {len(potential_stereocenters)} potential stereo center(s)."
+        highlight_atoms.append(sinfo.centeredOn)
+        atom_labels[sinfo.centeredOn] = sinfo.type.name
+    
+    # Create single image with all centers highlighted
+    svg = mol_to_svg(mol, IMAGE_SIZE, 
+                     highlightAtoms=highlight_atoms, 
+                     legend="Potential Stereogenic Centers",
+                     atomLabels=atom_labels)
+    
+    return [(svg, "Potential Stereogenic Centers")], f"Found {len(potential_stereocenters)} potential stereogenic center(s)."
 
 
 # -----------------------------
@@ -299,7 +306,7 @@ def process_smiles_mode(smiles: str, mode: str):
         if img is None:
             return [], status_msg
         return [img], status_msg
-    elif mode == "Potential Stereo":
+    elif mode == "Potential Stereogenic Centers":
         images, status_msg = process_potential_stereo(smiles)
         return images, status_msg
     elif mode == "DAYLIGHT SMARTS Examples":
@@ -344,7 +351,7 @@ with gr.Blocks() as demo:
                 "Rotatable Bonds",
                 "Interligand Moieties",
                 "Chiral Centers",
-                "Potential Stereo",
+                "Potential Stereogenic Centers",
                 "DAYLIGHT SMARTS Examples",
                 "Murcko Scaffold",
                 "Hybridization"  # Add new mode
