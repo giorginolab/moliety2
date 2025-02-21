@@ -26,7 +26,7 @@ def mol_to_svg(mol, size, highlightAtoms=None, highlightBonds=None, legend="", a
             atom = mol.GetAtomWithIdx(atom_idx)
             # Combine atom symbol with label
             original_symbol = atom.GetSymbol()
-            atom.SetProp('atomLabel', f'{original_symbol}({label})')
+            atom.SetProp('atomNote', label)
     
     drawer.DrawMolecule(mol, highlightAtoms=highlightAtoms, highlightBonds=highlightBonds, legend=legend)
     drawer.FinishDrawing()
@@ -249,6 +249,36 @@ def process_scaffold(smiles: str):
 
 
 # -----------------------------
+# Hybridization State Functions
+# -----------------------------
+def process_hybridization(smiles: str):
+    mol = Chem.MolFromSmiles(smiles)
+    if mol is None:
+        return [], "Invalid SMILES."
+    
+    # Create atom labels dictionary with hybridization states
+    atom_labels = {}
+    highlight_atoms = []
+    for atom in mol.GetAtoms():
+        hyb = atom.GetHybridization()
+        # Skip atoms with undefined hybridization
+        if hyb != Chem.HybridizationType.UNSPECIFIED:
+            atom_labels[atom.GetIdx()] = hyb.name
+            highlight_atoms.append(atom.GetIdx())
+    
+    if not highlight_atoms:
+        return [], "No hybridization states to display."
+    
+    # Generate image with hybridization labels
+    img = mol_to_svg(mol, IMAGE_SIZE, 
+                     highlightAtoms=highlight_atoms,
+                     legend="Hybridization States",
+                     atomLabels=atom_labels)
+    
+    return [(img, "Hybridization States")], "Hybridization states highlighted."
+
+
+# -----------------------------
 # Combined Processing Function
 # -----------------------------
 # Modified process_smiles_mode: add SMILES validity check for Functional Groups
@@ -277,6 +307,9 @@ def process_smiles_mode(smiles: str, mode: str):
         return images, status_msg
     elif mode == "Murcko Scaffold":
         images, status_msg = process_scaffold(smiles)
+        return images, status_msg
+    elif mode == "Hybridization":
+        images, status_msg = process_hybridization(smiles)
         return images, status_msg
     else:
         return [], "Invalid mode selected."
@@ -314,7 +347,8 @@ with gr.Blocks() as demo:
                 "Potential Stereo",
                 "DAYLIGHT SMARTS Examples",
                 "Murcko Scaffold",
-            ],  # Added new mode
+                "Hybridization"  # Add new mode
+            ],
             value="Functional Groups",
         )
 
