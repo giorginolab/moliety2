@@ -12,7 +12,7 @@ import tempfile  # New import
 
 from file_helpers import load_interligand_moieties, load_yaml_smarts
 
-IMAGE_SIZE = (800, 800)
+IMAGE_SIZE = (400, 400)
 
 # Modified helper function to write SVG to a temp file and return its path
 def mol_to_svg(mol, size, highlightAtoms=None, highlightBonds=None, legend=""):
