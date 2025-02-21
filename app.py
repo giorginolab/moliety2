@@ -101,18 +101,21 @@ def highlight_by_patterns(smiles: str, pattern_dict: dict):
     return images
 
 
-def process_functional_groups(smiles: str):
-    images = highlight_by_patterns(smiles, compiled_patterns)
-    if images is None or len(images) == 0:
-        return [], "No functional groups recognized or invalid SMILES."
-    return images, f"Found {len(images)} functional group(s)."
+def process_by_patterns(smiles: str, patterns: dict, not_found_msg: str):
+    images = highlight_by_patterns(smiles, patterns)
+    if not images:
+        return [], not_found_msg
+    return images, f"Found {len(images)} match(es)."
 
+def process_functional_groups(smiles: str):
+    return process_by_patterns(smiles, compiled_patterns, "No functional groups recognized or invalid SMILES.")
 
 def process_interligand_moieties(smiles: str):
-    images = highlight_by_patterns(smiles, compiled_interligand_patterns)
-    if images is None or len(images) == 0:
-        return [], "No interligand moieties recognized or invalid SMILES."
-    return images, f"Found {len(images)} interligand moiety(ies)."
+    return process_by_patterns(smiles, compiled_interligand_patterns, "No interligand moieties recognized or invalid SMILES.")
+
+def process_daylight_smarts_examples(smiles: str):
+    patterns = load_yaml_smarts()
+    return process_by_patterns(smiles, patterns, "No SMARTS examples recognized or invalid SMILES.")
 
 
 # -----------------------------
@@ -248,17 +251,6 @@ def load_yaml_smarts():
                         key = f"{group_name}: {subgroup_name} - {rule.get('name', 'Unnamed Rule')}"
                         compiled_yaml[key] = Chem.MolFromSmarts(rule.get("smarts"))
     return compiled_yaml
-
-
-def process_daylight_smarts_examples(smiles: str):
-    """
-    Highlight substructures using the SMARTS defined in the YAML file.
-    """
-    patterns = load_yaml_smarts()
-    images = highlight_by_patterns(smiles, patterns)
-    if images is None or len(images) == 0:
-        return [], "No SMARTS examples recognized or invalid SMILES."
-    return images, f"Found {len(images)} SMARTS matches."
 
 
 # -----------------------------
