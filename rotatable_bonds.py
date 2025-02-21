@@ -1,3 +1,9 @@
+"""
+Module for identifying and visualizing rotatable bonds in molecular structures.
+Provides functionality to detect single bonds that can rotate using both
+a local algorithm and SMARTS pattern matching approaches.
+"""
+
 from rdkit import Chem
 from utils import mol_to_svg, highlight_by_patterns, IMAGE_SIZE
 
@@ -8,6 +14,21 @@ rotatable_patterns = {
 }
 
 def get_rotatable_bond_indices(mol):
+    """
+    Identifies rotatable bonds in a molecule using local structural analysis.
+    
+    A bond is considered rotatable if it:
+    - Is a single bond
+    - Is not in a ring
+    - Neither atom is a hydrogen
+    - Both atoms have at least 2 neighbors
+    
+    Args:
+        mol: RDKit molecule object
+    
+    Returns:
+        list: Indices of rotatable bonds in the molecule
+    """
     rot_bond_indices = []
     for bond in mol.GetBonds():
         if bond.GetBondType() != Chem.BondType.SINGLE:
@@ -24,6 +45,16 @@ def get_rotatable_bond_indices(mol):
     return rot_bond_indices
 
 def highlight_rotatable_bonds(smiles: str):
+    """
+    Creates an SVG visualization of a molecule with rotatable bonds highlighted.
+    
+    Args:
+        smiles: SMILES string representation of the molecule
+    
+    Returns:
+        str: SVG string of the molecule with rotatable bonds highlighted, or
+             None if no rotatable bonds are found or if SMILES is invalid
+    """
     mol = Chem.MolFromSmiles(smiles)
     if mol is None:
         return None
@@ -34,6 +65,18 @@ def highlight_rotatable_bonds(smiles: str):
     return img
 
 def process_rotatable(smiles: str):
+    """
+    Processes a molecule to identify rotatable bonds using multiple methods
+    and generates visualizations for each method.
+    
+    Args:
+        smiles: SMILES string representation of the molecule
+    
+    Returns:
+        tuple: (list of (image, caption) tuples, status message string)
+               Images show the molecule with rotatable bonds highlighted using
+               different detection methods
+    """
     images = []
     img = highlight_rotatable_bonds(smiles)
     if img:
