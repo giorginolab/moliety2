@@ -100,8 +100,12 @@ def process_by_patterns(smiles: str, patterns: dict, not_found_msg: str):
         return [], not_found_msg
     return images, f"Found {len(images)} match(es)."
 
+# Modified process_functional_groups: removed SMILES validity check
 def process_functional_groups(smiles: str):
-    return process_by_patterns(smiles, compiled_patterns, "No functional groups recognized or invalid SMILES.")
+    images = highlight_by_patterns(smiles, compiled_patterns)
+    if not images:
+        return [], "No functional groups recognized."
+    return images, f"Found {len(images)} match(es)."
 
 def process_interligand_moieties(smiles: str):
     return process_by_patterns(smiles, compiled_interligand_patterns, "No interligand moieties recognized or invalid SMILES.")
@@ -228,7 +232,10 @@ def process_scaffold(smiles: str):
 # -----------------------------
 # Combined Processing Function
 # -----------------------------
+# Modified process_smiles_mode: add SMILES validity check for Functional Groups
 def process_smiles_mode(smiles: str, mode: str):
+    if Chem.MolFromSmiles(smiles) is None:
+        return [], "Invalid SMILES."
     if mode == "Functional Groups":
         images, status_msg = process_functional_groups(smiles)
         return images, status_msg
