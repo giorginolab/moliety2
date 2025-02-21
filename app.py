@@ -7,7 +7,6 @@ from io import BytesIO
 import yaml
 from rdkit.Chem.Scaffolds import MurckoScaffold  # New import
 
-# Import file-related functions from the new file_helpers module
 from file_helpers import load_interligand_moieties, load_yaml_smarts
 
 IMAGE_SIZE = (800, 800)
@@ -44,7 +43,8 @@ compiled_interligand_patterns = {
 # -----------------------------
 
 rotatable_patterns = {
-    "DAYLIGHT defn.": Chem.MolFromSmarts("[!$(*#*)&!D1]-!@[!$(*#*)&!D1]")
+    "DAYLIGHT defn.": Chem.MolFromSmarts("[!$(*#*)&!D1]-!@[!$(*#*)&!D1]"),
+    "RDKit defn.":    Chem.MolFromSmarts('[!$(*#*)&!D1]-&!@[!$(*#*)&!D1]')
 }
 
 
@@ -204,10 +204,6 @@ def process_potential_stereo(smiles: str):
     return images, f"Found {len(highlight_atoms)} potential stereo center(s)."
 
 
-# -----------------------------
-# DAYLIGHT SMARTS Functions
-# -----------------------------
-# Removed the load_yaml_smarts function definition here as it has been moved to file_helpers.py
 
 
 # -----------------------------
