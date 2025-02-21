@@ -112,16 +112,16 @@ def process_by_patterns(smiles: str, patterns: dict, not_found_msg: str):
     return images, f"Found {len(images)} match(es)."
 
 # Modified process_functional_groups: removed SMILES validity check
-def process_functional_groups(smiles: str):
+def functional_groups(smiles: str):
     images = highlight_by_patterns(smiles, compiled_patterns)
     if not images:
         return [], "No functional groups recognized."
     return images, f"Found {len(images)} match(es)."
 
-def process_interligand_moieties(smiles: str):
+def interligand_moieties(smiles: str):
     return process_by_patterns(smiles, compiled_interligand_patterns, "No interligand moieties recognized or invalid SMILES.")
 
-def process_daylight_smarts_examples(smiles: str):
+def daylight_smarts_examples(smiles: str):
     patterns = load_yaml_smarts()
     return process_by_patterns(smiles, patterns, "No SMARTS examples recognized or invalid SMILES.")
 
@@ -158,7 +158,7 @@ def highlight_rotatable_bonds(smiles: str):
     return img
 
 
-def process_rotatable(smiles: str):
+def rotatable(smiles: str):
     images = []
     img = highlight_rotatable_bonds(smiles)
     if img:
@@ -198,17 +198,17 @@ def highlight_chiral_centers(smiles: str):
     return img
 
 
-def process_chiral_centers(smiles: str):
+def chiral_centers(smiles: str):
     img = highlight_chiral_centers(smiles)
     if img is None:
         return None, "No chiral centers recognized or invalid SMILES."
-    return img, "Chiral centers highlighted."
+    return [(img, "Chiral centers")], "Chiral centers highlighted."
 
 
 # -----------------------------
 # Potential Stereo Functions
 # -----------------------------
-def process_potential_stereo(smiles: str):
+def stereocenters(smiles: str):
     mol = Chem.MolFromSmiles(smiles)
     if mol is None:
         return None, "Invalid SMILES."
@@ -235,7 +235,7 @@ def process_potential_stereo(smiles: str):
 # -----------------------------
 # Updated Scaffold Highlight Function
 # -----------------------------
-def process_scaffold(smiles: str):
+def scaffold(smiles: str):
     mol = Chem.MolFromSmiles(smiles)
     if mol is None:
         return [], "Invalid SMILES."
@@ -258,7 +258,7 @@ def process_scaffold(smiles: str):
 # -----------------------------
 # Hybridization State Functions
 # -----------------------------
-def process_hybridization(smiles: str):
+def hybridization(smiles: str):
     mol = Chem.MolFromSmiles(smiles)
     if mol is None:
         return [], "Invalid SMILES."
@@ -289,37 +289,30 @@ def process_hybridization(smiles: str):
 # Combined Processing Function
 # -----------------------------
 # Modified process_smiles_mode: add SMILES validity check for Functional Groups
-def process_smiles_mode(smiles: str, mode: str):
+def process_smiles_main(smiles: str, mode: str):
     if Chem.MolFromSmiles(smiles) is None:
         return [], "Invalid SMILES."
+
     if mode == "Functional Groups":
-        images, status_msg = process_functional_groups(smiles)
-        return images, status_msg
+        images, status_msg = functional_groups(smiles)
     elif mode == "Rotatable Bonds":
-        images, status_msg = process_rotatable(smiles)
-        return images, status_msg
+        images, status_msg = rotatable(smiles)
     elif mode == "Interligand Moieties":
-        images, status_msg = process_interligand_moieties(smiles)
-        return images, status_msg
+        images, status_msg = interligand_moieties(smiles)
     elif mode == "Chiral Centers":
-        img, status_msg = process_chiral_centers(smiles)
-        if img is None:
-            return [], status_msg
-        return [img], status_msg
+        images, status_msg = chiral_centers(smiles)
     elif mode == "Potential Stereogenic Centers":
-        images, status_msg = process_potential_stereo(smiles)
-        return images, status_msg
+        images, status_msg = stereocenters(smiles)
     elif mode == "DAYLIGHT SMARTS Examples":
-        images, status_msg = process_daylight_smarts_examples(smiles)
-        return images, status_msg
+        images, status_msg = daylight_smarts_examples(smiles)
     elif mode == "Murcko Scaffold":
-        images, status_msg = process_scaffold(smiles)
-        return images, status_msg
+        images, status_msg = scaffold(smiles)
     elif mode == "Hybridization":
-        images, status_msg = process_hybridization(smiles)
-        return images, status_msg
+        images, status_msg = hybridization(smiles)
     else:
         return [], "Invalid mode selected."
+
+    return images, status_msg
 
 
 # -----------------------------
@@ -388,12 +381,12 @@ with gr.Blocks() as demo:
     status = gr.Textbox(label="Status", interactive=False)
 
     smiles_input.submit(
-        process_smiles_mode,
+        process_smiles_main,
         inputs=[smiles_input, mode_dropdown],
         outputs=[gallery, status],
     )
     mode_dropdown.change(
-        process_smiles_mode,
+        process_smiles_main,
         inputs=[smiles_input, mode_dropdown],
         outputs=[gallery, status],
     )
