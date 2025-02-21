@@ -9,32 +9,13 @@ import yaml
 from rdkit.Chem.Scaffolds import MurckoScaffold  # New import
 from urllib.parse import quote  # New import
 import tempfile  # New import
+from rotatable_bonds import process_rotatable, rotatable_patterns
 
 from file_helpers import load_interligand_moieties, load_yaml_smarts
+from utils import mol_to_svg, highlight_by_patterns, IMAGE_SIZE
 
-IMAGE_SIZE = (400, 400)
-
-# Modified helper function to write SVG to a temp file and return its path
-def mol_to_svg(mol, size, highlightAtoms=None, highlightBonds=None, legend="", atomLabels=None):
-    drawer = MolDraw2DSVG(size[0], size[1])
-    opts = drawer.drawOptions()
-    
-    if atomLabels:
-        # Create a copy of the molecule to modify its atom labels
-        mol = Chem.Mol(mol)
-        for atom_idx, label in atomLabels.items():
-            atom = mol.GetAtomWithIdx(atom_idx)
-            # Combine atom symbol with label
-            original_symbol = atom.GetSymbol()
-            atom.SetProp('atomNote', label)
-    
-    drawer.DrawMolecule(mol, highlightAtoms=highlightAtoms, highlightBonds=highlightBonds, legend=legend)
-    drawer.FinishDrawing()
-    svg = drawer.GetDrawingText()
-    tmp = tempfile.NamedTemporaryFile(suffix=".svg", delete=False)
-    tmp.write(svg.encode("utf-8"))
-    tmp.close()
-    return tmp.name
+# Remove mol_to_svg function as it's now in utils.py
+# Remove highlight_by_patterns function as it's now in utils.py
 
 # -----------------------------
 # Functional Group Definitions
@@ -67,42 +48,13 @@ compiled_interligand_patterns = {
 # https://www.daylight.com/dayhtml_tutorials/languages/smarts/smarts_examples.html
 # -----------------------------
 
-rotatable_patterns = {
-    "DAYLIGHT defn.": Chem.MolFromSmarts("[!$(*#*)&!D1]-!@[!$(*#*)&!D1]"),
-    "RDKit defn.":    Chem.MolFromSmarts('[!$(*#*)&!D1]-&!@[!$(*#*)&!D1]')
-}
+# Remove the rotatable_patterns dictionary and all rotatable bond functions
+# They are now in rotatable_bonds.py
 
 
 # -----------------------------
 # Generic Highlighting Function
 # -----------------------------
-def highlight_by_patterns(smiles: str, pattern_dict: dict):
-    """
-    Generic function to highlight substructures in a molecule given a dictionary
-    of name:SMARTS patterns.
-    """
-    mol = Chem.MolFromSmiles(smiles)
-    if mol is None:
-        return None
-    images = []
-    for name, pattern in pattern_dict.items():
-        if pattern is None:  # Skip uncompiled patterns
-            continue
-        matches = mol.GetSubstructMatches(pattern)
-        if matches:
-            highlight_atoms = set()
-            highlight_bonds = set()
-            for match in matches:
-                highlight_atoms.update(match)
-                for bond in mol.GetBonds():
-                    a1 = bond.GetBeginAtomIdx()
-                    a2 = bond.GetEndAtomIdx()
-                    if a1 in match and a2 in match:
-                        highlight_bonds.add(bond.GetIdx())
-            # Modified to output SVG
-            img = mol_to_svg(mol, IMAGE_SIZE, highlightAtoms=list(highlight_atoms), highlightBonds=list(highlight_bonds), legend=name)
-            images.append((img, name))
-    return images
 
 
 def process_by_patterns(smiles: str, patterns: dict, not_found_msg: str):
@@ -124,51 +76,6 @@ def interligand_moieties(smiles: str):
 def daylight_smarts_examples(smiles: str):
     patterns = load_yaml_smarts()
     return process_by_patterns(smiles, patterns, "No SMARTS examples recognized or invalid SMILES.")
-
-
-# -----------------------------
-# Rotatable Bond Functions
-# -----------------------------
-def get_rotatable_bond_indices(mol):
-    rot_bond_indices = []
-    for bond in mol.GetBonds():
-        if bond.GetBondType() != Chem.BondType.SINGLE:
-            continue
-        if bond.IsInRing():
-            continue
-        a1 = bond.GetBeginAtom()
-        a2 = bond.GetEndAtom()
-        if a1.GetAtomicNum() == 1 or a2.GetAtomicNum() == 1:
-            continue
-        if a1.GetDegree() < 2 or a2.GetDegree() < 2:
-            continue
-        rot_bond_indices.append(bond.GetIdx())
-    return rot_bond_indices
-
-
-def highlight_rotatable_bonds(smiles: str):
-    mol = Chem.MolFromSmiles(smiles)
-    if mol is None:
-        return None
-    rot_bonds = get_rotatable_bond_indices(mol)
-    if not rot_bonds:
-        return None
-    # Modified to output SVG
-    img = mol_to_svg(mol, IMAGE_SIZE, highlightBonds=rot_bonds, legend="Rotatable Bonds")
-    return img
-
-
-def rotatable(smiles: str):
-    images = []
-    img = highlight_rotatable_bonds(smiles)
-    if img:
-        images.append((img, "Local algorithm"))
-    img = highlight_by_patterns(smiles, rotatable_patterns)
-    images.extend(img)
-    if images:
-        return images, "Rotatable bonds highlighted."
-    else:
-        return [], "No rotatable bonds found"
 
 
 # -----------------------------
@@ -296,7 +203,7 @@ def process_smiles_main(smiles: str, mode: str):
     if mode == "Functional Groups":
         images, status_msg = functional_groups(smiles)
     elif mode == "Rotatable Bonds":
-        images, status_msg = rotatable(smiles)
+        images, status_msg = process_rotatable(smiles)  # Simplified call
     elif mode == "Interligand Moieties":
         images, status_msg = interligand_moieties(smiles)
     elif mode == "Chiral Centers":
