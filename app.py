@@ -3,13 +3,27 @@ from rdkit import Chem
 from rdkit.Chem import Draw, AllChem
 from PIL import Image
 from rdkit.Chem.Draw import MolDraw2DCairo
+from rdkit.Chem.Draw import MolDraw2DSVG  # New import
 from io import BytesIO
 import yaml
 from rdkit.Chem.Scaffolds import MurckoScaffold  # New import
+from urllib.parse import quote  # New import
+import tempfile  # New import
 
 from file_helpers import load_interligand_moieties, load_yaml_smarts
 
 IMAGE_SIZE = (800, 800)
+
+# Modified helper function to write SVG to a temp file and return its path
+def mol_to_svg(mol, size, highlightAtoms=None, highlightBonds=None, legend=""):
+    drawer = MolDraw2DSVG(size[0], size[1])
+    drawer.DrawMolecule(mol, highlightAtoms=highlightAtoms, highlightBonds=highlightBonds, legend=legend)
+    drawer.FinishDrawing()
+    svg = drawer.GetDrawingText()
+    tmp = tempfile.NamedTemporaryFile(suffix=".svg", delete=False)
+    tmp.write(svg.encode("utf-8"))
+    tmp.close()
+    return tmp.name
 
 # -----------------------------
 # Functional Group Definitions
@@ -74,13 +88,8 @@ def highlight_by_patterns(smiles: str, pattern_dict: dict):
                     a2 = bond.GetEndAtomIdx()
                     if a1 in match and a2 in match:
                         highlight_bonds.add(bond.GetIdx())
-            img = Draw.MolToImage(
-                mol,
-                size=IMAGE_SIZE,
-                highlightAtoms=list(highlight_atoms),
-                highlightBonds=list(highlight_bonds),
-                legend=name,
-            )
+            # Modified to output SVG
+            img = mol_to_svg(mol, IMAGE_SIZE, highlightAtoms=list(highlight_atoms), highlightBonds=list(highlight_bonds), legend=name)
             images.append((img, name))
     return images
 
@@ -129,9 +138,8 @@ def highlight_rotatable_bonds(smiles: str):
     rot_bonds = get_rotatable_bond_indices(mol)
     if not rot_bonds:
         return None
-    img = Draw.MolToImage(
-        mol, size=IMAGE_SIZE, highlightBonds=rot_bonds, legend="Rotatable Bonds"
-    )
+    # Modified to output SVG
+    img = mol_to_svg(mol, IMAGE_SIZE, highlightBonds=rot_bonds, legend="Rotatable Bonds")
     return img
 
 
@@ -162,13 +170,8 @@ def highlight_chiral_centers(smiles: str):
     legend = "Chiral Centers: " + ", ".join(
         f"{idx} ({ch})" for idx, ch in chiral_centers
     )
-    drawer = MolDraw2DCairo(IMAGE_SIZE[0], IMAGE_SIZE[1])
-    options = drawer.drawOptions()
-    options.addAtomIndices = True  # Show atom number labels
-    drawer.DrawMolecule(mol, highlightAtoms=highlight_atoms, legend=legend)
-    drawer.FinishDrawing()
-    img_data = drawer.GetDrawingText()
-    img = Image.open(BytesIO(img_data))
+    # Modified to output SVG
+    img = mol_to_svg(mol, IMAGE_SIZE, highlightAtoms=highlight_atoms, legend=legend)
     return img
 
 
@@ -193,17 +196,10 @@ def process_potential_stereo(smiles: str):
     images = []
     for sinfo in potential_stereocenters:
         highlight_atoms = [sinfo.centeredOn]
-        images.append(
-            Draw.MolToImage(
-                mol,
-                size=IMAGE_SIZE,
-                highlightAtoms=highlight_atoms,
-                legend=sinfo.type.name,
-            )
-        )
-    return images, f"Found {len(highlight_atoms)} potential stereo center(s)."
-
-
+        # Modified to output SVG
+        svg = mol_to_svg(mol, IMAGE_SIZE, highlightAtoms=highlight_atoms, legend=sinfo.type.name)
+        images.append((svg, sinfo.type.name))
+    return images, f"Found {len(potential_stereocenters)} potential stereo center(s)."
 
 
 # -----------------------------
@@ -224,13 +220,8 @@ def process_scaffold(smiles: str):
     for bond in mol.GetBonds():
         if bond.GetBeginAtomIdx() in match and bond.GetEndAtomIdx() in match:
             highlight_bonds.append(bond.GetIdx())
-    img = Draw.MolToImage(
-        mol,
-        size=IMAGE_SIZE,
-        highlightAtoms=list(match),
-        highlightBonds=highlight_bonds,
-        legend="Murcko Scaffold",
-    )
+    # Modified to output SVG
+    img = mol_to_svg(mol, IMAGE_SIZE, highlightAtoms=list(match), highlightBonds=highlight_bonds, legend="Murcko Scaffold")
     return [(img, "Murcko Scaffold")], "Scaffold highlighted."
 
 
