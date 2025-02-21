@@ -1,15 +1,7 @@
 import gradio as gr
 from rdkit import Chem
-from rdkit.Chem import Draw, AllChem
-from PIL import Image
-from rdkit.Chem.Draw import MolDraw2DCairo
-from rdkit.Chem.Draw import MolDraw2DSVG  # New import
-from io import BytesIO
-import yaml
-from rdkit.Chem.Scaffolds import MurckoScaffold  # New import
-from urllib.parse import quote  # New import
-import tempfile  # New import
-from rotatable_bonds import process_rotatable, rotatable_patterns
+from rdkit.Chem.Scaffolds import MurckoScaffold 
+from rotatable_bonds import process_rotatable
 
 from file_helpers import load_interligand_moieties, load_yaml_smarts
 from utils import mol_to_svg, highlight_by_patterns, IMAGE_SIZE
@@ -42,14 +34,6 @@ compiled_interligand_patterns = {
     name: Chem.MolFromSmarts(smart) for name, smart in interligand_moieties.items()
 }
 
-
-# -----------------------------
-# Rotatable bond Definition
-# https://www.daylight.com/dayhtml_tutorials/languages/smarts/smarts_examples.html
-# -----------------------------
-
-# Remove the rotatable_patterns dictionary and all rotatable bond functions
-# They are now in rotatable_bonds.py
 
 
 # -----------------------------
