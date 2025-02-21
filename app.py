@@ -15,8 +15,19 @@ from file_helpers import load_interligand_moieties, load_yaml_smarts
 IMAGE_SIZE = (400, 400)
 
 # Modified helper function to write SVG to a temp file and return its path
-def mol_to_svg(mol, size, highlightAtoms=None, highlightBonds=None, legend=""):
+def mol_to_svg(mol, size, highlightAtoms=None, highlightBonds=None, legend="", atomLabels=None):
     drawer = MolDraw2DSVG(size[0], size[1])
+    opts = drawer.drawOptions()
+    
+    if atomLabels:
+        # Create a copy of the molecule to modify its atom labels
+        mol = Chem.Mol(mol)
+        for atom_idx, label in atomLabels.items():
+            atom = mol.GetAtomWithIdx(atom_idx)
+            # Combine atom symbol with label
+            original_symbol = atom.GetSymbol()
+            atom.SetProp('atomLabel', f'{original_symbol}({label})')
+    
     drawer.DrawMolecule(mol, highlightAtoms=highlightAtoms, highlightBonds=highlightBonds, legend=legend)
     drawer.FinishDrawing()
     svg = drawer.GetDrawingText()
@@ -171,11 +182,19 @@ def highlight_chiral_centers(smiles: str):
     if not chiral_centers:
         return None
     highlight_atoms = [idx for idx, _ in chiral_centers]
+    
+    # Create labels dictionary for chiral centers
+    atom_labels = {}
+    for idx, chirality in chiral_centers:
+        atom_labels[idx] = chirality  # Will show R or S (or ?)
+    
     legend = "Chiral Centers: " + ", ".join(
         f"{idx} ({ch})" for idx, ch in chiral_centers
     )
-    # Modified to output SVG
-    img = mol_to_svg(mol, IMAGE_SIZE, highlightAtoms=highlight_atoms, legend=legend)
+    img = mol_to_svg(mol, IMAGE_SIZE, 
+                     highlightAtoms=highlight_atoms, 
+                     legend=legend,
+                     atomLabels=atom_labels)
     return img
 
 
