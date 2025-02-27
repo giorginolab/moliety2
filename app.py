@@ -3,6 +3,8 @@ from rdkit import Chem
 from rdkit.Chem.Scaffolds import MurckoScaffold 
 from rdkit.Chem import AllChem  # Add this import
 from rotatable_bonds import process_rotatable
+from dimorphite_dl import dimorphite_dl
+import traceback
 
 from file_helpers import load_interligand_moieties, load_yaml_smarts
 from utils import mol_to_svg, highlight_by_patterns, IMAGE_SIZE
@@ -212,6 +214,35 @@ def gasteiger_charges(smiles: str):
 
 
 # -----------------------------
+# Protonation Function
+# -----------------------------
+def protonate_ph7(smiles: str):
+    """Protonate molecule at pH 7 using dimorphite-dl."""
+    try:
+        protonated_mols = dimorphite_dl.run_with_mol_list(
+            [Chem.MolFromSmiles(smiles)],
+            min_ph=7.0,
+            max_ph=7.0,
+            pka_precision=1.0
+        )
+        
+        if not protonated_mols:
+            return [], "No protonation variants found."
+        
+        images = []
+        for i, mol in enumerate(protonated_mols):
+            # Generate SVG for each protonated variant
+            svg = mol_to_svg(mol, IMAGE_SIZE, 
+                           legend=f"Protonated variant {i+1} at pH 7")
+            images.append((svg, f"Variant {i+1}"))
+        
+        return images, f"Found {len(images)} protonation variant(s) at pH 7."
+    except Exception as e:
+        print(traceback.format_exc())
+        return [], f"Error during protonation: {str(e)}"
+
+
+# -----------------------------
 # Combined Processing Function
 # -----------------------------
 # Modified process_smiles_mode: add SMILES validity check for Functional Groups
@@ -237,6 +268,8 @@ def process_smiles_main(smiles: str, mode: str):
         images, status_msg = hybridization(smiles)
     elif mode == "Gasteiger Charges":
         images, status_msg = gasteiger_charges(smiles)
+    elif mode == "Protonation (pH 7)":  # Add new mode
+        images, status_msg = protonate_ph7(smiles)
     else:
         return [], "Invalid mode selected."
 
@@ -276,7 +309,8 @@ with gr.Blocks() as demo:
                 "DAYLIGHT SMARTS Examples",
                 "Murcko Scaffold",
                 "Hybridization",  # Add new mode
-                "Gasteiger Charges"  # Add new mode
+                "Gasteiger Charges",  # Add new mode
+                "Protonation (pH 7)"  # Add new mode
             ],
             value="Functional Groups",
         )
@@ -304,6 +338,8 @@ with gr.Blocks() as demo:
             ["CC(Cl)CC(F)CN", "Potential Stereogenic Centers"],  # Multiple potential stereocenters
             ["c1ccc2c(c1)cccc2", "DAYLIGHT SMARTS Examples"],  # Naphthalene for aromatic patterns
             ["CC1=C(C2=C(C=C1)C=CC=C2)CC(=O)O", "Murcko Scaffold"],  # Naproxen scaffold
+            ["CC(=O)O", "Protonation (pH 7)"],  # Acetic acid
+            ["NCc1ccccc1", "Protonation (pH 7)"],  # Benzylamine
         ],
         example_labels=[
             "Aspirin",
@@ -319,7 +355,9 @@ with gr.Blocks() as demo:
             "Caffeine-like",
             "Multiple stereocenters",
             "Naphthalene",
-            "Naproxen"
+            "Naproxen",
+            "Acetic acid protonation",
+            "Benzylamine protonation"
         ],
         inputs=[smiles_input, mode_dropdown],
         label="Examples",
