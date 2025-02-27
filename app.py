@@ -216,13 +216,13 @@ def gasteiger_charges(smiles: str):
 # -----------------------------
 # Protonation Function
 # -----------------------------
-def protonate_ph7(smiles: str):
-    """Protonate molecule at pH 7 using dimorphite-dl."""
+def protonate_ph(smiles: str, min_ph: float, max_ph: float):
+    """Protonate molecule at given pH range using dimorphite-dl."""
     try:
         protonated_mols = dimorphite_dl.run_with_mol_list(
             [Chem.MolFromSmiles(smiles)],
-            min_ph=7.0,
-            max_ph=7.0,
+            min_ph=min_ph,
+            max_ph=max_ph,
             pka_precision=1.0
         )
         
@@ -233,10 +233,10 @@ def protonate_ph7(smiles: str):
         for i, mol in enumerate(protonated_mols):
             # Generate SVG for each protonated variant
             svg = mol_to_svg(mol, IMAGE_SIZE, 
-                           legend=f"Protonated variant {i+1} at pH 7")
+                           legend=f"Protonated variant {i+1} at pH {min_ph}-{max_ph}")
             images.append((svg, f"Variant {i+1}"))
         
-        return images, f"Found {len(images)} protonation variant(s) at pH 7."
+        return images, f"Found {len(images)} protonation variant(s) at pH {min_ph}-{max_ph}."
     except Exception as e:
         print(traceback.format_exc())
         return [], f"Error during protonation: {str(e)}"
@@ -246,7 +246,7 @@ def protonate_ph7(smiles: str):
 # Combined Processing Function
 # -----------------------------
 # Modified process_smiles_mode: add SMILES validity check for Functional Groups
-def process_smiles_main(smiles: str, mode: str):
+def process_smiles_main(smiles: str, mode: str, min_ph: float = 7.0, max_ph: float = 7.0):
     if Chem.MolFromSmiles(smiles) is None:
         return [], "Invalid SMILES."
 
@@ -268,8 +268,8 @@ def process_smiles_main(smiles: str, mode: str):
         images, status_msg = hybridization(smiles)
     elif mode == "Gasteiger Charges":
         images, status_msg = gasteiger_charges(smiles)
-    elif mode == "Protonation (pH 7)":  # Add new mode
-        images, status_msg = protonate_ph7(smiles)
+    elif mode == "Protonation":  # Modified mode name
+        images, status_msg = protonate_ph(smiles, min_ph, max_ph)
     else:
         return [], "Invalid mode selected."
 
@@ -310,10 +310,26 @@ with gr.Blocks() as demo:
                 "Murcko Scaffold",
                 "Hybridization",  # Add new mode
                 "Gasteiger Charges",  # Add new mode
-                "Protonation (pH 7)"  # Add new mode
+                "Protonation"  # Modified mode name
             ],
             value="Functional Groups",
         )
+
+    # Add pH controls in accordion
+    with gr.Accordion("pH Settings", visible=False) as ph_accordion:
+        with gr.Row():
+            min_ph = gr.Slider(minimum=0, maximum=14, value=7.0, step=0.5, label="Minimum pH")
+            max_ph = gr.Slider(minimum=0, maximum=14, value=7.0, step=0.5, label="Maximum pH")
+
+    # Update visibility of pH controls based on mode
+    def update_accordion_visibility(mode):
+        return gr.update(visible=(mode == "Protonation"))
+
+    mode_dropdown.change(
+        update_accordion_visibility,
+        inputs=[mode_dropdown],
+        outputs=[ph_accordion]
+    )
 
     # Update gr.Examples component with new examples
     gr.Examples(
@@ -338,8 +354,8 @@ with gr.Blocks() as demo:
             ["CC(Cl)CC(F)CN", "Potential Stereogenic Centers"],  # Multiple potential stereocenters
             ["c1ccc2c(c1)cccc2", "DAYLIGHT SMARTS Examples"],  # Naphthalene for aromatic patterns
             ["CC1=C(C2=C(C=C1)C=CC=C2)CC(=O)O", "Murcko Scaffold"],  # Naproxen scaffold
-            ["CC(=O)O", "Protonation (pH 7)"],  # Acetic acid
-            ["NCc1ccccc1", "Protonation (pH 7)"],  # Benzylamine
+            ["CC(=O)O", "Protonation"],  # Acetic acid
+            ["NCc1ccccc1", "Protonation"],  # Benzylamine
         ],
         example_labels=[
             "Aspirin",
@@ -366,14 +382,25 @@ with gr.Blocks() as demo:
     gallery = gr.Gallery(label="Highlighted Features", columns=3, height="auto")
     status = gr.Textbox(label="Status", interactive=False)
 
+    # Update the submit handlers to include pH values
     smiles_input.submit(
         process_smiles_main,
-        inputs=[smiles_input, mode_dropdown],
+        inputs=[smiles_input, mode_dropdown, min_ph, max_ph],
         outputs=[gallery, status],
     )
     mode_dropdown.change(
         process_smiles_main,
-        inputs=[smiles_input, mode_dropdown],
+        inputs=[smiles_input, mode_dropdown, min_ph, max_ph],
+        outputs=[gallery, status],
+    )
+    min_ph.change(
+        process_smiles_main,
+        inputs=[smiles_input, mode_dropdown, min_ph, max_ph],
+        outputs=[gallery, status],
+    )
+    max_ph.change(
+        process_smiles_main,
+        inputs=[smiles_input, mode_dropdown, min_ph, max_ph],
         outputs=[gallery, status],
     )
 
