@@ -281,7 +281,7 @@ with gr.Blocks() as demo:
             value="Functional Groups",
         )
 
-    # Update gr.Examples component to maintain existing examples and add new ones from the README
+    # Update gr.Examples component with new examples
     gr.Examples(
         examples=[
             ["CC(=O)Oc1ccccc1C(=O)O", "Functional Groups"],
@@ -293,6 +293,17 @@ with gr.Blocks() as demo:
                 "CC1=C(C=C(C=C1)C(=O)NC2=C3C(=CC(=CC3=C(C=C2)S(=O)(=O)O)S(=O)(=O)O)S(=O)(=O)O)NC(=O)C4=CC(=CC=C4)NC(=O)NC5=CC=CC(=C5)C(=O)NC6=C(C=CC(=C6)C(=O)NC7=C8C(=CC(=CC8=C(C=C7)S(=O)(=O)O)S(=O)(=O)O)S(=O)(=O)O)C",
                 "Functional Groups",
             ],
+            # New examples for Hybridization
+            ["C=CC#N", "Hybridization"],  # Shows SP, SP2, and SP3 carbons
+            ["C1=CC=CC=C1", "Hybridization"],  # Benzene ring showing SP2
+            # Examples for Gasteiger Charges
+            ["CCO", "Gasteiger Charges"],  # Simple alcohol showing charge distribution
+            ["CC(=O)O", "Gasteiger Charges"],  # Acetic acid showing polar groups
+            # Add examples for missing modes
+            ["O=C(O)C1N2C(=O)C3C(N=CN3C)C2=O", "Interligand Moieties"],  # Caffeine-like structure
+            ["CC(Cl)CC(F)CN", "Potential Stereogenic Centers"],  # Multiple potential stereocenters
+            ["c1ccc2c(c1)cccc2", "DAYLIGHT SMARTS Examples"],  # Naphthalene for aromatic patterns
+            ["CC1=C(C2=C(C=C1)C=CC=C2)CC(=O)O", "Murcko Scaffold"],  # Naproxen scaffold
         ],
         example_labels=[
             "Aspirin",
@@ -301,6 +312,14 @@ with gr.Blocks() as demo:
             "DL-Alanine",
             "Ibuprofen",
             "Suramin",
+            "Acrylonitrile",
+            "Benzene",
+            "Ethanol",
+            "Acetic acid",
+            "Caffeine-like",
+            "Multiple stereocenters",
+            "Naphthalene",
+            "Naproxen"
         ],
         inputs=[smiles_input, mode_dropdown],
         label="Examples",
