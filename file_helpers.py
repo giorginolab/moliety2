@@ -1,6 +1,7 @@
 import yaml
 from rdkit import Chem
 
+
 def load_interligand_moieties():
     moieties = {}
     try:
@@ -18,6 +19,7 @@ def load_interligand_moieties():
     except Exception as e:
         print("Error loading SMARTS_InteLigand.txt:", e)
     return moieties
+
 
 def load_yaml_smarts():
     """

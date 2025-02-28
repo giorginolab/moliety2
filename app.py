@@ -1,6 +1,6 @@
 import gradio as gr
 from rdkit import Chem
-from rdkit.Chem.Scaffolds import MurckoScaffold 
+from rdkit.Chem.Scaffolds import MurckoScaffold
 from rdkit.Chem import AllChem  # Add this import
 from rotatable_bonds import process_rotatable
 from dimorphite_dl import dimorphite_dl
@@ -38,7 +38,6 @@ compiled_interligand_patterns = {
 }
 
 
-
 # -----------------------------
 # Generic Highlighting Function
 # -----------------------------
@@ -50,6 +49,7 @@ def process_by_patterns(smiles: str, patterns: dict, not_found_msg: str):
         return [], not_found_msg
     return images, f"Found {len(images)} match(es)."
 
+
 # Modified process_functional_groups: removed SMILES validity check
 def functional_groups(smiles: str):
     images = highlight_by_patterns(smiles, compiled_patterns)
@@ -57,12 +57,20 @@ def functional_groups(smiles: str):
         return [], "No functional groups recognized."
     return images, f"Found {len(images)} match(es)."
 
+
 def interligand_moieties(smiles: str):
-    return process_by_patterns(smiles, compiled_interligand_patterns, "No interligand moieties recognized or invalid SMILES.")
+    return process_by_patterns(
+        smiles,
+        compiled_interligand_patterns,
+        "No interligand moieties recognized or invalid SMILES.",
+    )
+
 
 def daylight_smarts_examples(smiles: str):
     patterns = load_yaml_smarts()
-    return process_by_patterns(smiles, patterns, "No SMARTS examples recognized or invalid SMILES.")
+    return process_by_patterns(
+        smiles, patterns, "No SMARTS examples recognized or invalid SMILES."
+    )
 
 
 # -----------------------------
@@ -76,19 +84,22 @@ def highlight_chiral_centers(smiles: str):
     if not chiral_centers:
         return None
     highlight_atoms = [idx for idx, _ in chiral_centers]
-    
+
     # Create labels dictionary for chiral centers
     atom_labels = {}
     for idx, chirality in chiral_centers:
         atom_labels[idx] = chirality  # Will show R or S (or ?)
-    
+
     legend = "Chiral Centers: " + ", ".join(
         f"{idx} ({ch})" for idx, ch in chiral_centers
     )
-    img = mol_to_svg(mol, IMAGE_SIZE, 
-                     highlightAtoms=highlight_atoms, 
-                     legend=legend,
-                     atomLabels=atom_labels)
+    img = mol_to_svg(
+        mol,
+        IMAGE_SIZE,
+        highlightAtoms=highlight_atoms,
+        legend=legend,
+        atomLabels=atom_labels,
+    )
     return img
 
 
@@ -110,20 +121,25 @@ def stereocenters(smiles: str):
     potential_stereocenters = Chem.FindPotentialStereo(mol)
     if not potential_stereocenters:
         return None, "No potential stereo centers found."
-    
+
     highlight_atoms = []
     atom_labels = {}
     for sinfo in potential_stereocenters:
         highlight_atoms.append(sinfo.centeredOn)
         atom_labels[sinfo.centeredOn] = sinfo.type.name
-    
+
     # Create single image with all centers highlighted
-    svg = mol_to_svg(mol, IMAGE_SIZE, 
-                     highlightAtoms=highlight_atoms, 
-                     legend="Potential Stereogenic Centers",
-                     atomLabels=atom_labels)
-    
-    return [(svg, "Potential Stereogenic Centers")], f"Found {len(potential_stereocenters)} potential stereogenic center(s)."
+    svg = mol_to_svg(
+        mol,
+        IMAGE_SIZE,
+        highlightAtoms=highlight_atoms,
+        legend="Potential Stereogenic Centers",
+        atomLabels=atom_labels,
+    )
+
+    return [
+        (svg, "Potential Stereogenic Centers")
+    ], f"Found {len(potential_stereocenters)} potential stereogenic center(s)."
 
 
 # -----------------------------
@@ -145,7 +161,13 @@ def scaffold(smiles: str):
         if bond.GetBeginAtomIdx() in match and bond.GetEndAtomIdx() in match:
             highlight_bonds.append(bond.GetIdx())
     # Modified to output SVG
-    img = mol_to_svg(mol, IMAGE_SIZE, highlightAtoms=list(match), highlightBonds=highlight_bonds, legend="Murcko Scaffold")
+    img = mol_to_svg(
+        mol,
+        IMAGE_SIZE,
+        highlightAtoms=list(match),
+        highlightBonds=highlight_bonds,
+        legend="Murcko Scaffold",
+    )
     return [(img, "Murcko Scaffold")], "Scaffold highlighted."
 
 
@@ -156,7 +178,7 @@ def hybridization(smiles: str):
     mol = Chem.MolFromSmiles(smiles)
     if mol is None:
         return [], "Invalid SMILES."
-    
+
     # Create atom labels dictionary with hybridization states
     atom_labels = {}
     highlight_atoms = []
@@ -166,16 +188,19 @@ def hybridization(smiles: str):
         if hyb != Chem.HybridizationType.UNSPECIFIED:
             atom_labels[atom.GetIdx()] = hyb.name
             highlight_atoms.append(atom.GetIdx())
-    
+
     if not highlight_atoms:
         return [], "No hybridization states to display."
-    
+
     # Generate image with hybridization labels
-    img = mol_to_svg(mol, IMAGE_SIZE, 
-                     highlightAtoms=highlight_atoms,
-                     legend="Hybridization States",
-                     atomLabels=atom_labels)
-    
+    img = mol_to_svg(
+        mol,
+        IMAGE_SIZE,
+        highlightAtoms=highlight_atoms,
+        legend="Hybridization States",
+        atomLabels=atom_labels,
+    )
+
     return [(img, "Hybridization States")], "Hybridization states highlighted."
 
 
@@ -186,31 +211,36 @@ def gasteiger_charges(smiles: str):
     mol = Chem.MolFromSmiles(smiles)
     if mol is None:
         return [], "Invalid SMILES."
-    
+
     # Add explicit hydrogens to the molecule
     mol = Chem.AddHs(mol)
-    
+
     # Compute Gasteiger charges using AllChem
     AllChem.ComputeGasteigerCharges(mol)
-    
+
     # Create atom labels dictionary with charges
     atom_labels = {}
     highlight_atoms = []
     for atom in mol.GetAtoms():
-        charge = atom.GetDoubleProp('_GasteigerCharge')
+        charge = atom.GetDoubleProp("_GasteigerCharge")
         atom_labels[atom.GetIdx()] = f"{charge:.3f}"
         highlight_atoms.append(atom.GetIdx())
-    
+
     if not highlight_atoms:
         return [], "Could not compute Gasteiger charges."
-    
+
     # Generate image with charge labels, showing hydrogens
-    img = mol_to_svg(mol, IMAGE_SIZE, 
-                     highlightAtoms=highlight_atoms,
-                     legend="Gasteiger Charges (including H)",
-                     atomLabels=atom_labels)
-    
-    return [(img, "Gasteiger Charges")], "Gasteiger charges computed and displayed (including hydrogens)."
+    img = mol_to_svg(
+        mol,
+        IMAGE_SIZE,
+        highlightAtoms=highlight_atoms,
+        legend="Gasteiger Charges (including H)",
+        atomLabels=atom_labels,
+    )
+
+    return [
+        (img, "Gasteiger Charges")
+    ], "Gasteiger charges computed and displayed (including hydrogens)."
 
 
 # -----------------------------
@@ -223,20 +253,26 @@ def protonate_ph(smiles: str, min_ph: float, max_ph: float):
             [Chem.MolFromSmiles(smiles)],
             min_ph=min_ph,
             max_ph=max_ph,
-            pka_precision=1.0
+            pka_precision=1.0,
         )
-        
+
         if not protonated_mols:
             return [], "No protonation variants found."
-        
+
         images = []
         for i, mol in enumerate(protonated_mols):
             # Generate SVG for each protonated variant
-            svg = mol_to_svg(mol, IMAGE_SIZE, 
-                           legend=f"Protonated variant {i+1} at pH {min_ph}-{max_ph}")
-            images.append((svg, f"Variant {i+1}"))
-        
-        return images, f"Found {len(images)} protonation variant(s) at pH {min_ph}-{max_ph}."
+            svg = mol_to_svg(
+                mol,
+                IMAGE_SIZE,
+                legend=f"Protonated variant {i + 1} at pH {min_ph}-{max_ph}",
+            )
+            images.append((svg, f"Variant {i + 1}"))
+
+        return (
+            images,
+            f"Found {len(images)} protonation variant(s) at pH {min_ph}-{max_ph}.",
+        )
     except Exception as e:
         print(traceback.format_exc())
         return [], f"Error during protonation: {str(e)}"
@@ -246,7 +282,9 @@ def protonate_ph(smiles: str, min_ph: float, max_ph: float):
 # Combined Processing Function
 # -----------------------------
 # Modified process_smiles_mode: add SMILES validity check for Functional Groups
-def process_smiles_main(smiles: str, mode: str, min_ph: float = 7.0, max_ph: float = 7.0):
+def process_smiles_main(
+    smiles: str, mode: str, min_ph: float = 7.0, max_ph: float = 7.0
+):
     if Chem.MolFromSmiles(smiles) is None:
         return [], "Invalid SMILES."
 
@@ -310,7 +348,7 @@ with gr.Blocks() as demo:
                 "Murcko Scaffold",
                 "Hybridization",  # Add new mode
                 "Gasteiger Charges",  # Add new mode
-                "Protonation"  # Modified mode name
+                "Protonation",  # Modified mode name
             ],
             value="Functional Groups",
         )
@@ -318,17 +356,19 @@ with gr.Blocks() as demo:
     # Add pH controls in accordion
     with gr.Accordion("pH Settings", visible=False) as ph_accordion:
         with gr.Row():
-            min_ph = gr.Slider(minimum=0, maximum=14, value=7.0, step=0.5, label="Minimum pH")
-            max_ph = gr.Slider(minimum=0, maximum=14, value=7.0, step=0.5, label="Maximum pH")
+            min_ph = gr.Slider(
+                minimum=0, maximum=14, value=7.0, step=0.5, label="Minimum pH"
+            )
+            max_ph = gr.Slider(
+                minimum=0, maximum=14, value=7.0, step=0.5, label="Maximum pH"
+            )
 
     # Update visibility of pH controls based on mode
     def update_accordion_visibility(mode):
         return gr.update(visible=(mode == "Protonation"))
 
     mode_dropdown.change(
-        update_accordion_visibility,
-        inputs=[mode_dropdown],
-        outputs=[ph_accordion]
+        update_accordion_visibility, inputs=[mode_dropdown], outputs=[ph_accordion]
     )
 
     # Update gr.Examples component with new examples
@@ -347,9 +387,18 @@ with gr.Blocks() as demo:
             ["C1=CC=CC=C1", "Hybridization"],  # Benzene ring showing SP2
             ["CCO", "Gasteiger Charges"],  # Simple alcohol showing charge distribution
             ["CC(=O)O", "Gasteiger Charges"],  # Acetic acid showing polar groups
-            ["O=C(O)C1N2C(=O)C3C(N=CN3C)C2=O", "Interligand Moieties"],  # Caffeine-like structure
-            ["CC(Cl)CC(F)CN", "Potential Stereogenic Centers"],  # Multiple potential stereocenters
-            ["c1ccc2c(c1)cccc2", "DAYLIGHT SMARTS Examples"],  # Naphthalene for aromatic patterns
+            [
+                "O=C(O)C1N2C(=O)C3C(N=CN3C)C2=O",
+                "Interligand Moieties",
+            ],  # Caffeine-like structure
+            [
+                "CC(Cl)CC(F)CN",
+                "Potential Stereogenic Centers",
+            ],  # Multiple potential stereocenters
+            [
+                "c1ccc2c(c1)cccc2",
+                "DAYLIGHT SMARTS Examples",
+            ],  # Naphthalene for aromatic patterns
             ["CC1=C(C2=C(C=C1)C=CC=C2)CC(=O)O", "Murcko Scaffold"],  # Naproxen scaffold
             ["CC(=O)O", "Protonation"],  # Acetic acid
             ["NCc1ccccc1", "Protonation"],  # Benzylamine
@@ -370,7 +419,7 @@ with gr.Blocks() as demo:
             "Naphthalene",
             "Naproxen",
             "Acetic acid protonation",
-            "Benzylamine protonation"
+            "Benzylamine protonation",
         ],
         inputs=[smiles_input, mode_dropdown],
         label="Examples",
