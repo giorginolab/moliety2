@@ -334,7 +334,8 @@ with gr.Blocks() as demo:
         smiles_input = gr.Textbox(
             label="Enter SMILES string",
             placeholder="e.g. CC(=O)OC1=CC=CC=C1C(=O)O",
-            lines=3,
+            lines=2,
+            submit_btn=True,
         )
         mode_dropdown = gr.Dropdown(
             label="Highlight Mode",
@@ -374,34 +375,21 @@ with gr.Blocks() as demo:
     # Update gr.Examples component with new examples
     gr.Examples(
         examples=[
-            ["CC(=O)Oc1ccccc1C(=O)O", "Functional Groups"],
-            ["CC(=O)OC1=CC=CC=C1C(=O)O", "Functional Groups"],
-            ["CCOC(=O)C1=CC=CC=C1", "Rotatable Bonds"],
-            ["CC(C(=O)O)N", "Chiral Centers"],
-            ["CC(C)Cc1ccc(cc1)C(C)C(=O)O", "Functional Groups"],
-            [
-                "CC1=C(C=C(C=C1)C(=O)NC2=C3C(=CC(=CC3=C(C=C2)S(=O)(=O)O)S(=O)(=O)O)S(=O)(=O)O)NC(=O)C4=CC(=CC=C4)NC(=O)NC5=CC=CC(=C5)C(=O)NC6=C(C=CC(=C6)C(=O)NC7=C8C(=CC(=CC8=C(C=C7)S(=O)(=O)O)S(=O)(=O)O)S(=O)(=O)O)C",
-                "Functional Groups",
-            ],
-            ["C=CC#N", "Hybridization"],  # Shows SP, SP2, and SP3 carbons
-            ["C1=CC=CC=C1", "Hybridization"],  # Benzene ring showing SP2
-            ["CCO", "Gasteiger Charges"],  # Simple alcohol showing charge distribution
-            ["CC(=O)O", "Gasteiger Charges"],  # Acetic acid showing polar groups
-            [
-                "O=C(O)C1N2C(=O)C3C(N=CN3C)C2=O",
-                "Interligand Moieties",
-            ],  # Caffeine-like structure
-            [
-                "CC(Cl)CC(F)CN",
-                "Potential Stereogenic Centers",
-            ],  # Multiple potential stereocenters
-            [
-                "c1ccc2c(c1)cccc2",
-                "DAYLIGHT SMARTS Examples",
-            ],  # Naphthalene for aromatic patterns
-            ["CC1=C(C2=C(C=C1)C=CC=C2)CC(=O)O", "Murcko Scaffold"],  # Naproxen scaffold
-            ["CC(=O)O", "Protonation"],  # Acetic acid
-            ["NCc1ccccc1", "Protonation"],  # Benzylamine
+            "CC(=O)Oc1ccccc1C(=O)O",
+            "CC(=O)OC1=CC=CC=C1C(=O)O",
+            "CCOC(=O)C1=CC=CC=C1",
+            "CC(C(=O)O)N",
+            "CC(C)Cc1ccc(cc1)C(C)C(=O)O",
+            "CC1=C(C=C(C=C1)C(=O)NC2=C3C(=CC(=CC3=C(C=C2)S(=O)(=O)O)S(=O)(=O)O)S(=O)(=O)O)NC(=O)C4=CC(=CC=C4)NC(=O)NC5=CC=CC(=C5)C(=O)NC6=C(C=CC(=C6)C(=O)NC7=C8C(=CC(=CC8=C(C=C7)S(=O)(=O)O)S(=O)(=O)O)S(=O)(=O)O)C",
+            "C=CC#N",
+            "C1=CC=CC=C1",
+            "CCO",
+            "CC(=O)O",
+            "CN1C=NC2=C1C(=O)N(C)C(=O)N2C",
+            "CC(Cl)CC(F)CN",
+            "c1ccc2c(c1)cccc2",
+            "CC1=C(C2=C(C=C1)C=CC=C2)CC(=O)O",
+            "NCc1ccccc1",
         ],
         example_labels=[
             "Aspirin",
@@ -414,15 +402,14 @@ with gr.Blocks() as demo:
             "Benzene",
             "Ethanol",
             "Acetic acid",
-            "Caffeine-like",
-            "Multiple stereocenters",
+            "Caffeine",
+            "4-chloro-2-fluoropentan-1-amine",
             "Naphthalene",
             "Naproxen",
-            "Acetic acid protonation",
-            "Benzylamine protonation",
+            "Benzylamine",
         ],
-        inputs=[smiles_input, mode_dropdown],
-        label="Examples",
+        inputs=smiles_input,
+        examples_per_page=30,
     )
 
     gallery = gr.Gallery(label="Highlighted Features", columns=3, height="auto")
@@ -450,5 +437,4 @@ with gr.Blocks() as demo:
         outputs=[gallery, status],
     )
 
-if __name__ == "__main__":
-    demo.launch()
+demo.launch()
