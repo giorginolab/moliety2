@@ -1,4 +1,4 @@
-import yaml
+# Description: Helper functions for loading files and data.
 from rdkit import Chem
 
 
@@ -21,31 +21,25 @@ def load_interligand_moieties():
     return moieties
 
 
-def load_yaml_smarts():
+def load_smarts_patterns_from_csv():
     """
-    Load and compile SMARTS from the YAML file.
+    Load and compile SMARTS from the CSV file.
     """
+    import csv
+    compiled_patterns = {}
     try:
-        with open("data/daylight_smarts.yml", "r") as f:
-            data = yaml.safe_load(f)
+        with open("data/smarts_examples_parsed.csv", "r") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                if row['Pattern']:  # Skip empty patterns
+                    name = f"{row['Main Topic']} > {row['Subtopic']} > {row['Sub-sub-topic']} > {row['Rule Name']}"
+                    pattern = row['Pattern'].strip()
+                    try:
+                        mol = Chem.MolFromSmarts(pattern)
+                        if mol:  # Only add if pattern compiles successfully
+                            compiled_patterns[name] = mol
+                    except:
+                        print(f"Failed to compile SMARTS pattern: {pattern}")
     except Exception as e:
-        print("Error loading daylight_smarts.yml:", e)
-        return {}
-    compiled_yaml = {}
-    for group in data.get("groups", []):
-        group_name = group.get("name", "Unnamed Group")
-        for subgroup in group.get("subgroups", []):
-            subgroup_name = subgroup.get("name", "Unnamed Subgroup")
-            if "subsubgroups" in subgroup:
-                for subsub in subgroup.get("subsubgroups", []):
-                    subsub_name = subsub.get("name", "Unnamed Subsubgroup")
-                    for rule in subsub.get("rules", []):
-                        if "smarts" in rule:
-                            key = f"{group_name} > {subgroup_name} > {subsub_name} > {rule.get('name', 'Unnamed Rule')}"
-                            compiled_yaml[key] = Chem.MolFromSmarts(rule.get("smarts"))
-            elif "rules" in subgroup:
-                for rule in subgroup.get("rules", []):
-                    if "smarts" in rule:
-                        key = f"{group_name}: {subgroup_name} - {rule.get('name', 'Unnamed Rule')}"
-                        compiled_yaml[key] = Chem.MolFromSmarts(rule.get("smarts"))
-    return compiled_yaml
+        print("Error loading smarts_examples_parsed.csv:", e)
+    return compiled_patterns

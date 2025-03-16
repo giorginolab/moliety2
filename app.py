@@ -6,7 +6,7 @@ from rotatable_bonds import process_rotatable
 from dimorphite_dl import dimorphite_dl
 import traceback
 
-from file_helpers import load_interligand_moieties, load_yaml_smarts
+from file_helpers import load_interligand_moieties, load_smarts_patterns_from_csv
 from utils import mol_to_svg, highlight_by_patterns, IMAGE_SIZE
 
 # Remove mol_to_svg function as it's now in utils.py
@@ -67,7 +67,7 @@ def interligand_moieties(smiles: str):
 
 
 def daylight_smarts_examples(smiles: str):
-    patterns = load_yaml_smarts()
+    patterns = load_smarts_patterns_from_csv()
     return process_by_patterns(
         smiles, patterns, "No SMARTS examples recognized or invalid SMILES."
     )
