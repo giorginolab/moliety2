@@ -1,0 +1,6 @@
+H2 tags starting with a number are topics
+H2 without a number introduce subtopics (ignore badly formatted html)
+H3 are sub-sub-topics
+DT/DD has rule name and rule contents (smarts)
+if further DDs are encountered, they are comments
+if several patterns appear in the DD separated by BR, split them
