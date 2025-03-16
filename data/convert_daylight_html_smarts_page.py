@@ -13,7 +13,7 @@
 # if further DDs are encountered, they are comments
 # if several patterns appear in the DD separated by BR, split them
 
-
+# smarts_examples.ff.txt is obtained from https://www.daylight.com/dayhtml_tutorials/languages/smarts/smarts_examples.html with Firefox by "save outer HTML"
 
 from bs4 import BeautifulSoup
 import pandas as pd
