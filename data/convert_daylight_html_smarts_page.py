@@ -55,10 +55,14 @@ for element in soup.recursiveChildGenerator():
         # Process DT tags which contain the rule name
         elif element.name == "dt":
             rule_name = element.get_text(strip=True, separator=' ')
-            # Find the next DD sibling
-            dd = element.find_next_sibling("dd")
-            if dd:
-                # If the dd has <br> tags, split on them to get separate patterns.
+            # Find the next element sibling
+            next_sib = element.next_sibling
+            # Skip whitespace/text nodes until we find an element or None
+            while next_sib and not hasattr(next_sib, 'name'):
+                next_sib = next_sib.next_sibling
+            # Only process if next element is a DD
+            if next_sib and next_sib.name == 'dd':
+                dd = next_sib
                 if dd.find("br"):
                     # decode the inner HTML and split on <br>, ignoring newlines
                     raw_html = dd.decode_contents().replace('\n', '')
@@ -72,11 +76,12 @@ for element in soup.recursiveChildGenerator():
                     pattern_list = [dd.get_text(strip=True, separator=' ')]
                     rule_names = [rule_name]
                 
-                # Look for an additional DD that might contain comments and normalize whitespace
-                comment_dd = dd.find_next_sibling("dd")
-                if comment_dd:
-                    # Replace newlines with spaces and normalize whitespace
-                    comments = ' '.join(comment_dd.get_text(separator=' ').split())
+                # Look for an immediate next DD sibling for comments
+                next_comment_sib = dd.next_sibling
+                while next_comment_sib and not hasattr(next_comment_sib, 'name'):
+                    next_comment_sib = next_comment_sib.next_sibling
+                if next_comment_sib and next_comment_sib.name == 'dd':
+                    comments = ' '.join(next_comment_sib.get_text(separator=' ').split())
                 else:
                     comments = ""
 
