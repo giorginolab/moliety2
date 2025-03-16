@@ -1,6 +1,15 @@
-H2 tags starting with a number are topics
+Your task is to parse the attached pseudo-html file into a data frame.
+The file contains a list of SMARTS rules and descriptions, organized
+as follows. The HTML tagging is not well-formed, so run tests until
+the pandas dataframe looks right.
+
+Rules are organised hierarchically:
+
+H2 tags starting with a number are main topics
 H2 without a number introduce subtopics (ignore badly formatted html)
 H3 are sub-sub-topics
-DT/DD has rule name and rule contents (smarts)
+DT has rule name
+DD rule contents (smarts)
 if further DDs are encountered, they are comments
 if several patterns appear in the DD separated by BR, split them
+
