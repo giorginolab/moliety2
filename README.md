@@ -36,3 +36,8 @@ uv sync
 uv run gradio app.py
 ```
 
+## Hugging Face Space dependencies
+
+HF Gradio Spaces install Python packages from `requirements.txt` during build.
+`uv.lock` is not used by the default Space launcher, so runtime dependencies
+needed by `app.py` (such as `rdkit`) must be listed in `requirements.txt`.

@@ -1,0 +1,4 @@
+# Hugging Face Gradio Spaces install Python deps from requirements.txt.
+# Keep `uv` for local dev; this file ensures runtime deps are present on HF.
+rdkit
+pillow
