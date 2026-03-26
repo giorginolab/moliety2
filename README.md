@@ -3,7 +3,7 @@ title: Moliety2
 colorFrom: indigo
 colorTo: yellow
 sdk: gradio
-sdk_version: 5.19.0
+sdk_version: 6.10.0
 app_file: app.py
 pinned: false
 license: gpl-3.0
