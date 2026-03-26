@@ -32,8 +32,7 @@ Hosted online at https://huggingface.co/spaces/tonigi/moliety2 .
 Uses RDKit and Gradio. Therefore:
 
 ```bash
-python -m venv env
-source env/bin/activate
-pip install gradio rdkit
-gradio app.py
+uv sync
+uv run gradio app.py
 ```
+

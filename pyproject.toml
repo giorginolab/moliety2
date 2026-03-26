@@ -1,0 +1,10 @@
+[project]
+name = "moliety2"
+version = "0.1.0"
+description = "Molecular feature highlighter"
+authors = [
+    { name = "Toni", email = "toni.giorgino@gmail.com" }
+]
+#requires-python = ">=3.13"
+dependencies = ["rdkit", "pillow", "gradio"]
+
