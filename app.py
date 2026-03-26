@@ -15,7 +15,7 @@ from utils import mol_to_svg, highlight_by_patterns, IMAGE_SIZE
 # -----------------------------
 # Functional Group Definitions
 # -----------------------------
-functional_groups = {
+FUNCTIONAL_GROUP_SMARTS = {
     "Hydroxyl": "[OX2H]",
     "Carbonyl": "[CX3]=[OX1]",
     "Amine": "[NX3;H2,H1;!$(NC=O)]",
@@ -25,16 +25,16 @@ functional_groups = {
     "Halide": "[F,Cl,Br,I]",
 }
 compiled_patterns = {
-    name: Chem.MolFromSmarts(smart) for name, smart in functional_groups.items()
+    name: Chem.MolFromSmarts(smart) for name, smart in FUNCTIONAL_GROUP_SMARTS.items()
 }
 
 
 # -----------------------------
 # Interligand Moieties Definitions
 # -----------------------------
-interligand_moieties = load_interligand_moieties()
+interligand_moieties_data = load_interligand_moieties()
 compiled_interligand_patterns = {
-    name: Chem.MolFromSmarts(smart) for name, smart in interligand_moieties.items()
+    name: Chem.MolFromSmarts(smart) for name, smart in interligand_moieties_data.items()
 }
 
 
@@ -437,4 +437,5 @@ with gr.Blocks() as demo:
         outputs=[gallery, status],
     )
 
-demo.launch()
+if __name__ == "__main__":
+    demo.launch()
