@@ -3,7 +3,7 @@ from rdkit import Chem
 from rdkit.Chem.Scaffolds import MurckoScaffold
 from rdkit.Chem import AllChem  # Add this import
 from rotatable_bonds import process_rotatable
-from dimorphite_dl import dimorphite_dl
+import dimorphite_dl
 import traceback
 
 from file_helpers import load_interligand_moieties, load_smarts_patterns_from_csv
@@ -249,11 +249,11 @@ def gasteiger_charges(smiles: str):
 def protonate_ph(smiles: str, min_ph: float, max_ph: float):
     """Protonate molecule at given pH range using dimorphite-dl."""
     try:
-        protonated_mols = dimorphite_dl.run_with_mol_list(
-            [Chem.MolFromSmiles(smiles)],
-            min_ph=min_ph,
-            max_ph=max_ph,
-            pka_precision=1.0,
+        protonated_mols = dimorphite_dl.protonate_smiles(
+            smiles,
+            ph_min=min_ph,
+            ph_max=max_ph,
+            precision=1.0,
         )
 
         if not protonated_mols:
@@ -263,7 +263,7 @@ def protonate_ph(smiles: str, min_ph: float, max_ph: float):
         for i, mol in enumerate(protonated_mols):
             # Generate SVG for each protonated variant
             svg = mol_to_svg(
-                mol,
+                Chem.MolFromSmiles(mol),
                 IMAGE_SIZE,
                 legend=f"Protonated variant {i + 1} at pH {min_ph}-{max_ph}",
             )
