@@ -7,10 +7,10 @@ sdk_version: 6.10.0
 app_file: app.py
 pinned: false
 license: gpl-3.0
-short_description: Recognize functional groups
+short_description: Molecular moieties highlighter
 ---
 
-# Moliety: Molecular Feature Highlighter
+# Moliety: Molecular moieties highlighter
 
 www.giorginolab.it
 
