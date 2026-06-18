@@ -290,7 +290,7 @@ FEATURE_MODES = [
     FeatureMode(
         "SMARTS-RX Moieties",
         smartsrx_moieties,
-        "Kogej, T., Kannas, C., Genheden, S. et al. SMARTS-RX. J Cheminform 17, 177 (2025).",
+        "Kogej, T., Kannas, C., Genheden, S. et al. [SMARTS-RX](https://doi.org/10.1186/s13321-025-01136-8). J Cheminform 17, 177 (2025).",
     ),
     FeatureMode(
         "Chiral Centers",
