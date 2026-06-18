@@ -5,11 +5,10 @@ description = "Molecular moieties highlighter"
 authors = [
     { name = "Toni", email = "toni.giorgino@gmail.com" }
 ]
-#requires-python = ">=3.13"
+requires-python = ">=3.12"
 dependencies = [
     "rdkit",
     "pillow",
     "gradio",
     "dimorphite-dl>=2.0.2",
 ]
-

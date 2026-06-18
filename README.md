@@ -14,30 +14,29 @@ short_description: Molecular moieties highlighter
 
 www.giorginolab.it
 
-Boost your impostor syndrome by uploading a molecule in SMILES form and count all the moieties you were supposed to know by heart.
-
-Enter a SMILES string and select a highlighting mode. You can choose to highlight functional groups, interligand moieties, rotatable bonds, or chiral centers.
+Enter a SMILES string and select a molecular feature mode. Moliety can highlight functional groups, interligand moieties, rotatable bonds, chiral centers, potential stereogenic centers, DAYLIGHT SMARTS examples, Murcko scaffolds, hybridization states, Gasteiger charges, and protonation variants.
 
 **WARNING: Mostly AI-generated and untested! Use at own risk.**
 
-Based on SMARTS patterns provided with [OpenBabel](https://github.com/openbabel/openbabel/blob/master/data/SMARTS_InteLigand.txt) and [DAYLIGHT SMARTS examples](https://www.daylight.com/dayhtml_tutorials/languages/smarts/smarts_examples.html). Protonation mode supported by Durrant Lab's [dimorphite_dl](https://durrantlab.pitt.edu/dimorphite-dl/) library.
+Based on SMARTS patterns provided with [OpenBabel](https://github.com/openbabel/openbabel/blob/master/data/SMARTS_InteLigand.txt) and [DAYLIGHT SMARTS examples](https://www.daylight.com/dayhtml_tutorials/languages/smarts/smarts_examples.html). Protonation mode is supported by Durrant Lab's [dimorphite_dl](https://durrantlab.pitt.edu/dimorphite-dl/) library.
 
 Hosted online at https://huggingface.co/spaces/tonigi/moliety2 .
 
-
-
-
 ## Local installation
 
-Uses RDKit and Gradio. Therefore:
+Uses RDKit and Gradio:
 
 ```bash
 uv sync
 uv run gradio app.py
 ```
 
+Run tests with:
+
+```bash
+uv run python -m unittest
+```
+
 ## Hugging Face Space dependencies
 
-HF Gradio Spaces install Python packages from `requirements.txt` during build.
-`uv.lock` is not used by the default Space launcher, so runtime dependencies
-needed by `app.py` (such as `rdkit`) must be listed in `requirements.txt`.
+HF Gradio Spaces install Python packages from `requirements.txt` during build. `uv.lock` is not used by the default Space launcher, so runtime dependencies needed by `app.py` must be listed in `requirements.txt`.
