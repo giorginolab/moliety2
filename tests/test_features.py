@@ -2,7 +2,7 @@ import contextlib
 import io
 import unittest
 
-from moliety2.features import FEATURE_MODES, depict_input_smiles, process_smiles_main
+from moliety2.features import FEATURE_MODES, depict_input_smiles, feature_mode_source, process_smiles_main
 from moliety2.patterns import daylight_smarts_patterns, smartsrx_patterns
 
 
@@ -38,6 +38,12 @@ class ProcessSmilesMainTests(unittest.TestCase):
 
                 self.assertIsInstance(images, list)
                 self.assertIsInstance(message, str)
+
+    def test_all_modes_have_display_sources(self):
+        for mode in FEATURE_MODES:
+            with self.subTest(mode=mode.name):
+                self.assertTrue(mode.source.strip())
+                self.assertEqual(feature_mode_source(mode.name), f"Source: {mode.source}")
 
     def test_no_result_modes_return_empty_lists_not_none(self):
         for mode_name in ("Chiral Centers", "Potential Stereogenic Centers"):

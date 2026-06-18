@@ -27,6 +27,7 @@ FeatureHandler = Callable[[Chem.Mol, str, float, float], GalleryResult]
 class FeatureMode:
     name: str
     handler: FeatureHandler
+    source: str
     needs_ph: bool = False
 
 
@@ -271,19 +272,71 @@ def protonate_ph(_mol: Chem.Mol, smiles: str, min_ph: float, max_ph: float) -> G
 
 
 FEATURE_MODES = [
-    FeatureMode("Functional Groups", functional_groups),
-    FeatureMode("Rotatable Bonds", rotatable_bonds),
-    FeatureMode("Interligand Moieties", interligand_moieties),
-    FeatureMode("SMARTS-RX Moieties", smartsrx_moieties),
-    FeatureMode("Chiral Centers", chiral_centers),
-    FeatureMode("Potential Stereogenic Centers", stereocenters),
-    FeatureMode("DAYLIGHT SMARTS Examples", daylight_smarts_examples),
-    FeatureMode("Murcko Scaffold", scaffold),
-    FeatureMode("Hybridization", hybridization),
-    FeatureMode("Gasteiger Charges", gasteiger_charges),
-    FeatureMode("Protonation", protonate_ph, needs_ph=True),
+    FeatureMode(
+        "Functional Groups",
+        functional_groups,
+        "Built-in SMARTS patterns maintained in this repository.",
+    ),
+    FeatureMode(
+        "Rotatable Bonds",
+        rotatable_bonds,
+        "Local rule-based implementation plus DAYLIGHT and RDKit rotatable bond SMARTS definitions.",
+    ),
+    FeatureMode(
+        "Interligand Moieties",
+        interligand_moieties,
+        "SMARTS patterns from OpenBabel SMARTS_InteLigand.txt.",
+    ),
+    FeatureMode(
+        "SMARTS-RX Moieties",
+        smartsrx_moieties,
+        "Kogej, T., Kannas, C., Genheden, S. et al. SMARTS-RX. J Cheminform 17, 177 (2025).",
+    ),
+    FeatureMode(
+        "Chiral Centers",
+        chiral_centers,
+        "RDKit FindMolChiralCenters.",
+    ),
+    FeatureMode(
+        "Potential Stereogenic Centers",
+        stereocenters,
+        "RDKit FindPotentialStereo.",
+    ),
+    FeatureMode(
+        "DAYLIGHT SMARTS Examples",
+        daylight_smarts_examples,
+        "DAYLIGHT SMARTS examples.",
+    ),
+    FeatureMode(
+        "Murcko Scaffold",
+        scaffold,
+        "RDKit MurckoScaffold.",
+    ),
+    FeatureMode(
+        "Hybridization",
+        hybridization,
+        "RDKit atom hybridization annotations.",
+    ),
+    FeatureMode(
+        "Gasteiger Charges",
+        gasteiger_charges,
+        "RDKit ComputeGasteigerCharges.",
+    ),
+    FeatureMode(
+        "Protonation",
+        protonate_ph,
+        "Durrant Lab dimorphite_dl library.",
+        needs_ph=True,
+    ),
 ]
 FEATURE_MODE_BY_NAME = {mode.name: mode for mode in FEATURE_MODES}
+
+
+def feature_mode_source(mode: str) -> str:
+    feature_mode = FEATURE_MODE_BY_NAME.get(mode)
+    if feature_mode is None:
+        return "Source: unknown highlight mode."
+    return f"Source: {feature_mode.source}"
 
 
 def process_smiles_main(

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import gradio as gr
 
-from .features import FEATURE_MODES, depict_input_smiles, process_smiles_main
+from .features import FEATURE_MODES, depict_input_smiles, feature_mode_source, process_smiles_main
 
 EXAMPLES = [
     ("CC(=O)Oc1ccccc1C(=O)O", "Aspirin"),
@@ -28,9 +28,9 @@ EXAMPLES = [
 ]
 
 
-def update_accordion_visibility(mode: str):
+def update_mode_context(mode: str):
     selected_mode = next((feature_mode for feature_mode in FEATURE_MODES if feature_mode.name == mode), None)
-    return gr.update(visible=bool(selected_mode and selected_mode.needs_ph))
+    return gr.update(visible=bool(selected_mode and selected_mode.needs_ph)), feature_mode_source(mode)
 
 
 def process_smiles_ui(smiles: str, mode: str, min_ph: float, max_ph: float):
@@ -51,11 +51,7 @@ def build_demo() -> gr.Blocks:
         )
         gr.Markdown("**WARNING: Mostly AI-generated and untested! Use at own risk.**")
         gr.Markdown(
-            "Based on SMARTS patterns from [OpenBabel](https://github.com/openbabel/openbabel/blob/master/data/SMARTS_InteLigand.txt) "
-            "[DAYLIGHT SMARTS examples](https://www.daylight.com/dayhtml_tutorials/languages/smarts/smarts_examples.html), "
-            "and SMARTS-RX: Kogej, T., Kannas, C., Genheden, S. et al. "
-            "[J Cheminform 17, 177 (2025)](https://doi.org/10.1186/s13321-025-01136-8). "
-            "Protonation mode uses Durrant Lab's [dimorphite_dl](https://durrantlab.pitt.edu/dimorphite-dl/) library."
+            "Each highlight mode shows its method or data source next to the selector."
         )
 
         with gr.Row():
@@ -70,6 +66,7 @@ def build_demo() -> gr.Blocks:
                 choices=mode_names,
                 value=mode_names[0],
             )
+        source_markdown = gr.Markdown(feature_mode_source(mode_names[0]))
 
         with gr.Accordion("pH Settings", visible=False) as ph_accordion:
             with gr.Row():
@@ -89,9 +86,9 @@ def build_demo() -> gr.Blocks:
                 )
 
         mode_dropdown.change(
-            update_accordion_visibility,
+            update_mode_context,
             inputs=[mode_dropdown],
-            outputs=[ph_accordion],
+            outputs=[ph_accordion, source_markdown],
         )
 
         gr.Examples(
