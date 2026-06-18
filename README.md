@@ -31,11 +31,6 @@ uv sync
 uv run gradio app.py
 ```
 
-Run tests with:
-
-```bash
-uv run python -m unittest
-```
 
 ## Hugging Face Space dependencies
 
