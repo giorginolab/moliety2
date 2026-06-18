@@ -3,7 +3,7 @@ import io
 import unittest
 
 from moliety2.features import FEATURE_MODES, depict_input_smiles, process_smiles_main
-from moliety2.patterns import daylight_smarts_patterns
+from moliety2.patterns import daylight_smarts_patterns, smartsrx_patterns
 
 
 class ProcessSmilesMainTests(unittest.TestCase):
@@ -64,6 +64,23 @@ class PatternLoadingTests(unittest.TestCase):
 
         self.assertGreater(len(patterns), 0)
         self.assertNotIn("SMARTS Parse Error", stderr.getvalue())
+
+    def test_smartsrx_loading_skips_invalid_patterns_quietly(self):
+        smartsrx_patterns.cache_clear()
+
+        stderr = io.StringIO()
+        with contextlib.redirect_stderr(stderr):
+            patterns = smartsrx_patterns()
+
+        self.assertGreater(len(patterns), 0)
+        self.assertIn("Acid > Acid_Aliphatic > Acid_SaturatedAliphatic", patterns)
+        self.assertNotIn("SMARTS Parse Error", stderr.getvalue())
+
+    def test_smartsrx_mode_finds_carboxylic_acid(self):
+        images, message = process_smiles_main("CC(=O)O", "SMARTS-RX Moieties")
+
+        self.assertGreater(len(images), 0)
+        self.assertIn("Found ", message)
 
 
 if __name__ == "__main__":

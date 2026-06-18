@@ -15,6 +15,7 @@ from .patterns import (
     functional_group_patterns,
     interligand_patterns,
     rotatable_patterns,
+    smartsrx_patterns,
 )
 from .rendering import IMAGE_SIZE, highlight_by_patterns, matching_bond_indices, mol_to_svg
 
@@ -69,6 +70,14 @@ def daylight_smarts_examples(mol: Chem.Mol, _smiles: str, _min_ph: float, _max_p
         mol,
         daylight_smarts_patterns(),
         "No SMARTS examples recognized.",
+    )
+
+
+def smartsrx_moieties(mol: Chem.Mol, _smiles: str, _min_ph: float, _max_ph: float) -> GalleryResult:
+    return _pattern_mode(
+        mol,
+        smartsrx_patterns(),
+        "No SMARTS-RX moieties recognized.",
     )
 
 
@@ -265,6 +274,7 @@ FEATURE_MODES = [
     FeatureMode("Functional Groups", functional_groups),
     FeatureMode("Rotatable Bonds", rotatable_bonds),
     FeatureMode("Interligand Moieties", interligand_moieties),
+    FeatureMode("SMARTS-RX Moieties", smartsrx_moieties),
     FeatureMode("Chiral Centers", chiral_centers),
     FeatureMode("Potential Stereogenic Centers", stereocenters),
     FeatureMode("DAYLIGHT SMARTS Examples", daylight_smarts_examples),

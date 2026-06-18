@@ -14,11 +14,16 @@ short_description: Molecular moieties highlighter
 
 www.giorginolab.it
 
-Enter a SMILES string and select a molecular feature mode. Moliety can highlight functional groups, interligand moieties, rotatable bonds, chiral centers, potential stereogenic centers, DAYLIGHT SMARTS examples, Murcko scaffolds, hybridization states, Gasteiger charges, and protonation variants.
+Enter a SMILES string and select a molecular feature mode. Moliety can highlight functional groups, interligand moieties, SMARTS-RX moieties, rotatable bonds, chiral centers, potential stereogenic centers, DAYLIGHT SMARTS examples, Murcko scaffolds, hybridization states, Gasteiger charges, and protonation variants.
 
 **WARNING: Mostly AI-generated and untested! Use at own risk.**
 
-Based on SMARTS patterns provided with [OpenBabel](https://github.com/openbabel/openbabel/blob/master/data/SMARTS_InteLigand.txt) and [DAYLIGHT SMARTS examples](https://www.daylight.com/dayhtml_tutorials/languages/smarts/smarts_examples.html). Protonation mode is supported by Durrant Lab's [dimorphite_dl](https://durrantlab.pitt.edu/dimorphite-dl/) library.
+Based on SMARTS patterns provided with
+ * [OpenBabel](https://github.com/openbabel/openbabel/blob/master/data/SMARTS_InteLigand.txt) 
+ * [DAYLIGHT SMARTS examples](https://www.daylight.com/dayhtml_tutorials/languages/smarts/smarts_examples.html). 
+ * SMARTS-RX: Kogej, T., Kannas, C., Genheden, S. et al. [SMARTS-RX: a SMARTS-based representation of chemical functions for reactivity analysis](https://doi.org/10.1186/s13321-025-01136-8). J Cheminform 17, 177 (2025).
+ 
+Protonation mode is supported by Durrant Lab's [dimorphite_dl](https://durrantlab.pitt.edu/dimorphite-dl/) library.
 
 Hosted online at https://huggingface.co/spaces/tonigi/moliety2 .
 

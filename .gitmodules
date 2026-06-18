@@ -1,0 +1,3 @@
+[submodule "data/smartsrx"]
+	path = data/smartsrx
+	url = https://github.com/MolecularAI/smartsrx.git

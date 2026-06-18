@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import csv
+import json
 from functools import lru_cache
 from pathlib import Path
 
@@ -92,5 +93,32 @@ def daylight_smarts_patterns() -> dict[str, Chem.Mol]:
                 ]
             )
             patterns[name] = mol
+
+    return patterns
+
+
+@lru_cache(maxsize=1)
+def smartsrx_patterns() -> dict[str, Chem.Mol]:
+    patterns: dict[str, Chem.Mol] = {}
+    with (DATA_DIR / "smartsrx" / "smartsrx.json").open(encoding="utf-8") as handle:
+        rows = json.load(handle)["data"]
+
+    for row in rows:
+        pattern = row["smarts"].strip()
+        if not pattern:
+            continue
+
+        mol = _compile_smarts(pattern, quiet=True)
+        if mol is None:
+            continue
+
+        name = " > ".join(
+            [
+                row["category"],
+                row["subcategory"],
+                row["specific_type"],
+            ]
+        )
+        patterns[name] = mol
 
     return patterns

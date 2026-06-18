@@ -52,7 +52,9 @@ def build_demo() -> gr.Blocks:
         gr.Markdown("**WARNING: Mostly AI-generated and untested! Use at own risk.**")
         gr.Markdown(
             "Based on SMARTS patterns from [OpenBabel](https://github.com/openbabel/openbabel/blob/master/data/SMARTS_InteLigand.txt) "
-            "and [DAYLIGHT SMARTS examples](https://www.daylight.com/dayhtml_tutorials/languages/smarts/smarts_examples.html). "
+            "[DAYLIGHT SMARTS examples](https://www.daylight.com/dayhtml_tutorials/languages/smarts/smarts_examples.html), "
+            "and SMARTS-RX: Kogej, T., Kannas, C., Genheden, S. et al. "
+            "[J Cheminform 17, 177 (2025)](https://doi.org/10.1186/s13321-025-01136-8). "
             "Protonation mode uses Durrant Lab's [dimorphite_dl](https://durrantlab.pitt.edu/dimorphite-dl/) library."
         )
 
