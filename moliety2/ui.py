@@ -338,7 +338,7 @@ def build_demo() -> gr.Blocks:
 
             with gr.Column(elem_classes=["examples-panel"]):
                 gr.Markdown("Examples", elem_classes=["section-label"])
-                gr.Examples(
+                examples = gr.Examples(
                     examples=[example for example, _label in EXAMPLES],
                     example_labels=[label for _example, label in EXAMPLES],
                     inputs=smiles_input,
@@ -362,6 +362,11 @@ def build_demo() -> gr.Blocks:
 
             inputs = [smiles_input, mode_dropdown, min_ph, max_ph]
             run_button.click(process_smiles_ui, inputs=inputs, outputs=[input_image, gallery, status])
+            examples.load_input_event.then(
+                process_smiles_ui,
+                inputs=inputs,
+                outputs=[input_image, gallery, status],
+            )
             demo.load(process_smiles_ui, inputs=inputs, outputs=[input_image, gallery, status])
             for component in (smiles_input, mode_dropdown, min_ph, max_ph):
                 event = component.submit if component is smiles_input else component.change

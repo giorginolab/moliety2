@@ -25,7 +25,7 @@ def mol_to_svg(
     )
 
 
-def highlight_by_patterns(smiles: str, pattern_dict: dict[str, Chem.Mol]) -> list[tuple[str, str]] | None:
+def highlight_by_patterns(smiles: str, pattern_dict: dict[str, Chem.Mol | None]) -> list[tuple[str, str]] | None:
     mol = Chem.MolFromSmiles(smiles)
     if mol is None:
         return None
